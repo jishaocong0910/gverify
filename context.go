@@ -15,12 +15,15 @@
 package vfy
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Context struct {
+	ctx              context.Context
 	all              bool
 	wronged          bool
 	msgs             []string
@@ -28,6 +31,22 @@ type Context struct {
 	currentFieldName string
 	isDiveElem       bool
 	confines         []string
+}
+
+func (c *Context) Deadline() (deadline time.Time, ok bool) {
+	return c.ctx.Deadline()
+}
+
+func (c *Context) Done() <-chan struct{} {
+	return c.ctx.Done()
+}
+
+func (c *Context) Err() error {
+	return c.ctx.Err()
+}
+
+func (c *Context) Value(key any) any {
+	return c.ctx.Value(key)
 }
 
 func (c *Context) FieldName() string {

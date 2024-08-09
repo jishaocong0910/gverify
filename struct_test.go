@@ -29,14 +29,14 @@ type Video struct {
 	Snippet  *Snippet
 }
 
-func (v Video) Checklist(c *vfy.Context) {
-	vfy.String(c, &v.Title, "title").NotBlank().Msg(c.FieldName() + " must not be blank")
-	vfy.String(c, &v.Author, "author").NotBlank().Msg(c.FieldName() + " must not be blank")
-	vfy.Slices(c, v.Tags, "tags").Dive(func(t string) {
-		vfy.String(c, &t, "").Max(4).Msg(c.FieldName() + "'s length must less than 4")
+func (v Video) Checklist(ctx *vfy.Context) {
+	vfy.String(ctx, &v.Title, "title").NotBlank().Msg(ctx.FieldName() + " must not be blank")
+	vfy.String(ctx, &v.Author, "author").NotBlank().Msg(ctx.FieldName() + " must not be blank")
+	vfy.Slices(ctx, v.Tags, "tags").Dive(func(t string) {
+		vfy.String(ctx, &t, "").Max(4).Msg(ctx.FieldName() + "'s length must less than 4")
 	})
-	vfy.Int64(c, v.Duration, "duration").Range(int64(60), int64(120)).Msg(c.FieldName() + " must between 60 and 120 second")
-	vfy.Struct(c, v.Snippet, "snippet").Dive()
+	vfy.Int64(ctx, v.Duration, "duration").Range(int64(60), int64(120)).Msg(ctx.FieldName() + " must between 60 and 120 second")
+	vfy.Struct(ctx, v.Snippet, "snippet").Dive()
 }
 
 type Snippet struct {
@@ -45,11 +45,11 @@ type Snippet struct {
 	Thumbnails  []*Thumbnail
 }
 
-func (s Snippet) Checklist(c *vfy.Context) {
-	vfy.String(c, &s.Caption, "caption").NotBlank().Msg(c.FieldName() + " must not be blank")
-	vfy.String(c, &s.Description, "description").Min(6).Msg(c.FieldName() + "'s length must greater than 6")
-	vfy.Slices(c, s.Thumbnails, "thumbnails").Dive(func(t *Thumbnail) {
-		vfy.Struct(c, t, "").Dive()
+func (s Snippet) Checklist(ctx *vfy.Context) {
+	vfy.String(ctx, &s.Caption, "caption").NotBlank().Msg(ctx.FieldName() + " must not be blank")
+	vfy.String(ctx, &s.Description, "description").Min(6).Msg(ctx.FieldName() + "'s length must greater than 6")
+	vfy.Slices(ctx, s.Thumbnails, "thumbnails").Dive(func(t *Thumbnail) {
+		vfy.Struct(ctx, t, "").Dive()
 	})
 }
 
@@ -58,11 +58,11 @@ type Thumbnail struct {
 	Size *Size
 }
 
-func (t Thumbnail) Checklist(c *vfy.Context) {
-	vfy.String(c, t.Url, "url").
-		NotBlank().Msg(c.FieldName() + " must not be blank").
-		Max(20).Msg(c.FieldName() + " length must be less than 20")
-	vfy.Struct(c, t.Size, "size").NotNil().Msg(c.FieldName() + " must not be nil").Dive()
+func (t Thumbnail) Checklist(ctx *vfy.Context) {
+	vfy.String(ctx, t.Url, "url").
+		NotBlank().Msg(ctx.FieldName() + " must not be blank").
+		Max(20).Msg(ctx.FieldName() + " length must be less than 20")
+	vfy.Struct(ctx, t.Size, "size").NotNil().Msg(ctx.FieldName() + " must not be nil").Dive()
 }
 
 type Size struct {
@@ -70,9 +70,9 @@ type Size struct {
 	Height int32
 }
 
-func (s Size) Checklist(c *vfy.Context) {
-	vfy.Int32(c, &s.Width, "width").Max(2000).Msg(c.FieldName() + " must less than 2000")
-	vfy.Int32(c, &s.Height, "height").Max(1500).Msg(c.FieldName() + " must less than 1500")
+func (s Size) Checklist(ctx *vfy.Context) {
+	vfy.Int32(ctx, &s.Width, "width").Max(2000).Msg(ctx.FieldName() + " must less than 2000")
+	vfy.Int32(ctx, &s.Height, "height").Max(1500).Msg(ctx.FieldName() + " must less than 1500")
 }
 
 func TestCheckStruct_NotNil(t *testing.T) {

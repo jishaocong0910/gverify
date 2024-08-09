@@ -21,6 +21,7 @@ go get github.com/jishaocong0910/gverify
 package main
 
 import (
+    "context"
     "fmt"
     "regexp"
 
@@ -94,7 +95,7 @@ func (c Category) Checklist(ctx *vfy.Context) {
 
 func main() {
     b := Book{Author: &Author{}, Categories: []*Category{{Sort: 127}, {Id: "c1", Sort: 1000}}}
-    ok, _, msgs := vfy.Check_(&b, true)
+    ok, _, msgs := vfy.Check_(context.Background(), &b, true)
     if !ok {
         for i, msg := range msgs {
             fmt.Println(i, msg)
@@ -118,7 +119,7 @@ func main() {
 
 | 函数            | 说明                                      |
 |---------------|-----------------------------------------|
-| vfy.Check  | 检查至首个错误的字段，相当于`vfy.Check_(?, false)` |
+| vfy.Check  | 检查至首个错误的字段，相当于`vfy.Check_(?, ?, false)` |
 | vfy.Check_ | 参数`all`为false则检查至首个错误字段 ，true则检查所有字段    |
 
 # 编写结构体校验过程
@@ -274,7 +275,7 @@ func main() {
         Slice: []string{"a", "", ""},
         Map:   map[string]int{"": 32, "a": 0, "b": 101},
     }
-    ok, _, msgs := vfy.Check_(d, true)
+    ok, _, msgs := vfy.Check_(context.Background(), d, true)
     if !ok {
         for i, msg := range msgs {
             fmt.Println(i, msg)
@@ -322,7 +323,7 @@ func (b Book) Checklist(ctx *vfy.Context) {
 
 func main() {
     b := Book{}
-    ok, _, msgs := vfy.Check_(b, true)
+    ok, _, msgs := vfy.Check_(context.Background(), b, true)
     if !ok {
         for i, msg := range msgs {
             fmt.Println(i, msg)
@@ -378,7 +379,7 @@ func (g GenStruct) Checklist(ctx *vfy.Context) {
 
 ## 在其他目录的文件
 
-如果代码生成器会覆盖整个目录，或者想分开存放生成的和自定义的代码，可以在其他包实现`vfy.Verifiable`接口。 由于Golang语法禁止在其他增加结构体方法，因此需增加一个内嵌原结构体的新的结构体，通过新的结构体来验证。
+如果代码生成器会覆盖整个目录，或者想分开存放生成的和自定义的代码，可以在其他包实现`vfy.Verifiable`接口。 由于Golang语法禁止在其他包增加结构体方法，因此需增加一个内嵌原结构体的新的结构体，通过新的结构体来验证。
 
 *目录结构*
 
@@ -433,7 +434,7 @@ import (
 
 func main() {
     g := model.GenStruct{}
-    ok, _, msgs := vfy.Check_(&check.GenStruct{g}, true)
+    ok, _, msgs := vfy.Check_(context.Background(), &check.GenStruct{g}, true)
     if !ok {
         for i, msg := range msgs {
             fmt.Println(i, msg)

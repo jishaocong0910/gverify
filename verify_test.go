@@ -29,27 +29,27 @@ type Image struct {
 	Url string
 }
 
-func (i Image) Checklist(c *vfy.Context) {
-	vfy.String(c, &i.Url, "url").NotBlank().Msg("%s must not be blank", c.FieldName())
+func (i Image) Checklist(ctx *vfy.Context) {
+	vfy.String(ctx, &i.Url, "url").NotBlank().Msg("%s must not be blank", ctx.FieldName())
 }
 
 func TestCheck(t *testing.T) {
 	r := require.New(t)
 	{
 		i := &Image{}
-		ok, msg := vfy.Check(i)
+		ok, msg := vfy.Check(nil, i)
 		r.False(ok)
 		r.Equal("url must not be blank", msg)
 	}
 	{
 		i := Image{}
-		ok, msg := vfy.Check(i)
+		ok, msg := vfy.Check(nil, i)
 		r.False(ok)
 		r.Equal("url must not be blank", msg)
 	}
 	{
 		var i *Image
-		ok, msg := vfy.Check(i)
+		ok, msg := vfy.Check(nil, i)
 		r.False(ok)
 		r.Equal("url must not be blank", msg)
 	}
