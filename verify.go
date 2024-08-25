@@ -15,6 +15,7 @@
 package vfy
 
 import (
+	"context"
 	"reflect"
 )
 
@@ -22,12 +23,12 @@ type Verifiable interface {
 	Checklist(ctx *Context)
 }
 
-func Check[T Verifiable](t T) (ok bool, msg string) {
-	ok, msg, _ = Check_(t, false)
+func Check[T Verifiable](ctx context.Context, t T) (ok bool, msg string) {
+	ok, msg, _ = Check_(ctx, t, false)
 	return
 }
 
-func Check_[T Verifiable](t T, all bool) (ok bool, first string, msgs []string) {
+func Check_[T Verifiable](ctx context.Context, t T, all bool) (ok bool, first string, msgs []string) {
 	var ve Verifiable
 	if v := reflect.ValueOf(t); v.Kind() == reflect.Pointer {
 		if v.IsNil() {
@@ -38,7 +39,7 @@ func Check_[T Verifiable](t T, all bool) (ok bool, first string, msgs []string) 
 	} else {
 		ve = t
 	}
-	c := &Context{all: all}
+	c := &Context{ctx: ctx, all: all}
 	ve.Checklist(c)
 	if len(c.msgs) > 0 {
 		first = c.msgs[0]

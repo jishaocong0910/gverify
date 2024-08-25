@@ -1,12 +1,10 @@
-# gverify
+# Gverify
 
 一款用于Golang的结构体校验工具。它通过手动编排校验过程进行校验，而非使用标签。使用标签的验证工具，无法用在经常被代码生成器覆盖的结构体，例如grpc、gorm生成的代码。gverify没有限制，并且简单易用，处理速度理论上比使用标签的校验工具更快。
-
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/jishaocong0910/gverify.svg)](https://pkg.go.dev/github.com/jishaocong0910/gverify)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jishaocong0910/gverify)](https://goreportcard.com/report/github.com/jishaocong0910/gverify)
 ![coverage](https://raw.githubusercontent.com/jishaocong0910/gverify/badges/.badges/main/coverage.svg)
-
 
 # 安装
 
@@ -17,10 +15,12 @@ go get github.com/jishaocong0910/gverify
 # 用法与例子
 
 *代码示例*
+
 ```go
 package main
 
 import (
+    "context"
     "fmt"
     "regexp"
 
@@ -65,11 +65,11 @@ func (b *Book) Checklist(ctx *vfy.Context) {
 
     vfy.Slices(ctx, b.Categories, "categories").
         NotEmpty().Msg("%s must not be empty", ctx.FieldName()).
-        Dive(func(t *Category) {
-            vfy.Struct(ctx, t, "").
-                NotNil().Msg("%s must not be nil", ctx.FieldName()).
-                Dive()
-        })
+            Dive(func(t *Category) {
+                vfy.Struct(ctx, t, "").
+                    NotNil().Msg("%s must not be nil", ctx.FieldName()).
+                    Dive()
+            })
 }
 
 type Author struct {
@@ -94,7 +94,7 @@ func (c Category) Checklist(ctx *vfy.Context) {
 
 func main() {
     b := Book{Author: &Author{}, Categories: []*Category{{Sort: 127}, {Id: "c1", Sort: 1000}}}
-    ok, _, msgs := vfy.Check_(&b, true)
+    ok, _, msgs := vfy.Check_(context.Background(), &b, true)
     if !ok {
         for i, msg := range msgs {
             fmt.Println(i, msg)
@@ -116,18 +116,20 @@ func main() {
 
 # 入口函数
 
-| 函数            | 说明                                      |
-|---------------|-----------------------------------------|
-| vfy.Check  | 检查至首个错误的字段，相当于`vfy.Check_(?, false)` |
+| 函数         | 说明                                      |
+|------------|-----------------------------------------|
+| vfy.Check  | 检查至首个错误的字段，相当于`vfy.Check_(?, ?, false)` |
 | vfy.Check_ | 参数`all`为false则检查至首个错误字段 ，true则检查所有字段    |
 
 # 编写结构体校验过程
 
-结构体须实现`vfy.Verifiable`接口的`Checklist`方法，在其中编写每个字段的校验过程。方法的接收者为指针时，**无需担心它为nil**，入口函数会判断传入的值是否为nil，若为nil则会创建零值进行验证。
+结构体须实现`vfy.Verifiable`接口的`Checklist`方法，在其中编写每个字段的校验过程。方法的接收者为指针时，**无需担心它为nil**
+，入口函数会判断传入的值是否为nil，若为nil则会创建零值进行验证。
 
 # 类型入口函数
 
-每个字段须根据自身类型，选择对应的*类型入口函数*，创建具有*校验方法*的*校验变量*，再根据需要使用其中的方法。所有*类型入口函数*的第一个参数都传入`Checklist`方法的`ctx`参数。
+每个字段须根据自身类型，选择对应的*类型入口函数*，创建具有*校验方法*的*校验变量*，再根据需要使用其中的方法。所有
+*类型入口函数*的第一个参数都传入`Checklist`方法的`ctx`参数。
 
 | 类型入口函数      | 对应类型                      |
 |-------------|---------------------------|
@@ -241,10 +243,12 @@ func main() {
 设置为`<slices字段名称>[<索引>]`；对于map，key设置为`<map字段名称>$key`，value的设置为`<map字段名称>$value`。
 
 *代码示例*
+
 ```go
 package main
 
 import (
+    "context"
     "fmt"
 
     vfy "github.com/jishaocong0910/gverify"
@@ -274,7 +278,7 @@ func main() {
         Slice: []string{"a", "", ""},
         Map:   map[string]int{"": 32, "a": 0, "b": 101},
     }
-    ok, _, msgs := vfy.Check_(d, true)
+    ok, _, msgs := vfy.Check_(context.Background(), d, true)
     if !ok {
         for i, msg := range msgs {
             fmt.Println(i, msg)
@@ -291,13 +295,16 @@ func main() {
 
 ## 默认消息
 
-有些*校验方法*调用后可链式调用`DefaultMsg`方法，使用默认的错误消息。**每个*校验方法*的默认错误消息必须进行设置**，否则默认消息是空字符串。默认消息的设置方式为`vfy.DefaultMsg().<类型入口函数名>.<校验方法名>(<默认消息处理函数>)）`
+有些*校验方法*调用后可链式调用`DefaultMsg`方法，使用默认的错误消息。**每个*校验方法*的默认错误消息必须进行设置**
+，否则默认消息是空字符串。默认消息的设置方式为`vfy.DefaultMsg().<类型入口函数名>.<校验方法名>(<默认消息处理函数>)）`
 
 *代码示例*
+
 ```go
 package main
 
 import (
+    "context"
     "fmt"
     "regexp"
 
@@ -322,7 +329,7 @@ func (b Book) Checklist(ctx *vfy.Context) {
 
 func main() {
     b := Book{}
-    ok, _, msgs := vfy.Check_(b, true)
+    ok, _, msgs := vfy.Check_(context.Background(), b, true)
     if !ok {
         for i, msg := range msgs {
             fmt.Println(i, msg)
@@ -335,9 +342,11 @@ func main() {
     // 由于没有设置string的Regex校验方法的默认消息，isbn字段的错误消息为空字符串。
 }
 ```
+
 # 代码风格
 
-gverify的特色之一，是可避免结构体代码被生成器覆盖，导致校验规则丢失，它通过在其他文件实现`vfy.Verifiable`接口来避免，以下介绍在各种文件位置下实现的代码风格。
+gverify的特色之一，是可避免结构体代码被生成器覆盖，导致校验规则丢失，它通过在其他文件实现`vfy.Verifiable`
+接口来避免，以下介绍在各种文件位置下实现的代码风格。
 
 ## 在结构体所在文件
 
@@ -348,6 +357,7 @@ gverify的特色之一，是可避免结构体代码被生成器覆盖，导致�
 为避免代码生成器覆盖结构体所在的文件，可以在同包下另一个文件实现`vfy.Verifiable`接口。
 
 *目录结构*
+
 ```
 .
 ├─ gen_struct.go
@@ -355,6 +365,7 @@ gverify的特色之一，是可避免结构体代码被生成器覆盖，导致�
 ```
 
 *gen_struct.go*
+
 ```go
 package demo
 
@@ -365,6 +376,7 @@ type GenStruct struct {
 ```
 
 *gen_struct_checklist.go*
+
 ```go
 package demo
 
@@ -378,7 +390,8 @@ func (g GenStruct) Checklist(ctx *vfy.Context) {
 
 ## 在其他目录的文件
 
-如果代码生成器会覆盖整个目录，或者想分开存放生成的和自定义的代码，可以在其他包实现`vfy.Verifiable`接口。 由于Golang语法禁止在其他增加结构体方法，因此需增加一个内嵌原结构体的新的结构体，通过新的结构体来验证。
+如果代码生成器会覆盖整个目录，或者想分开存放生成的和自定义的代码，可以在其他包实现`vfy.Verifiable`接口。
+由于Golang语法禁止在其他包增加结构体方法，因此需增加一个内嵌原结构体的新的结构体，通过新的结构体来验证。
 
 *目录结构*
 
@@ -391,6 +404,7 @@ func (g GenStruct) Checklist(ctx *vfy.Context) {
 ```
 
 *gen_struct.go*
+
 ```go
 package model
 
@@ -401,12 +415,14 @@ type GenStruct struct {
 ```
 
 *gen_struct_checklist.go*
+
 ```go
 package check
 
 import (
-    vfy "github.com/jishaocong0910/gverify"
     "demo/model"
+
+    vfy "github.com/jishaocong0910/gverify"
 )
 
 type GenStruct struct {
@@ -420,20 +436,23 @@ func (g GenStruct) Checklist(ctx *vfy.Context) {
 ```
 
 *代码示例*
+
 ```go
 package main
 
 import (
+    "context"
     "fmt"
 
-    vfy "github.com/jishaocong0910/gverify"
     "demo/check"
     "demo/model"
+
+    vfy "github.com/jishaocong0910/gverify"
 )
 
 func main() {
     g := model.GenStruct{}
-    ok, _, msgs := vfy.Check_(&check.GenStruct{g}, true)
+    ok, _, msgs := vfy.Check_(context.Background(), &check.GenStruct{g}, true)
     if !ok {
         for i, msg := range msgs {
             fmt.Println(i, msg)

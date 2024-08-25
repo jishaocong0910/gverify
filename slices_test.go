@@ -437,6 +437,6 @@ type Stuff struct {
 	Field string
 }
 
-func (s Stuff) Checklist(c *vfy.Context) {
-	vfy.String(c, &s.Field, "field").NotBlank().Msg("%s must not be blank", c.FieldName())
+func (s Stuff) Checklist(ctx *vfy.Context) {
+	vfy.String(ctx, &s.Field, "field").NotBlank().Msg("%s must not be blank", ctx.FieldName())
 }
