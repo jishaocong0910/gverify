@@ -15,8 +15,8 @@
 package vfy
 
 type checkFloat64 struct {
-	ctx *Context
-	f   *float64
+	*Context
+	f *float64
 }
 
 func (c *checkFloat64) success() msg[*checkFloat64] {
@@ -28,11 +28,11 @@ func (c *checkFloat64) success_() msg_[*checkFloat64] {
 }
 
 func (c *checkFloat64) fail(confines ...[]string) msg[*checkFloat64] {
-	c.ctx.wronged = true
+	c.wronged = true
 	for _, cs := range confines {
-		c.ctx.confines = append(c.ctx.confines, cs...)
+		c.confines = append(c.confines, cs...)
 	}
-	return msg[*checkFloat64]{ctx: c.ctx, t: c}
+	return msg[*checkFloat64]{ctx: c.Context, t: c}
 }
 
 func (c *checkFloat64) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkFloat64] {
@@ -40,7 +40,7 @@ func (c *checkFloat64) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkF
 }
 
 func (c *checkFloat64) NotNil() msg_[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -54,15 +54,15 @@ func (c *checkFloat64) Min(min float64) msg_[*checkFloat64] {
 }
 
 func (c *checkFloat64) Min_(min float64, omitNil bool) msg_[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
 		if !omitNil {
-			return c.fail_(default_msg_float64_min, c.ctx.float64Confines(min))
+			return c.fail_(default_msg_float64_min, float64ToConfines(min))
 		}
 	} else if *c.f < min {
-		return c.fail_(default_msg_float64_min, c.ctx.float64Confines(min))
+		return c.fail_(default_msg_float64_min, float64ToConfines(min))
 	}
 	return c.success_()
 }
@@ -72,15 +72,15 @@ func (c *checkFloat64) Max(max float64) msg_[*checkFloat64] {
 }
 
 func (c *checkFloat64) Max_(max float64, omitNil bool) msg_[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
 		if !omitNil {
-			return c.fail_(default_msg_float64_max, c.ctx.float64Confines(max))
+			return c.fail_(default_msg_float64_max, float64ToConfines(max))
 		}
 	} else if *c.f > max {
-		return c.fail_(default_msg_float64_max, c.ctx.float64Confines(max))
+		return c.fail_(default_msg_float64_max, float64ToConfines(max))
 	}
 	return c.success_()
 }
@@ -90,17 +90,17 @@ func (c *checkFloat64) Range(min, max float64) msg_[*checkFloat64] {
 }
 
 func (c *checkFloat64) Range_(min, max float64, omitNil bool) msg_[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
 		if !omitNil {
-			return c.fail_(default_msg_float64_range, c.ctx.float64Confines(min, max))
+			return c.fail_(default_msg_float64_range, float64ToConfines(min, max))
 		}
 	} else if *c.f < min {
-		return c.fail_(default_msg_float64_range, c.ctx.float64Confines(min, max))
+		return c.fail_(default_msg_float64_range, float64ToConfines(min, max))
 	} else if *c.f > max {
-		return c.fail_(default_msg_float64_range, c.ctx.float64Confines(min, max))
+		return c.fail_(default_msg_float64_range, float64ToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -110,15 +110,15 @@ func (c *checkFloat64) Gt(min float64) msg_[*checkFloat64] {
 }
 
 func (c *checkFloat64) Gt_(min float64, omitNil bool) msg_[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
 		if !omitNil {
-			return c.fail_(default_msg_float64_gt, c.ctx.float64Confines(min))
+			return c.fail_(default_msg_float64_gt, float64ToConfines(min))
 		}
 	} else if *c.f <= min {
-		return c.fail_(default_msg_float64_gt, c.ctx.float64Confines(min))
+		return c.fail_(default_msg_float64_gt, float64ToConfines(min))
 	}
 	return c.success_()
 }
@@ -128,15 +128,15 @@ func (c *checkFloat64) Lt(max float64) msg_[*checkFloat64] {
 }
 
 func (c *checkFloat64) Lt_(max float64, omitNil bool) msg_[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
 		if !omitNil {
-			return c.fail_(default_msg_float64_lt, c.ctx.float64Confines(max))
+			return c.fail_(default_msg_float64_lt, float64ToConfines(max))
 		}
 	} else if *c.f >= max {
-		return c.fail_(default_msg_float64_lt, c.ctx.float64Confines(max))
+		return c.fail_(default_msg_float64_lt, float64ToConfines(max))
 	}
 	return c.success_()
 }
@@ -146,17 +146,17 @@ func (c *checkFloat64) Within(min, max float64) msg_[*checkFloat64] {
 }
 
 func (c *checkFloat64) Within_(min, max float64, omitNil bool) msg_[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
 		if !omitNil {
-			return c.fail_(default_msg_float64_within, c.ctx.float64Confines(min, max))
+			return c.fail_(default_msg_float64_within, float64ToConfines(min, max))
 		}
 	} else if *c.f <= min {
-		return c.fail_(default_msg_float64_within, c.ctx.float64Confines(min, max))
+		return c.fail_(default_msg_float64_within, float64ToConfines(min, max))
 	} else if *c.f >= max {
-		return c.fail_(default_msg_float64_within, c.ctx.float64Confines(min, max))
+		return c.fail_(default_msg_float64_within, float64ToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -166,12 +166,12 @@ func (c *checkFloat64) Options(options []float64) msg_[*checkFloat64] {
 }
 
 func (c *checkFloat64) Options_(options []float64, omitNil bool) msg_[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
 		if !omitNil {
-			return c.fail_(default_msg_float64_options, c.ctx.float64Confines(options...))
+			return c.fail_(default_msg_float64_options, float64ToConfines(options...))
 		}
 	} else {
 		match := false
@@ -181,7 +181,7 @@ func (c *checkFloat64) Options_(options []float64, omitNil bool) msg_[*checkFloa
 			}
 		}
 		if !match {
-			return c.fail_(default_msg_float64_options, c.ctx.float64Confines(options...))
+			return c.fail_(default_msg_float64_options, float64ToConfines(options...))
 		}
 	}
 	return c.success_()
@@ -192,7 +192,7 @@ func (c *checkFloat64) Custom(custom func(f float64) bool) msg[*checkFloat64] {
 }
 
 func (c *checkFloat64) Custom_(custom func(f float64) bool, omitNil bool) msg[*checkFloat64] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success()
 	}
 	if c.f == nil {

@@ -19,47 +19,31 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
+)
+
+type diveType int
+
+const (
+	dive_struct diveType = iota + 1
+	dive_slices
+	dive_map
 )
 
 type Context struct {
-	ctx              context.Context
-	all              bool
-	wronged          bool
-	msgs             []string
-	parentFieldNames []string
-	currentFieldName string
-	isDiveElem       bool
-	confines         []string
-}
-
-func (c *Context) Deadline() (deadline time.Time, ok bool) {
-	return c.ctx.Deadline()
-}
-
-func (c *Context) Done() <-chan struct{} {
-	return c.ctx.Done()
-}
-
-func (c *Context) Err() error {
-	return c.ctx.Err()
-}
-
-func (c *Context) Value(key any) any {
-	return c.ctx.Value(key)
+	context.Context
+	all             bool
+	wronged         bool
+	msgs            []string
+	confines        []string
+	fieldNamePrefix string
+	fieldName       string
+	nameSeparator   string
+	diveType        diveType
+	index           int
 }
 
 func (c *Context) FieldName() string {
-	if len(c.parentFieldNames) == 0 {
-		return c.currentFieldName
-	}
-	var builder strings.Builder
-	for _, pn := range c.parentFieldNames {
-		builder.WriteString(pn)
-		builder.WriteString(".")
-	}
-	builder.WriteString(c.currentFieldName)
-	return builder.String()
+	return c.fieldName
 }
 
 func (c *Context) Confine(i int) string {
@@ -87,13 +71,21 @@ func (c *Context) Confines() string {
 	return builder.String()
 }
 
+func (c *Context) Index() int {
+	i := -1
+	if c.diveType == dive_slices {
+		i = c.index
+	}
+	return i
+}
+
 func (c *Context) interrupt() bool {
 	return c.wronged && !c.all
 }
 
-func (c *Context) setCurrentFieldName(fieldName string) *Context {
-	if !c.isDiveElem {
-		c.currentFieldName = fieldName
+func (c *Context) reset(fieldName string) *Context {
+	if c.diveType != dive_slices && c.diveType != dive_map || fieldName != "" {
+		c.fieldName = c.fieldNamePrefix + c.nameSeparator + fieldName
 	}
 	c.confines = nil
 	return c
@@ -103,29 +95,41 @@ func (c *Context) addMsg(msg string, args ...any) {
 	c.msgs = append(c.msgs, fmt.Sprintf(msg, args...))
 }
 
-func (c *Context) diveElem(currentName string, f func()) {
-	n := c.currentFieldName
-	i := c.isDiveElem
-	c.currentFieldName = currentName
-	c.isDiveElem = true
-	f()
-	c.currentFieldName = n
-	c.isDiveElem = i
+func (c *Context) savepoint() savepoint {
+	return savepoint{
+		fieldNamePrefix: c.fieldNamePrefix,
+		fieldName:       c.fieldName,
+		nameSeparator:   c.nameSeparator,
+		diveType:        c.diveType,
+		index:           c.index,
+	}
 }
 
-func (c *Context) diveStruct(parentName string, f func()) {
-	n := c.currentFieldName
-	i := c.isDiveElem
-	c.isDiveElem = false
-	c.parentFieldNames = append(c.parentFieldNames, parentName)
-	f()
-	c.currentFieldName = n
-	c.isDiveElem = i
-	c.parentFieldNames = c.parentFieldNames[:len(c.parentFieldNames)-1]
-
+func (c *Context) beforeDive(diveType diveType, defaultFieldName, nameSeparator string, index int) {
+	c.fieldNamePrefix = c.fieldName
+	c.nameSeparator = nameSeparator
+	c.reset(defaultFieldName)
+	c.diveType = diveType
+	c.index = index
 }
 
-func (c *Context) byteConfines(confines ...byte) []string {
+func (c *Context) afterDive(s savepoint) {
+	c.fieldNamePrefix = s.fieldNamePrefix
+	c.fieldName = s.fieldName
+	c.nameSeparator = s.nameSeparator
+	c.diveType = s.diveType
+	c.index = s.index
+}
+
+type savepoint struct {
+	fieldNamePrefix string
+	fieldName       string
+	nameSeparator   string
+	diveType        diveType
+	index           int
+}
+
+func byteToConfines(confines ...byte) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatUint(uint64(confine), 10))
@@ -133,7 +137,7 @@ func (c *Context) byteConfines(confines ...byte) []string {
 	return result
 }
 
-func (c *Context) intConfines(confines ...int) []string {
+func intToConfines(confines ...int) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatInt(int64(confine), 10))
@@ -141,7 +145,7 @@ func (c *Context) intConfines(confines ...int) []string {
 	return result
 }
 
-func (c *Context) int8Confines(confines ...int8) []string {
+func int8ToConfines(confines ...int8) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatInt(int64(confine), 10))
@@ -149,7 +153,7 @@ func (c *Context) int8Confines(confines ...int8) []string {
 	return result
 }
 
-func (c *Context) int16Confines(confines ...int16) []string {
+func int16ToConfines(confines ...int16) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatInt(int64(confine), 10))
@@ -157,7 +161,7 @@ func (c *Context) int16Confines(confines ...int16) []string {
 	return result
 }
 
-func (c *Context) int32Confines(confines ...int32) []string {
+func int32ToConfines(confines ...int32) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatInt(int64(confine), 10))
@@ -165,7 +169,7 @@ func (c *Context) int32Confines(confines ...int32) []string {
 	return result
 }
 
-func (c *Context) int64Confines(confines ...int64) []string {
+func int64ToConfines(confines ...int64) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatInt(confine, 10))
@@ -173,7 +177,7 @@ func (c *Context) int64Confines(confines ...int64) []string {
 	return result
 }
 
-func (c *Context) uintConfines(confines ...uint) []string {
+func uintToConfines(confines ...uint) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatUint(uint64(confine), 10))
@@ -181,7 +185,7 @@ func (c *Context) uintConfines(confines ...uint) []string {
 	return result
 }
 
-func (c *Context) uint8Confines(confines ...uint8) []string {
+func uint8ToConfines(confines ...uint8) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatUint(uint64(confine), 10))
@@ -189,7 +193,7 @@ func (c *Context) uint8Confines(confines ...uint8) []string {
 	return result
 }
 
-func (c *Context) uint16Confines(confines ...uint16) []string {
+func uint16ToConfines(confines ...uint16) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatUint(uint64(confine), 10))
@@ -197,7 +201,7 @@ func (c *Context) uint16Confines(confines ...uint16) []string {
 	return result
 }
 
-func (c *Context) uint32Confines(confines ...uint32) []string {
+func uint32ToConfines(confines ...uint32) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatUint(uint64(confine), 10))
@@ -205,7 +209,7 @@ func (c *Context) uint32Confines(confines ...uint32) []string {
 	return result
 }
 
-func (c *Context) uint64Confines(confines ...uint64) []string {
+func uint64ToConfines(confines ...uint64) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatUint(uint64(confine), 10))
@@ -213,7 +217,7 @@ func (c *Context) uint64Confines(confines ...uint64) []string {
 	return result
 }
 
-func (c *Context) float32Confines(confines ...float32) []string {
+func float32ToConfines(confines ...float32) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatFloat(float64(confine), 'f', -1, 32))
@@ -221,7 +225,7 @@ func (c *Context) float32Confines(confines ...float32) []string {
 	return result
 }
 
-func (c *Context) float64Confines(confines ...float64) []string {
+func float64ToConfines(confines ...float64) []string {
 	result := make([]string, 0, len(confines))
 	for _, confine := range confines {
 		result = append(result, strconv.FormatFloat(confine, 'f', -1, 32))

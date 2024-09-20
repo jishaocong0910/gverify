@@ -17,8 +17,8 @@ package vfy
 import "strconv"
 
 type checkSlices[T any] struct {
-	ctx *Context
-	s   []T
+	*Context
+	s []T
 }
 
 func (c *checkSlices[T]) success() msg[*checkSlices[T]] {
@@ -30,11 +30,11 @@ func (c *checkSlices[T]) success_() msg_[*checkSlices[T]] {
 }
 
 func (c *checkSlices[T]) fail(confines ...[]string) msg[*checkSlices[T]] {
-	c.ctx.wronged = true
+	c.wronged = true
 	for _, cs := range confines {
-		c.ctx.confines = append(c.ctx.confines, cs...)
+		c.confines = append(c.confines, cs...)
 	}
-	return msg[*checkSlices[T]]{ctx: c.ctx, t: c}
+	return msg[*checkSlices[T]]{ctx: c.Context, t: c}
 }
 
 func (c *checkSlices[T]) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkSlices[T]] {
@@ -42,7 +42,7 @@ func (c *checkSlices[T]) fail_(k defaultMsgKey, confines ...[]string) msg_[*chec
 }
 
 func (c *checkSlices[T]) NotNil() msg_[*checkSlices[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
@@ -56,7 +56,7 @@ func (c *checkSlices[T]) NotEmpty() msg_[*checkSlices[T]] {
 }
 
 func (c *checkSlices[T]) NotEmpty_(omitNil bool) msg_[*checkSlices[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
@@ -74,16 +74,16 @@ func (c *checkSlices[T]) Length(l int) msg_[*checkSlices[T]] {
 }
 
 func (c *checkSlices[T]) Length_(l int, omitNil bool) msg_[*checkSlices[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_slices_length, c.ctx.intConfines(l))
+			return c.fail_(default_msg_slices_length, intToConfines(l))
 		}
 	} else {
 		if len(c.s) != l {
-			return c.fail_(default_msg_slices_length, c.ctx.intConfines(l))
+			return c.fail_(default_msg_slices_length, intToConfines(l))
 		}
 	}
 	return c.success_()
@@ -94,15 +94,15 @@ func (c *checkSlices[T]) Min(min int) msg_[*checkSlices[T]] {
 }
 
 func (c *checkSlices[T]) Min_(min int, omitNil bool) msg_[*checkSlices[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_slices_min, c.ctx.intConfines(min))
+			return c.fail_(default_msg_slices_min, intToConfines(min))
 		}
 	} else if len(c.s) < min {
-		return c.fail_(default_msg_slices_min, c.ctx.intConfines(min))
+		return c.fail_(default_msg_slices_min, intToConfines(min))
 	}
 	return c.success_()
 }
@@ -112,15 +112,15 @@ func (c *checkSlices[T]) Max(max int) msg_[*checkSlices[T]] {
 }
 
 func (c *checkSlices[T]) Max_(max int, omitNil bool) msg_[*checkSlices[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_slices_max, c.ctx.intConfines(max))
+			return c.fail_(default_msg_slices_max, intToConfines(max))
 		}
 	} else if len(c.s) > max {
-		return c.fail_(default_msg_slices_max, c.ctx.intConfines(max))
+		return c.fail_(default_msg_slices_max, intToConfines(max))
 	}
 	return c.success_()
 }
@@ -130,17 +130,17 @@ func (c *checkSlices[T]) Range(min, max int) msg_[*checkSlices[T]] {
 }
 
 func (c *checkSlices[T]) Range_(min, max int, omitNil bool) msg_[*checkSlices[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_slices_range, c.ctx.intConfines(min, max))
+			return c.fail_(default_msg_slices_range, intToConfines(min, max))
 		}
 	} else if len(c.s) < min {
-		return c.fail_(default_msg_slices_range, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_slices_range, intToConfines(min, max))
 	} else if len(c.s) > max {
-		return c.fail_(default_msg_slices_range, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_slices_range, intToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -150,15 +150,15 @@ func (c *checkSlices[t]) Gt(min int) msg_[*checkSlices[t]] {
 }
 
 func (c *checkSlices[t]) Gt_(min int, omitNil bool) msg_[*checkSlices[t]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_slices_gt, c.ctx.intConfines(min))
+			return c.fail_(default_msg_slices_gt, intToConfines(min))
 		}
 	} else if len(c.s) <= min {
-		return c.fail_(default_msg_slices_gt, c.ctx.intConfines(min))
+		return c.fail_(default_msg_slices_gt, intToConfines(min))
 	}
 	return c.success_()
 }
@@ -168,15 +168,15 @@ func (c *checkSlices[t]) Lt(max int) msg_[*checkSlices[t]] {
 }
 
 func (c *checkSlices[t]) Lt_(max int, omitNil bool) msg_[*checkSlices[t]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_slices_lt, c.ctx.intConfines(max))
+			return c.fail_(default_msg_slices_lt, intToConfines(max))
 		}
 	} else if len(c.s) >= max {
-		return c.fail_(default_msg_slices_lt, c.ctx.intConfines(max))
+		return c.fail_(default_msg_slices_lt, intToConfines(max))
 	}
 	return c.success_()
 }
@@ -186,28 +186,29 @@ func (c *checkSlices[t]) Within(min, max int) msg_[*checkSlices[t]] {
 }
 
 func (c *checkSlices[t]) Within_(min, max int, omitNil bool) msg_[*checkSlices[t]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_slices_within, c.ctx.intConfines(min, max))
+			return c.fail_(default_msg_slices_within, intToConfines(min, max))
 		}
 	} else if len(c.s) <= min {
-		return c.fail_(default_msg_slices_within, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_slices_within, intToConfines(min, max))
 	} else if len(c.s) >= max {
-		return c.fail_(default_msg_slices_within, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_slices_within, intToConfines(min, max))
 	}
 	return c.success_()
 }
 
-func (c *checkSlices[T]) Dive(f func(t T)) {
+func (c *checkSlices[T]) Dive(f func(e T)) {
 	if c.s != nil && f != nil {
+		s := c.savepoint()
 		for i, t := range c.s {
-			c.ctx.diveElem(c.ctx.currentFieldName+"["+strconv.Itoa(i)+"]", func() {
-				f(t)
-			})
-			if c.ctx.interrupt() {
+			c.beforeDive(dive_slices, "["+strconv.Itoa(i)+"]", "", i)
+			f(t)
+			c.afterDive(s)
+			if c.interrupt() {
 				break
 			}
 		}

@@ -15,6 +15,7 @@
 package vfy_test
 
 import (
+	"strconv"
 	"testing"
 
 	vfy "github.com/jishaocong0910/gverify"
@@ -392,51 +393,77 @@ func TestCheckSlice_Dive(t *testing.T) {
 		r.Equal("param[2]'s length must be 5", msg)
 	}
 	{
+		m := MyStruct{
+			MySlice: []string{"", ""},
+		}
 		c := vfy.NewCheckAllContext()
-		vfy.Slices[string](c, []string{""}, "param").Dive(func(t string) {
-			vfy.String(c, &t, "f").NotBlank().Msg("%s must not be blank", c.FieldName())
-			vfy.String(c, &t, "f").NotBlank().Msg("%s must not be blank", c.FieldName())
-		})
+		vfy.Struct(c, &m, "myStruct").Dive()
 		ok, _, msgs := vfy.GetResult(c)
 		r.False(ok)
 		r.Len(msgs, 2)
-		r.Equal("param[0] must not be blank", msgs[0])
-		r.Equal("param[0] must not be blank", msgs[1])
+		r.Equal("myStruct.mySlice[0] must not be blank", msgs[0])
+		r.Equal("myStruct.mySlice[1] must not be blank", msgs[1])
+	}
+	{
+		m := MyStruct2{
+			MySlice: []string{"", ""},
+		}
+		c := vfy.NewCheckAllContext()
+		vfy.Struct(c, &m, "myStruct").Dive()
+		ok, _, msgs := vfy.GetResult(c)
+		r.False(ok)
+		r.Len(msgs, 2)
+		r.Equal("myStruct.mySlice[1] must not be blank", msgs[0])
+		r.Equal("myStruct.mySlice[2] must not be blank", msgs[1])
 	}
 	{
 		c := vfy.NewCheckAllContext()
-		vfy.Slices[Stuff](c, []Stuff{{}}, "param").Dive(func(t Stuff) {
-			vfy.Struct(c, &t, "f").Dive()
-			vfy.Struct(c, &t, "f").Dive()
+		vfy.Slices[MyStruct3](c, []MyStruct3{{}}, "param").Dive(func(t MyStruct3) {
+			vfy.Struct(c, &t, "").Dive()
 		})
 		ok, _, msgs := vfy.GetResult(c)
 		r.False(ok)
-		r.Len(msgs, 2)
-		r.Equal("param[0].field must not be blank", msgs[0])
-		r.Equal("param[0].field must not be blank", msgs[1])
+		r.Len(msgs, 1)
+		r.Equal("param[0].myField must not be blank", msgs[0])
 	}
 	{
 		c := vfy.NewCheckAllContext()
-		vfy.Slices[[]Stuff](c, [][]Stuff{{{Field: "a"}, {}}}, "param").Dive(func(t []Stuff) {
-			vfy.Slices(c, t, "f").Dive(func(t Stuff) {
-				vfy.Struct(c, &t, "f2").Dive()
-			})
-			vfy.Slices(c, t, "f").Dive(func(t Stuff) {
-				vfy.Struct(c, &t, "f2").Dive()
+		vfy.Slices[[]MyStruct3](c, [][]MyStruct3{{{MyField: "a"}, {}}}, "param").Dive(func(t []MyStruct3) {
+			vfy.Slices(c, t, "").Dive(func(t MyStruct3) {
+				vfy.Struct(c, &t, "").Dive()
 			})
 		})
 		ok, _, msgs := vfy.GetResult(c)
 		r.False(ok)
-		r.Len(msgs, 2)
-		r.Equal("param[0][1].field must not be blank", msgs[0])
-		r.Equal("param[0][1].field must not be blank", msgs[1])
+		r.Len(msgs, 1)
+		r.Equal("param[0][1].myField must not be blank", msgs[0])
 	}
 }
 
-type Stuff struct {
-	Field string
+type MyStruct struct {
+	MySlice []string
 }
 
-func (s Stuff) Checklist(ctx *vfy.Context) {
-	vfy.String(ctx, &s.Field, "field").NotBlank().Msg("%s must not be blank", ctx.FieldName())
+func (m MyStruct) Checklist(ctx *vfy.Context) {
+	vfy.Slices(ctx, m.MySlice, "mySlice").Dive(func(e string) {
+		vfy.String(ctx, &e, "").NotBlank().Msg("%s must not be blank", ctx.FieldName())
+	})
+}
+
+type MyStruct2 struct {
+	MySlice []string
+}
+
+func (m MyStruct2) Checklist(ctx *vfy.Context) {
+	vfy.Slices(ctx, m.MySlice, "mySlice").Dive(func(e string) {
+		vfy.String(ctx, &e, "["+strconv.Itoa(ctx.Index()+1)+"]").NotBlank().Msg("%s must not be blank", ctx.FieldName())
+	})
+}
+
+type MyStruct3 struct {
+	MyField string
+}
+
+func (s MyStruct3) Checklist(ctx *vfy.Context) {
+	vfy.String(ctx, &s.MyField, "myField").NotBlank().Msg("%s must not be blank", ctx.FieldName())
 }

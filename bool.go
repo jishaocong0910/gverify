@@ -15,8 +15,8 @@
 package vfy
 
 type checkBool struct {
-	ctx *Context
-	b   *bool
+	*Context
+	b *bool
 }
 
 func (c *checkBool) success() msg[*checkBool] {
@@ -28,8 +28,8 @@ func (c *checkBool) success_() msg_[*checkBool] {
 }
 
 func (c *checkBool) fail() msg[*checkBool] {
-	c.ctx.wronged = true
-	return msg[*checkBool]{ctx: c.ctx, t: c}
+	c.wronged = true
+	return msg[*checkBool]{ctx: c.Context, t: c}
 }
 
 func (c *checkBool) fail_(k defaultMsgKey) msg_[*checkBool] {
@@ -37,7 +37,7 @@ func (c *checkBool) fail_(k defaultMsgKey) msg_[*checkBool] {
 }
 
 func (c *checkBool) NotNil() msg_[*checkBool] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -51,7 +51,7 @@ func (c *checkBool) Custom(custom func(b bool) bool) msg[*checkBool] {
 }
 
 func (c *checkBool) Custom_(custom func(b bool) bool, omitNil bool) msg[*checkBool] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success()
 	}
 	if c.b == nil {

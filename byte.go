@@ -15,8 +15,8 @@
 package vfy
 
 type checkByte struct {
-	ctx *Context
-	b   *byte
+	*Context
+	b *byte
 }
 
 func (c *checkByte) success() msg[*checkByte] {
@@ -28,11 +28,11 @@ func (c *checkByte) success_() msg_[*checkByte] {
 }
 
 func (c *checkByte) fail(confines ...[]string) msg[*checkByte] {
-	c.ctx.wronged = true
+	c.wronged = true
 	for _, cs := range confines {
-		c.ctx.confines = append(c.ctx.confines, cs...)
+		c.confines = append(c.confines, cs...)
 	}
-	return msg[*checkByte]{ctx: c.ctx, t: c}
+	return msg[*checkByte]{ctx: c.Context, t: c}
 }
 
 func (c *checkByte) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkByte] {
@@ -40,7 +40,7 @@ func (c *checkByte) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkByte
 }
 
 func (c *checkByte) NotNil() msg_[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -54,15 +54,15 @@ func (c *checkByte) Min(min byte) msg_[*checkByte] {
 }
 
 func (c *checkByte) Min_(min byte, omitNil bool) msg_[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
 		if !omitNil {
-			return c.fail_(default_msg_byte_min, c.ctx.byteConfines(min))
+			return c.fail_(default_msg_byte_min, byteToConfines(min))
 		}
 	} else if *c.b < min {
-		return c.fail_(default_msg_byte_min, c.ctx.byteConfines(min))
+		return c.fail_(default_msg_byte_min, byteToConfines(min))
 	}
 	return c.success_()
 }
@@ -72,15 +72,15 @@ func (c *checkByte) Max(max byte) msg_[*checkByte] {
 }
 
 func (c *checkByte) Max_(max byte, omitNil bool) msg_[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
 		if !omitNil {
-			return c.fail_(default_msg_byte_max, c.ctx.byteConfines(max))
+			return c.fail_(default_msg_byte_max, byteToConfines(max))
 		}
 	} else if *c.b > max {
-		return c.fail_(default_msg_byte_max, c.ctx.byteConfines(max))
+		return c.fail_(default_msg_byte_max, byteToConfines(max))
 	}
 	return c.success_()
 }
@@ -90,17 +90,17 @@ func (c *checkByte) Range(min, max byte) msg_[*checkByte] {
 }
 
 func (c *checkByte) Range_(min, max byte, omitNil bool) msg_[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
 		if !omitNil {
-			return c.fail_(default_msg_byte_range, c.ctx.byteConfines(min, max))
+			return c.fail_(default_msg_byte_range, byteToConfines(min, max))
 		}
 	} else if *c.b < min {
-		return c.fail_(default_msg_byte_range, c.ctx.byteConfines(min, max))
+		return c.fail_(default_msg_byte_range, byteToConfines(min, max))
 	} else if *c.b > max {
-		return c.fail_(default_msg_byte_range, c.ctx.byteConfines(min, max))
+		return c.fail_(default_msg_byte_range, byteToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -110,15 +110,15 @@ func (c *checkByte) Gt(min byte) msg_[*checkByte] {
 }
 
 func (c *checkByte) Gt_(min byte, omitNil bool) msg_[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
 		if !omitNil {
-			return c.fail_(default_msg_byte_gt, c.ctx.byteConfines(min))
+			return c.fail_(default_msg_byte_gt, byteToConfines(min))
 		}
 	} else if *c.b <= min {
-		return c.fail_(default_msg_byte_gt, c.ctx.byteConfines(min))
+		return c.fail_(default_msg_byte_gt, byteToConfines(min))
 	}
 	return c.success_()
 }
@@ -128,15 +128,15 @@ func (c *checkByte) Lt(max byte) msg_[*checkByte] {
 }
 
 func (c *checkByte) Lt_(max byte, omitNil bool) msg_[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
 		if !omitNil {
-			return c.fail_(default_msg_byte_lt, c.ctx.byteConfines(max))
+			return c.fail_(default_msg_byte_lt, byteToConfines(max))
 		}
 	} else if *c.b >= max {
-		return c.fail_(default_msg_byte_lt, c.ctx.byteConfines(max))
+		return c.fail_(default_msg_byte_lt, byteToConfines(max))
 	}
 	return c.success_()
 }
@@ -146,17 +146,17 @@ func (c *checkByte) Within(min, max byte) msg_[*checkByte] {
 }
 
 func (c *checkByte) Within_(min, max byte, omitNil bool) msg_[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
 		if !omitNil {
-			return c.fail_(default_msg_byte_within, c.ctx.byteConfines(min, max))
+			return c.fail_(default_msg_byte_within, byteToConfines(min, max))
 		}
 	} else if *c.b <= min {
-		return c.fail_(default_msg_byte_within, c.ctx.byteConfines(min, max))
+		return c.fail_(default_msg_byte_within, byteToConfines(min, max))
 	} else if *c.b >= max {
-		return c.fail_(default_msg_byte_within, c.ctx.byteConfines(min, max))
+		return c.fail_(default_msg_byte_within, byteToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -166,12 +166,12 @@ func (c *checkByte) Options(options []byte) msg_[*checkByte] {
 }
 
 func (c *checkByte) Options_(options []byte, omitNil bool) msg_[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
 		if !omitNil {
-			return c.fail_(default_msg_byte_options, c.ctx.byteConfines(options...))
+			return c.fail_(default_msg_byte_options, byteToConfines(options...))
 		}
 	} else {
 		match := false
@@ -181,7 +181,7 @@ func (c *checkByte) Options_(options []byte, omitNil bool) msg_[*checkByte] {
 			}
 		}
 		if !match {
-			return c.fail_(default_msg_byte_options, c.ctx.byteConfines(options...))
+			return c.fail_(default_msg_byte_options, byteToConfines(options...))
 		}
 	}
 	return c.success_()
@@ -192,7 +192,7 @@ func (c *checkByte) Custom(custom func(b byte) bool) msg[*checkByte] {
 }
 
 func (c *checkByte) Custom_(custom func(b byte) bool, omitNil bool) msg[*checkByte] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success()
 	}
 	if c.b == nil {

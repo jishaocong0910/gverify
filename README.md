@@ -65,8 +65,8 @@ func (b *Book) Checklist(ctx *vfy.Context) {
 
     vfy.Slices(ctx, b.Categories, "categories").
         NotEmpty().Msg("%s must not be empty", ctx.FieldName()).
-            Dive(func(t *Category) {
-                vfy.Struct(ctx, t, "").
+            Dive(func(e *Category) {
+                vfy.Struct(ctx, e, "").
                     NotNil().Msg("%s must not be nil", ctx.FieldName()).
                     Dive()
             })
@@ -128,8 +128,7 @@ func main() {
 
 # 类型入口函数
 
-每个字段须根据自身类型，选择对应的*类型入口函数*，创建具有*校验方法*的*校验变量*，再根据需要使用其中的方法。所有
-*类型入口函数*的第一个参数都传入`Checklist`方法的`ctx`参数。
+校验字段时，须根据自身类型，调用对应的*类型入口函数*，再调用*校验方法*。所有*类型入口函数*的第一个参数都传入`Checklist`方法的`ctx`参数。
 
 | 类型入口函数      | 对应类型                      |
 |-------------|---------------------------|
@@ -148,7 +147,7 @@ func main() {
 | vfy.Uint32  | uint32                    |
 | vfy.Uint64  | uint64                    |
 | vfy.String  | string                    |
-| vfy.Slices  | slices                    |
+| vfy.Slices  | 切片                        |
 | vfy.Map     | map                       |
 | vfy.Struct  | struct（需实现vfy.Verifiable） |
 | vfy.Any     | any                       |
@@ -157,7 +156,7 @@ func main() {
 
 有些*校验方法*之间的名称，仅区别于是否具有下划线，例如`NotBlank`和`NotBlank_`
 。带下划线的方法多一个参数用于指定值为nil时是否跳过，不带下划线的方法默认不跳过，例如`NotBlank()`相当于`NotBlank_(false)`
-。下面列举不同类型创建的*校验变量*具有的*校验方法*，为节省篇幅不列举带下划线的方法。
+。下面列举所有*校验方法*，为节省篇幅不列举带下划线的方法。
 
 <table>
     <tr>
@@ -179,33 +178,33 @@ func main() {
     </tr>
     <tr>
         <td>NotEmpty</td>
-        <td>slices map</td>
+        <td>切片 map</td>
         <td>元素数量必须大于0</td>
     </tr>
     <tr>
         <td>Length</td>
-        <td>string slices map</td>
-        <td>必须等于指定值。对于string类型则比较utf8字符数，slices和map则比较元素数量</td>
+        <td>string 三七片 map</td>
+        <td>必须等于指定值。对于string类型则比较utf8字符数，切片和map则比较元素数量</td>
     </tr>
     <tr>
         <td>Min</td>
-        <td rowspan="6">byte int int8 int16 int32 int64 float32 float64 uint uint8 uint16 uint32 uint64 string slices map</td>
-        <td>必须大于等于指定值。对于string类型则比较utf8字符数，slices和map则比较元素数量</td>
+        <td rowspan="6">byte int int8 int16 int32 int64 float32 float64 uint uint8 uint16 uint32 uint64 string 切片 map</td>
+        <td>必须大于等于指定值。对于string类型则比较utf8字符数，切片和map则比较元素数量</td>
     </tr>
     <tr>
-        <td>Max</td><td>必须小于等于指定值。对于string类型则比较utf8字符数，slices和map则比较元素数量</td>
+        <td>Max</td><td>必须小于等于指定值。对于string类型则比较utf8字符数，切片和map则比较元素数量</td>
     </tr>
     <tr>
-        <td>Range</td><td>必须在指定范围，包含边界。对于string类型则比较utf8字符数，slices和map则比较元素数量</td>
+        <td>Range</td><td>必须在指定范围，包含边界。对于string类型则比较utf8字符数，切片和map则比较元素数量</td>
     </tr>
     <tr>
-        <td>Gt</td><td>必须大于指定值。对于string类型则比较utf8字符数，slices和map则比较元素数量</td>
+        <td>Gt</td><td>必须大于指定值。对于string类型则比较utf8字符数，切片和map则比较元素数量</td>
     </tr>
     <tr>
-        <td>Lt</td><td>必须小于指定值。对于string类型则比较utf8字符数，slices和map则比较元素数量</td>
+        <td>Lt</td><td>必须小于指定值。对于string类型则比较utf8字符数，切片和map则比较元素数量</td>
     </tr>
     <tr>
-        <td>Within</td><td>必须在指定范围内，即不包含边界。对于string类型则比较utf8字符数，slices和map则比较元素数量</td>
+        <td>Within</td><td>必须在指定范围内，即不包含边界。对于string类型则比较utf8字符数，切片和map则比较元素数量</td>
     </tr>
     <tr>
         <td>Options</td>
@@ -219,8 +218,8 @@ func main() {
     </tr>
     <tr>
         <td>Dive</td>
-        <td>struct slices map</td>
-        <td>校验struct字段、slices元素、map元素的key和value</td>
+        <td>struct 切片 map</td>
+        <td>校验struct字段、切片元素、map元素的key和value</td>
     </tr>
 </table>
 
@@ -236,11 +235,11 @@ func main() {
 | FieldName | 返回具有路径的字段名称。例如：`title`、`author.name`、`categoryId[2].sort`。                                                                                                                                           |
 | Confine   | 返回*校验方法*的指定索引的限制值的字符串形式。例如：对于`Max(10)`，`c.Confine(0)`返回`10`；对于`Range(5, 15)`，`c.Confine(0)`返回`5`，`c.Confine(1)`返回`15`。                                                                               |
 | Confines  | 返回*校验方法*的所有限制值的字符串形式，用`,`拼接，若数量超过两个，则最后一个用`or`拼接。例如：对于`Options("zh-cn", "en-US")`，`ctx.Confines()`返回`zh-cn, en-US`；对于`Options("zh-cn", "en-US", "ja-JP")`，`ctx.Confines()`返回`zh-cn, en-US or ja-JP`。 |
+| Index     | 返回切片元素索引，必须在切片的*校验方法*`Dive`中使用才有效，否则返回-1。                                                                                                                                                            |
 
 ## 元素字段名称
 
-在slices和map的*校验变量*的`Dive`方法内校验元素值时，会预设*元素字段名称*，并且*类型入口函数*的`fieldName`参数无效。对于slices
-设置为`<slices字段名称>[<索引>]`；对于map，key设置为`<map字段名称>$key`，value的设置为`<map字段名称>$value`。
+在切片和map的*校验方法*的`Dive`内校验元素值时，会预设*元素字段名称*，*类型入口函数*的`fieldName`为空字符串时则自动使用。对于切片设置为`[<索引>]`；对于map，key设置为`$key`，value的设置为`$value`。
 
 *代码示例*
 
@@ -250,33 +249,41 @@ package main
 import (
     "context"
     "fmt"
+    "strconv"
 
     vfy "github.com/jishaocong0910/gverify"
 )
 
 type Demo struct {
-    Slice []string
-    Map   map[string]int
+    MySlice  []string
+    MyMap    map[string]int
+    MySlice2 []string
 }
 
 func (d Demo) Checklist(ctx *vfy.Context) {
-    vfy.Slices(ctx, d.Slice, "slice_field_name").Dive(func(t string) {
-        // fieldName参数无效
-        vfy.String(ctx, &t, "elem").NotBlank().Msg("%s must not be blank", ctx.FieldName())
+    vfy.Slices(ctx, d.MySlice, "mySlice").Dive(func(e string) {
+        // fieldName为空字符串时默认为[<索引>]
+        vfy.String(ctx, &e, "").NotBlank().Msg("%s must not be blank", ctx.FieldName())
     })
-    vfy.Map(ctx, d.Map, "map_field_name").Dive(func(k string) {
-        // fieldName参数无效
-        vfy.String(ctx, &k, "key").NotBlank().Msg("%s must not be blank", ctx.FieldName())
+    vfy.Slices(ctx, d.MySlice2, "mySlice2").Dive(func(e string) {
+        // fieldName不为空字符串，则使用该值
+        vfy.String(ctx, &e, "#"+strconv.Itoa(ctx.Index()+1)).NotBlank().Msg("%s must not be blank", ctx.FieldName())
+    })
+    vfy.Map(ctx, d.MyMap, "myMap").Dive(func(k string) {
+        // fieldName为空字符串时默认为$key
+        vfy.String(ctx, &k, "").NotBlank().Msg("%s must not be blank", ctx.FieldName()).
+            Gt(2).Msg("%s's length must greater than %s", ctx.FieldName(), ctx.Confine(0))
     }, func(v int) {
-        // fieldName参数无效
-        vfy.Int(ctx, &v, "value").Within(0, 100).Msg("%s must be > %s and < %s", ctx.FieldName(), ctx.Confine(0), ctx.Confine(1))
+        // fieldName不为空字符串，则使用该值
+        vfy.Int(ctx, &v, "@value").Within(0, 100).Msg("%s must be > %s and < %s", ctx.FieldName(), ctx.Confine(0), ctx.Confine(1))
     })
 }
 
 func main() {
     d := &Demo{
-        Slice: []string{"a", "", ""},
-        Map:   map[string]int{"": 32, "a": 0, "b": 101},
+        MySlice:  []string{"", "", ""},
+        MySlice2: []string{"", "", ""},
+        MyMap:    map[string]int{"": 0, "a": 100},
     }
     ok, _, msgs := vfy.Check_(context.Background(), d, true)
     if !ok {
@@ -285,11 +292,17 @@ func main() {
         }
     }
     // Output:
-    // 0 slice_field_name[1] must not be blank
-    // 1 slice_field_name[2] must not be blank
-    // 2 map_field_name$key must not be blank
-    // 3 map_field_name$value must be > 0 and < 100
-    // 4 map_field_name$value must be > 0 and < 100
+    // 0 mySlice[0] must not be blank
+    // 1 mySlice[1] must not be blank
+    // 2 mySlice[2] must not be blank
+    // 3 mySlice2#1 must not be blank
+    // 4 mySlice2#2 must not be blank
+    // 5 mySlice2#3 must not be blank
+    // 6 myMap$key must not be blank
+    // 7 myMap$key's length must greater than 2
+    // 8 myMap@value must be > 0 and < 100
+    // 9 myMap$key's length must greater than 2
+    // 10 myMap@value must be > 0 and < 100
 }
 ```
 

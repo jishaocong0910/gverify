@@ -15,8 +15,8 @@
 package vfy
 
 type checkInt struct {
-	ctx *Context
-	i   *int
+	*Context
+	i *int
 }
 
 func (c *checkInt) success() msg[*checkInt] {
@@ -28,11 +28,11 @@ func (c *checkInt) success_() msg_[*checkInt] {
 }
 
 func (c *checkInt) fail(confines ...[]string) msg[*checkInt] {
-	c.ctx.wronged = true
+	c.wronged = true
 	for _, cs := range confines {
-		c.ctx.confines = append(c.ctx.confines, cs...)
+		c.confines = append(c.confines, cs...)
 	}
-	return msg[*checkInt]{ctx: c.ctx, t: c}
+	return msg[*checkInt]{ctx: c.Context, t: c}
 }
 
 func (c *checkInt) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkInt] {
@@ -40,7 +40,7 @@ func (c *checkInt) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkInt] 
 }
 
 func (c *checkInt) NotNil() msg_[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -54,15 +54,15 @@ func (c *checkInt) Min(min int) msg_[*checkInt] {
 }
 
 func (c *checkInt) Min_(min int, omitNil bool) msg_[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
 		if !omitNil {
-			return c.fail_(default_msg_int_min, c.ctx.intConfines(min))
+			return c.fail_(default_msg_int_min, intToConfines(min))
 		}
 	} else if *c.i < min {
-		return c.fail_(default_msg_int_min, c.ctx.intConfines(min))
+		return c.fail_(default_msg_int_min, intToConfines(min))
 	}
 	return c.success_()
 }
@@ -72,15 +72,15 @@ func (c *checkInt) Max(max int) msg_[*checkInt] {
 }
 
 func (c *checkInt) Max_(max int, omitNil bool) msg_[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
 		if !omitNil {
-			return c.fail_(default_msg_int_max, c.ctx.intConfines(max))
+			return c.fail_(default_msg_int_max, intToConfines(max))
 		}
 	} else if *c.i > max {
-		return c.fail_(default_msg_int_max, c.ctx.intConfines(max))
+		return c.fail_(default_msg_int_max, intToConfines(max))
 	}
 	return c.success_()
 }
@@ -90,17 +90,17 @@ func (c *checkInt) Range(min, max int) msg_[*checkInt] {
 }
 
 func (c *checkInt) Range_(min, max int, omitNil bool) msg_[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
 		if !omitNil {
-			return c.fail_(default_msg_int_range, c.ctx.intConfines(min, max))
+			return c.fail_(default_msg_int_range, intToConfines(min, max))
 		}
 	} else if *c.i < min {
-		return c.fail_(default_msg_int_range, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_int_range, intToConfines(min, max))
 	} else if *c.i > max {
-		return c.fail_(default_msg_int_range, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_int_range, intToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -110,15 +110,15 @@ func (c *checkInt) Gt(min int) msg_[*checkInt] {
 }
 
 func (c *checkInt) Gt_(min int, omitNil bool) msg_[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
 		if !omitNil {
-			return c.fail_(default_msg_int_gt, c.ctx.intConfines(min))
+			return c.fail_(default_msg_int_gt, intToConfines(min))
 		}
 	} else if *c.i <= min {
-		return c.fail_(default_msg_int_gt, c.ctx.intConfines(min))
+		return c.fail_(default_msg_int_gt, intToConfines(min))
 	}
 	return c.success_()
 }
@@ -128,15 +128,15 @@ func (c *checkInt) Lt(max int) msg_[*checkInt] {
 }
 
 func (c *checkInt) Lt_(max int, omitNil bool) msg_[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
 		if !omitNil {
-			return c.fail_(default_msg_int_lt, c.ctx.intConfines(max))
+			return c.fail_(default_msg_int_lt, intToConfines(max))
 		}
 	} else if *c.i >= max {
-		return c.fail_(default_msg_int_lt, c.ctx.intConfines(max))
+		return c.fail_(default_msg_int_lt, intToConfines(max))
 	}
 	return c.success_()
 }
@@ -146,17 +146,17 @@ func (c *checkInt) Within(min, max int) msg_[*checkInt] {
 }
 
 func (c *checkInt) Within_(min, max int, omitNil bool) msg_[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
 		if !omitNil {
-			return c.fail_(default_msg_int_within, c.ctx.intConfines(min, max))
+			return c.fail_(default_msg_int_within, intToConfines(min, max))
 		}
 	} else if *c.i <= min {
-		return c.fail_(default_msg_int_within, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_int_within, intToConfines(min, max))
 	} else if *c.i >= max {
-		return c.fail_(default_msg_int_within, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_int_within, intToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -166,12 +166,12 @@ func (c *checkInt) Options(options []int) msg_[*checkInt] {
 }
 
 func (c *checkInt) Options_(options []int, omitNil bool) msg_[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
 		if !omitNil {
-			return c.fail_(default_msg_int_options, c.ctx.intConfines(options...))
+			return c.fail_(default_msg_int_options, intToConfines(options...))
 		}
 	} else {
 		match := false
@@ -181,7 +181,7 @@ func (c *checkInt) Options_(options []int, omitNil bool) msg_[*checkInt] {
 			}
 		}
 		if !match {
-			return c.fail_(default_msg_int_options, c.ctx.intConfines(options...))
+			return c.fail_(default_msg_int_options, intToConfines(options...))
 		}
 	}
 	return c.success_()
@@ -192,7 +192,7 @@ func (c *checkInt) Custom(custom func(i int) bool) msg[*checkInt] {
 }
 
 func (c *checkInt) Custom_(custom func(i int) bool, omitNil bool) msg[*checkInt] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success()
 	}
 	if c.i == nil {

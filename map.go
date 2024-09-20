@@ -15,8 +15,8 @@
 package vfy
 
 type checkMap[K comparable, V any] struct {
-	ctx *Context
-	m   map[K]V
+	*Context
+	m map[K]V
 }
 
 func (c *checkMap[K, V]) success() msg[*checkMap[K, V]] {
@@ -28,11 +28,11 @@ func (c *checkMap[K, V]) success_() msg_[*checkMap[K, V]] {
 }
 
 func (c *checkMap[K, V]) fail(confines ...[]string) msg[*checkMap[K, V]] {
-	c.ctx.wronged = true
+	c.wronged = true
 	for _, cs := range confines {
-		c.ctx.confines = append(c.ctx.confines, cs...)
+		c.confines = append(c.confines, cs...)
 	}
-	return msg[*checkMap[K, V]]{ctx: c.ctx, t: c}
+	return msg[*checkMap[K, V]]{ctx: c.Context, t: c}
 }
 
 func (c *checkMap[K, V]) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkMap[K, V]] {
@@ -40,7 +40,7 @@ func (c *checkMap[K, V]) fail_(k defaultMsgKey, confines ...[]string) msg_[*chec
 }
 
 func (c *checkMap[K, V]) NotNil() msg_[*checkMap[K, V]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -54,7 +54,7 @@ func (c *checkMap[K, V]) NotEmpty() msg_[*checkMap[K, V]] {
 }
 
 func (c *checkMap[K, V]) NotEmpty_(omitNil bool) msg_[*checkMap[K, V]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -72,16 +72,16 @@ func (c *checkMap[K, V]) Length(l int) msg_[*checkMap[K, V]] {
 }
 
 func (c *checkMap[K, V]) Length_(l int, omitNil bool) msg_[*checkMap[K, V]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
 		if !omitNil {
-			return c.fail_(default_msg_map_length, c.ctx.intConfines(l))
+			return c.fail_(default_msg_map_length, intToConfines(l))
 		}
 	} else {
 		if len(c.m) != l {
-			return c.fail_(default_msg_map_length, c.ctx.intConfines(l))
+			return c.fail_(default_msg_map_length, intToConfines(l))
 		}
 	}
 	return c.success_()
@@ -92,15 +92,15 @@ func (c *checkMap[K, V]) Min(min int) msg_[*checkMap[K, V]] {
 }
 
 func (c *checkMap[K, V]) Min_(min int, omitNil bool) msg_[*checkMap[K, V]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
 		if !omitNil {
-			return c.fail_(default_msg_map_min, c.ctx.intConfines(min))
+			return c.fail_(default_msg_map_min, intToConfines(min))
 		}
 	} else if len(c.m) < min {
-		return c.fail_(default_msg_map_min, c.ctx.intConfines(min))
+		return c.fail_(default_msg_map_min, intToConfines(min))
 	}
 	return c.success_()
 }
@@ -110,15 +110,15 @@ func (c *checkMap[K, V]) Max(max int) msg_[*checkMap[K, V]] {
 }
 
 func (c *checkMap[K, V]) Max_(max int, omitNil bool) msg_[*checkMap[K, V]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
 		if !omitNil {
-			return c.fail_(default_msg_map_max, c.ctx.intConfines(max))
+			return c.fail_(default_msg_map_max, intToConfines(max))
 		}
 	} else if len(c.m) > max {
-		return c.fail_(default_msg_map_max, c.ctx.intConfines(max))
+		return c.fail_(default_msg_map_max, intToConfines(max))
 	}
 	return c.success_()
 }
@@ -128,17 +128,17 @@ func (c *checkMap[K, V]) Range(min, max int) msg_[*checkMap[K, V]] {
 }
 
 func (c *checkMap[K, V]) Range_(min, max int, omitNil bool) msg_[*checkMap[K, V]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
 		if !omitNil {
-			return c.fail_(default_msg_map_range, c.ctx.intConfines(min, max))
+			return c.fail_(default_msg_map_range, intToConfines(min, max))
 		}
 	} else if len(c.m) < min {
-		return c.fail_(default_msg_map_range, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_map_range, intToConfines(min, max))
 	} else if len(c.m) > max {
-		return c.fail_(default_msg_map_range, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_map_range, intToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -148,15 +148,15 @@ func (c *checkMap[k, v]) Gt(min int) msg_[*checkMap[k, v]] {
 }
 
 func (c *checkMap[k, v]) Gt_(min int, omitNil bool) msg_[*checkMap[k, v]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
 		if !omitNil {
-			return c.fail_(default_msg_map_gt, c.ctx.intConfines(min))
+			return c.fail_(default_msg_map_gt, intToConfines(min))
 		}
 	} else if len(c.m) <= min {
-		return c.fail_(default_msg_map_gt, c.ctx.intConfines(min))
+		return c.fail_(default_msg_map_gt, intToConfines(min))
 	}
 	return c.success_()
 }
@@ -166,15 +166,15 @@ func (c *checkMap[k, v]) Lt(max int) msg_[*checkMap[k, v]] {
 }
 
 func (c *checkMap[k, v]) Lt_(max int, omitNil bool) msg_[*checkMap[k, v]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
 		if !omitNil {
-			return c.fail_(default_msg_map_lt, c.ctx.intConfines(max))
+			return c.fail_(default_msg_map_lt, intToConfines(max))
 		}
 	} else if len(c.m) >= max {
-		return c.fail_(default_msg_map_lt, c.ctx.intConfines(max))
+		return c.fail_(default_msg_map_lt, intToConfines(max))
 	}
 	return c.success_()
 }
@@ -184,33 +184,40 @@ func (c *checkMap[k, v]) Within(min, max int) msg_[*checkMap[k, v]] {
 }
 
 func (c *checkMap[k, v]) Within_(min, max int, omitNil bool) msg_[*checkMap[k, v]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
 		if !omitNil {
-			return c.fail_(default_msg_map_within, c.ctx.intConfines(min, max))
+			return c.fail_(default_msg_map_within, intToConfines(min, max))
 		}
 	} else if len(c.m) <= min {
-		return c.fail_(default_msg_map_within, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_map_within, intToConfines(min, max))
 	} else if len(c.m) >= max {
-		return c.fail_(default_msg_map_within, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_map_within, intToConfines(min, max))
 	}
 	return c.success_()
 }
 
 func (c *checkMap[K, V]) Dive(key func(k K), value func(v V)) {
 	if c.m != nil {
+		s := c.savepoint()
 		for k, v := range c.m {
 			if key != nil {
-				c.ctx.diveElem(c.ctx.currentFieldName+"$key", func() {
-					key(k)
-				})
+				c.beforeDive(dive_map, "$key", "", 0)
+				key(k)
+				c.afterDive(s)
+				if c.interrupt() {
+					break
+				}
 			}
 			if value != nil {
-				c.ctx.diveElem(c.ctx.currentFieldName+"$value", func() {
-					value(v)
-				})
+				c.beforeDive(dive_map, "$value", "", 0)
+				value(v)
+				c.afterDive(s)
+				if c.interrupt() {
+					break
+				}
 			}
 		}
 	}

@@ -183,606 +183,606 @@ const (
 	default_msg_any_notnil
 )
 
-var defaultMsgs = map[defaultMsgKey]func(ctx *Context) string{}
+var defaultMsgs = map[defaultMsgKey]func(*Context) string{}
 
 type defaultMsgBool struct {
 }
 
-func (d defaultMsgBool) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgBool) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_bool_notnil] = f
 }
 
 type defaultMsgByte struct {
 }
 
-func (d defaultMsgByte) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgByte) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_byte_notnil] = f
 }
 
-func (d defaultMsgByte) Min(f func(ctx *Context) string) {
+func (d defaultMsgByte) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_byte_min] = f
 }
 
-func (d defaultMsgByte) Max(f func(ctx *Context) string) {
+func (d defaultMsgByte) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_byte_max] = f
 }
 
-func (d defaultMsgByte) Range(f func(ctx *Context) string) {
+func (d defaultMsgByte) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_byte_range] = f
 }
 
-func (d defaultMsgByte) Gt(f func(ctx *Context) string) {
+func (d defaultMsgByte) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_byte_gt] = f
 }
 
-func (d defaultMsgByte) Lt(f func(ctx *Context) string) {
+func (d defaultMsgByte) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_byte_lt] = f
 }
 
-func (d defaultMsgByte) Within(f func(ctx *Context) string) {
+func (d defaultMsgByte) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_byte_within] = f
 }
 
-func (d defaultMsgByte) Options(f func(ctx *Context) string) {
+func (d defaultMsgByte) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_byte_options] = f
 }
 
 type defaultMsgInt struct {
 }
 
-func (d defaultMsgInt) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgInt) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_int_notnil] = f
 }
 
-func (d defaultMsgInt) Min(f func(ctx *Context) string) {
+func (d defaultMsgInt) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_int_min] = f
 }
 
-func (d defaultMsgInt) Max(f func(ctx *Context) string) {
+func (d defaultMsgInt) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_int_max] = f
 }
 
-func (d defaultMsgInt) Range(f func(ctx *Context) string) {
+func (d defaultMsgInt) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_int_range] = f
 }
 
-func (d defaultMsgInt) Gt(f func(ctx *Context) string) {
+func (d defaultMsgInt) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_int_gt] = f
 }
 
-func (d defaultMsgInt) Lt(f func(ctx *Context) string) {
+func (d defaultMsgInt) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_int_lt] = f
 }
 
-func (d defaultMsgInt) Within(f func(ctx *Context) string) {
+func (d defaultMsgInt) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_int_within] = f
 }
 
-func (d defaultMsgInt) Options(f func(ctx *Context) string) {
+func (d defaultMsgInt) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_int_options] = f
 }
 
 type defaultMsgInt8 struct {
 }
 
-func (d defaultMsgInt8) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgInt8) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_int8_notnil] = f
 }
 
-func (d defaultMsgInt8) Min(f func(ctx *Context) string) {
+func (d defaultMsgInt8) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_int8_min] = f
 }
 
-func (d defaultMsgInt8) Max(f func(ctx *Context) string) {
+func (d defaultMsgInt8) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_int8_max] = f
 }
 
-func (d defaultMsgInt8) Range(f func(ctx *Context) string) {
+func (d defaultMsgInt8) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_int8_range] = f
 }
 
-func (d defaultMsgInt8) Gt(f func(ctx *Context) string) {
+func (d defaultMsgInt8) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_int8_gt] = f
 }
 
-func (d defaultMsgInt8) Lt(f func(ctx *Context) string) {
+func (d defaultMsgInt8) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_int8_lt] = f
 }
 
-func (d defaultMsgInt8) Within(f func(ctx *Context) string) {
+func (d defaultMsgInt8) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_int8_within] = f
 }
 
-func (d defaultMsgInt8) Options(f func(ctx *Context) string) {
+func (d defaultMsgInt8) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_int8_options] = f
 }
 
 type defaultMsgInt16 struct {
 }
 
-func (d defaultMsgInt16) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgInt16) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_int16_notnil] = f
 }
 
-func (d defaultMsgInt16) Min(f func(ctx *Context) string) {
+func (d defaultMsgInt16) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_int16_min] = f
 }
 
-func (d defaultMsgInt16) Max(f func(ctx *Context) string) {
+func (d defaultMsgInt16) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_int16_max] = f
 }
 
-func (d defaultMsgInt16) Range(f func(ctx *Context) string) {
+func (d defaultMsgInt16) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_int16_range] = f
 }
 
-func (d defaultMsgInt16) Gt(f func(ctx *Context) string) {
+func (d defaultMsgInt16) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_int16_gt] = f
 }
 
-func (d defaultMsgInt16) Lt(f func(ctx *Context) string) {
+func (d defaultMsgInt16) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_int16_lt] = f
 }
 
-func (d defaultMsgInt16) Within(f func(ctx *Context) string) {
+func (d defaultMsgInt16) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_int16_within] = f
 }
 
-func (d defaultMsgInt16) Options(f func(ctx *Context) string) {
+func (d defaultMsgInt16) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_int16_options] = f
 }
 
 type defaultMsgInt32 struct {
 }
 
-func (d defaultMsgInt32) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgInt32) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_int32_notnil] = f
 }
 
-func (d defaultMsgInt32) Min(f func(ctx *Context) string) {
+func (d defaultMsgInt32) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_int32_min] = f
 }
 
-func (d defaultMsgInt32) Max(f func(ctx *Context) string) {
+func (d defaultMsgInt32) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_int32_max] = f
 }
 
-func (d defaultMsgInt32) Range(f func(ctx *Context) string) {
+func (d defaultMsgInt32) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_int32_range] = f
 }
 
-func (d defaultMsgInt32) Gt(f func(ctx *Context) string) {
+func (d defaultMsgInt32) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_int32_gt] = f
 }
 
-func (d defaultMsgInt32) Lt(f func(ctx *Context) string) {
+func (d defaultMsgInt32) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_int32_lt] = f
 }
 
-func (d defaultMsgInt32) Within(f func(ctx *Context) string) {
+func (d defaultMsgInt32) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_int32_within] = f
 }
 
-func (d defaultMsgInt32) Options(f func(ctx *Context) string) {
+func (d defaultMsgInt32) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_int32_options] = f
 }
 
 type defaultMsgInt64 struct {
 }
 
-func (d defaultMsgInt64) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgInt64) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_int64_notnil] = f
 }
 
-func (d defaultMsgInt64) Min(f func(ctx *Context) string) {
+func (d defaultMsgInt64) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_int64_min] = f
 }
 
-func (d defaultMsgInt64) Max(f func(ctx *Context) string) {
+func (d defaultMsgInt64) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_int64_max] = f
 }
 
-func (d defaultMsgInt64) Range(f func(ctx *Context) string) {
+func (d defaultMsgInt64) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_int64_range] = f
 }
 
-func (d defaultMsgInt64) Gt(f func(ctx *Context) string) {
+func (d defaultMsgInt64) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_int64_gt] = f
 }
 
-func (d defaultMsgInt64) Lt(f func(ctx *Context) string) {
+func (d defaultMsgInt64) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_int64_lt] = f
 }
 
-func (d defaultMsgInt64) Within(f func(ctx *Context) string) {
+func (d defaultMsgInt64) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_int64_within] = f
 }
 
-func (d defaultMsgInt64) Options(f func(ctx *Context) string) {
+func (d defaultMsgInt64) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_int64_options] = f
 }
 
 type defaultMsgUint struct {
 }
 
-func (d defaultMsgUint) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgUint) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_uint_notnil] = f
 }
 
-func (d defaultMsgUint) Min(f func(ctx *Context) string) {
+func (d defaultMsgUint) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_uint_min] = f
 }
 
-func (d defaultMsgUint) Max(f func(ctx *Context) string) {
+func (d defaultMsgUint) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_uint_max] = f
 }
 
-func (d defaultMsgUint) Range(f func(ctx *Context) string) {
+func (d defaultMsgUint) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_uint_range] = f
 }
 
-func (d defaultMsgUint) Gt(f func(ctx *Context) string) {
+func (d defaultMsgUint) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint_gt] = f
 }
 
-func (d defaultMsgUint) Lt(f func(ctx *Context) string) {
+func (d defaultMsgUint) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint_lt] = f
 }
 
-func (d defaultMsgUint) Within(f func(ctx *Context) string) {
+func (d defaultMsgUint) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_uint_within] = f
 }
 
-func (d defaultMsgUint) Options(f func(ctx *Context) string) {
+func (d defaultMsgUint) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_uint_options] = f
 }
 
 type defaultMsgUint8 struct {
 }
 
-func (d defaultMsgUint8) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgUint8) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_uint8_notnil] = f
 }
 
-func (d defaultMsgUint8) Min(f func(ctx *Context) string) {
+func (d defaultMsgUint8) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_uint8_min] = f
 }
 
-func (d defaultMsgUint8) Max(f func(ctx *Context) string) {
+func (d defaultMsgUint8) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_uint8_max] = f
 }
 
-func (d defaultMsgUint8) Range(f func(ctx *Context) string) {
+func (d defaultMsgUint8) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_uint8_range] = f
 }
 
-func (d defaultMsgUint8) Gt(f func(ctx *Context) string) {
+func (d defaultMsgUint8) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint8_gt] = f
 }
 
-func (d defaultMsgUint8) Lt(f func(ctx *Context) string) {
+func (d defaultMsgUint8) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint8_lt] = f
 }
 
-func (d defaultMsgUint8) Within(f func(ctx *Context) string) {
+func (d defaultMsgUint8) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_uint8_within] = f
 }
 
-func (d defaultMsgUint8) Options(f func(ctx *Context) string) {
+func (d defaultMsgUint8) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_uint8_options] = f
 }
 
 type defaultMsgUint16 struct {
 }
 
-func (d defaultMsgUint16) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgUint16) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_uint16_notnil] = f
 }
 
-func (d defaultMsgUint16) Min(f func(ctx *Context) string) {
+func (d defaultMsgUint16) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_uint16_min] = f
 }
 
-func (d defaultMsgUint16) Max(f func(ctx *Context) string) {
+func (d defaultMsgUint16) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_uint16_max] = f
 }
 
-func (d defaultMsgUint16) Range(f func(ctx *Context) string) {
+func (d defaultMsgUint16) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_uint16_range] = f
 }
 
-func (d defaultMsgUint16) Gt(f func(ctx *Context) string) {
+func (d defaultMsgUint16) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint16_gt] = f
 }
 
-func (d defaultMsgUint16) Lt(f func(ctx *Context) string) {
+func (d defaultMsgUint16) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint16_lt] = f
 }
 
-func (d defaultMsgUint16) Within(f func(ctx *Context) string) {
+func (d defaultMsgUint16) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_uint16_within] = f
 }
 
-func (d defaultMsgUint16) Options(f func(ctx *Context) string) {
+func (d defaultMsgUint16) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_uint16_options] = f
 }
 
 type defaultMsgUint32 struct {
 }
 
-func (d defaultMsgUint32) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgUint32) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_uint32_notnil] = f
 }
 
-func (d defaultMsgUint32) Min(f func(ctx *Context) string) {
+func (d defaultMsgUint32) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_uint32_min] = f
 }
 
-func (d defaultMsgUint32) Max(f func(ctx *Context) string) {
+func (d defaultMsgUint32) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_uint32_max] = f
 }
 
-func (d defaultMsgUint32) Range(f func(ctx *Context) string) {
+func (d defaultMsgUint32) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_uint32_range] = f
 }
 
-func (d defaultMsgUint32) Gt(f func(ctx *Context) string) {
+func (d defaultMsgUint32) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint32_gt] = f
 }
 
-func (d defaultMsgUint32) Lt(f func(ctx *Context) string) {
+func (d defaultMsgUint32) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint32_lt] = f
 }
 
-func (d defaultMsgUint32) Within(f func(ctx *Context) string) {
+func (d defaultMsgUint32) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_uint32_within] = f
 }
 
-func (d defaultMsgUint32) Options(f func(ctx *Context) string) {
+func (d defaultMsgUint32) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_uint32_options] = f
 }
 
 type defaultMsgUint64 struct {
 }
 
-func (d defaultMsgUint64) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgUint64) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_uint64_notnil] = f
 }
 
-func (d defaultMsgUint64) Min(f func(ctx *Context) string) {
+func (d defaultMsgUint64) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_uint64_min] = f
 }
 
-func (d defaultMsgUint64) Max(f func(ctx *Context) string) {
+func (d defaultMsgUint64) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_uint64_max] = f
 }
 
-func (d defaultMsgUint64) Range(f func(ctx *Context) string) {
+func (d defaultMsgUint64) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_uint64_range] = f
 }
 
-func (d defaultMsgUint64) Gt(f func(ctx *Context) string) {
+func (d defaultMsgUint64) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint64_gt] = f
 }
 
-func (d defaultMsgUint64) Lt(f func(ctx *Context) string) {
+func (d defaultMsgUint64) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_uint64_lt] = f
 }
 
-func (d defaultMsgUint64) Within(f func(ctx *Context) string) {
+func (d defaultMsgUint64) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_uint64_within] = f
 }
 
-func (d defaultMsgUint64) Options(f func(ctx *Context) string) {
+func (d defaultMsgUint64) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_uint64_options] = f
 }
 
 type defaultMsgFloat32 struct {
 }
 
-func (d defaultMsgFloat32) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgFloat32) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_float32_notnil] = f
 }
 
-func (d defaultMsgFloat32) Min(f func(ctx *Context) string) {
+func (d defaultMsgFloat32) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_float32_min] = f
 }
 
-func (d defaultMsgFloat32) Max(f func(ctx *Context) string) {
+func (d defaultMsgFloat32) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_float32_max] = f
 }
 
-func (d defaultMsgFloat32) Range(f func(ctx *Context) string) {
+func (d defaultMsgFloat32) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_float32_range] = f
 }
 
-func (d defaultMsgFloat32) Gt(f func(ctx *Context) string) {
+func (d defaultMsgFloat32) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_float32_gt] = f
 }
 
-func (d defaultMsgFloat32) Lt(f func(ctx *Context) string) {
+func (d defaultMsgFloat32) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_float32_lt] = f
 }
 
-func (d defaultMsgFloat32) Within(f func(ctx *Context) string) {
+func (d defaultMsgFloat32) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_float32_within] = f
 }
 
-func (d defaultMsgFloat32) Options(f func(ctx *Context) string) {
+func (d defaultMsgFloat32) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_float32_options] = f
 }
 
 type defaultMsgFloat64 struct {
 }
 
-func (d defaultMsgFloat64) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgFloat64) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_float64_notnil] = f
 }
 
-func (d defaultMsgFloat64) Min(f func(ctx *Context) string) {
+func (d defaultMsgFloat64) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_float64_min] = f
 }
 
-func (d defaultMsgFloat64) Max(f func(ctx *Context) string) {
+func (d defaultMsgFloat64) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_float64_max] = f
 }
 
-func (d defaultMsgFloat64) Range(f func(ctx *Context) string) {
+func (d defaultMsgFloat64) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_float64_range] = f
 }
 
-func (d defaultMsgFloat64) Gt(f func(ctx *Context) string) {
+func (d defaultMsgFloat64) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_float64_gt] = f
 }
 
-func (d defaultMsgFloat64) Lt(f func(ctx *Context) string) {
+func (d defaultMsgFloat64) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_float64_lt] = f
 }
 
-func (d defaultMsgFloat64) Within(f func(ctx *Context) string) {
+func (d defaultMsgFloat64) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_float64_within] = f
 }
 
-func (d defaultMsgFloat64) Options(f func(ctx *Context) string) {
+func (d defaultMsgFloat64) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_float64_options] = f
 }
 
 type defaultMsgString struct {
 }
 
-func (d defaultMsgString) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgString) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_string_notnil] = f
 }
 
-func (d defaultMsgString) NotBlank(f func(ctx *Context) string) {
+func (d defaultMsgString) NotBlank(f func(*Context) string) {
 	defaultMsgs[default_msg_string_notblank] = f
 }
 
-func (d defaultMsgString) Length(f func(ctx *Context) string) {
+func (d defaultMsgString) Length(f func(*Context) string) {
 	defaultMsgs[default_msg_string_length] = f
 }
 
-func (d defaultMsgString) Regex(f func(ctx *Context) string) {
+func (d defaultMsgString) Regex(f func(*Context) string) {
 	defaultMsgs[default_msg_string_regex] = f
 }
 
-func (d defaultMsgString) Min(f func(ctx *Context) string) {
+func (d defaultMsgString) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_string_min] = f
 }
 
-func (d defaultMsgString) Max(f func(ctx *Context) string) {
+func (d defaultMsgString) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_string_max] = f
 }
 
-func (d defaultMsgString) Range(f func(ctx *Context) string) {
+func (d defaultMsgString) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_string_range] = f
 }
 
-func (d defaultMsgString) Gt(f func(ctx *Context) string) {
+func (d defaultMsgString) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_string_gt] = f
 }
 
-func (d defaultMsgString) Lt(f func(ctx *Context) string) {
+func (d defaultMsgString) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_string_lt] = f
 }
 
-func (d defaultMsgString) Within(f func(ctx *Context) string) {
+func (d defaultMsgString) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_string_within] = f
 }
 
-func (d defaultMsgString) Options(f func(ctx *Context) string) {
+func (d defaultMsgString) Options(f func(*Context) string) {
 	defaultMsgs[default_msg_string_options] = f
 }
 
 type defaultMsgSlices struct {
 }
 
-func (d defaultMsgSlices) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgSlices) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_notnil] = f
 }
 
-func (d defaultMsgSlices) NotEmpty(f func(ctx *Context) string) {
+func (d defaultMsgSlices) NotEmpty(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_notempty] = f
 }
 
-func (d defaultMsgSlices) Length(f func(ctx *Context) string) {
+func (d defaultMsgSlices) Length(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_length] = f
 }
 
-func (d defaultMsgSlices) Min(f func(ctx *Context) string) {
+func (d defaultMsgSlices) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_min] = f
 }
 
-func (d defaultMsgSlices) Max(f func(ctx *Context) string) {
+func (d defaultMsgSlices) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_max] = f
 }
 
-func (d defaultMsgSlices) Range(f func(ctx *Context) string) {
+func (d defaultMsgSlices) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_range] = f
 }
 
-func (d defaultMsgSlices) Gt(f func(ctx *Context) string) {
+func (d defaultMsgSlices) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_gt] = f
 }
 
-func (d defaultMsgSlices) Lt(f func(ctx *Context) string) {
+func (d defaultMsgSlices) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_lt] = f
 }
 
-func (d defaultMsgSlices) Within(f func(ctx *Context) string) {
+func (d defaultMsgSlices) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_slices_within] = f
 }
 
 type defaultMsgMap struct {
 }
 
-func (d defaultMsgMap) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgMap) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_map_notnil] = f
 }
 
-func (d defaultMsgMap) NotEmpty(f func(ctx *Context) string) {
+func (d defaultMsgMap) NotEmpty(f func(*Context) string) {
 	defaultMsgs[default_msg_map_notempty] = f
 }
 
-func (d defaultMsgMap) Length(f func(ctx *Context) string) {
+func (d defaultMsgMap) Length(f func(*Context) string) {
 	defaultMsgs[default_msg_map_length] = f
 }
 
-func (d defaultMsgMap) Min(f func(ctx *Context) string) {
+func (d defaultMsgMap) Min(f func(*Context) string) {
 	defaultMsgs[default_msg_map_min] = f
 }
 
-func (d defaultMsgMap) Max(f func(ctx *Context) string) {
+func (d defaultMsgMap) Max(f func(*Context) string) {
 	defaultMsgs[default_msg_map_max] = f
 }
 
-func (d defaultMsgMap) Range(f func(ctx *Context) string) {
+func (d defaultMsgMap) Range(f func(*Context) string) {
 	defaultMsgs[default_msg_map_range] = f
 }
 
-func (d defaultMsgMap) Gt(f func(ctx *Context) string) {
+func (d defaultMsgMap) Gt(f func(*Context) string) {
 	defaultMsgs[default_msg_map_gt] = f
 }
 
-func (d defaultMsgMap) Lt(f func(ctx *Context) string) {
+func (d defaultMsgMap) Lt(f func(*Context) string) {
 	defaultMsgs[default_msg_map_lt] = f
 }
 
-func (d defaultMsgMap) Within(f func(ctx *Context) string) {
+func (d defaultMsgMap) Within(f func(*Context) string) {
 	defaultMsgs[default_msg_map_within] = f
 }
 
 type defaultMsgStruct struct {
 }
 
-func (d defaultMsgStruct) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgStruct) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_struct_notnil] = f
 }
 
 type defaultMsgAny struct {
 }
 
-func (d defaultMsgAny) NotNil(f func(ctx *Context) string) {
+func (d defaultMsgAny) NotNil(f func(*Context) string) {
 	defaultMsgs[default_msg_any_notnil] = f
 }
 

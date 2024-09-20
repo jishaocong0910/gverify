@@ -15,8 +15,8 @@
 package vfy
 
 type checkAny[T any] struct {
-	ctx *Context
-	t   *T
+	*Context
+	t *T
 }
 
 func (c *checkAny[T]) success() msg[*checkAny[T]] {
@@ -28,8 +28,8 @@ func (c *checkAny[T]) success_() msg_[*checkAny[T]] {
 }
 
 func (c *checkAny[T]) fail() msg[*checkAny[T]] {
-	c.ctx.wronged = true
-	return msg[*checkAny[T]]{ctx: c.ctx, t: c}
+	c.wronged = true
+	return msg[*checkAny[T]]{ctx: c.Context, t: c}
 }
 
 func (c *checkAny[T]) fail_(k defaultMsgKey) msg_[*checkAny[T]] {
@@ -37,7 +37,7 @@ func (c *checkAny[T]) fail_(k defaultMsgKey) msg_[*checkAny[T]] {
 }
 
 func (c *checkAny[T]) NotNil() msg_[*checkAny[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.t == nil {
@@ -51,7 +51,7 @@ func (c *checkAny[T]) Custom(custom func(t T) bool) msg[*checkAny[T]] {
 }
 
 func (c *checkAny[T]) Custom_(custom func(t T) bool, omitNil bool) msg[*checkAny[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success()
 	}
 	if c.t == nil {

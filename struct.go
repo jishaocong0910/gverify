@@ -15,8 +15,8 @@
 package vfy
 
 type checkStruct[T Verifiable] struct {
-	ctx *Context
-	t   *T
+	*Context
+	t *T
 }
 
 func (c *checkStruct[T]) success() msg[*checkStruct[T]] {
@@ -28,8 +28,8 @@ func (c *checkStruct[T]) success_() msg_[*checkStruct[T]] {
 }
 
 func (c *checkStruct[T]) fail() msg[*checkStruct[T]] {
-	c.ctx.wronged = true
-	return msg[*checkStruct[T]]{ctx: c.ctx, t: c}
+	c.wronged = true
+	return msg[*checkStruct[T]]{ctx: c.Context, t: c}
 }
 
 func (c *checkStruct[T]) fail_(k defaultMsgKey) msg_[*checkStruct[T]] {
@@ -37,7 +37,7 @@ func (c *checkStruct[T]) fail_(k defaultMsgKey) msg_[*checkStruct[T]] {
 }
 
 func (c *checkStruct[T]) NotNil() msg_[*checkStruct[T]] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.t == nil {
@@ -48,8 +48,9 @@ func (c *checkStruct[T]) NotNil() msg_[*checkStruct[T]] {
 
 func (c *checkStruct[T]) Dive() {
 	if c.t != nil {
-		c.ctx.diveStruct(c.ctx.currentFieldName, func() {
-			(*c.t).Checklist(c.ctx)
-		})
+		s := c.savepoint()
+		c.beforeDive(dive_struct, "", ".", 0)
+		(*c.t).Checklist(c.Context)
+		c.afterDive(s)
 	}
 }

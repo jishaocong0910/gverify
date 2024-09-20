@@ -15,8 +15,8 @@
 package vfy
 
 type checkUint32 struct {
-	ctx *Context
-	u   *uint32
+	*Context
+	u *uint32
 }
 
 func (c *checkUint32) success() msg[*checkUint32] {
@@ -28,11 +28,11 @@ func (c *checkUint32) success_() msg_[*checkUint32] {
 }
 
 func (c *checkUint32) fail(confines ...[]string) msg[*checkUint32] {
-	c.ctx.wronged = true
+	c.wronged = true
 	for _, cs := range confines {
-		c.ctx.confines = append(c.ctx.confines, cs...)
+		c.confines = append(c.confines, cs...)
 	}
-	return msg[*checkUint32]{ctx: c.ctx, t: c}
+	return msg[*checkUint32]{ctx: c.Context, t: c}
 }
 
 func (c *checkUint32) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkUint32] {
@@ -40,7 +40,7 @@ func (c *checkUint32) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkUi
 }
 
 func (c *checkUint32) NotNil() msg_[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -54,15 +54,15 @@ func (c *checkUint32) Min(min uint32) msg_[*checkUint32] {
 }
 
 func (c *checkUint32) Min_(min uint32, omitNil bool) msg_[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
 		if !omitNil {
-			return c.fail_(default_msg_uint32_min, c.ctx.uint32Confines(min))
+			return c.fail_(default_msg_uint32_min, uint32ToConfines(min))
 		}
 	} else if *c.u < min {
-		return c.fail_(default_msg_uint32_min, c.ctx.uint32Confines(min))
+		return c.fail_(default_msg_uint32_min, uint32ToConfines(min))
 	}
 	return c.success_()
 }
@@ -72,15 +72,15 @@ func (c *checkUint32) Max(max uint32) msg_[*checkUint32] {
 }
 
 func (c *checkUint32) Max_(max uint32, omitNil bool) msg_[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
 		if !omitNil {
-			return c.fail_(default_msg_uint32_max, c.ctx.uint32Confines(max))
+			return c.fail_(default_msg_uint32_max, uint32ToConfines(max))
 		}
 	} else if *c.u > max {
-		return c.fail_(default_msg_uint32_max, c.ctx.uint32Confines(max))
+		return c.fail_(default_msg_uint32_max, uint32ToConfines(max))
 	}
 	return c.success_()
 }
@@ -90,17 +90,17 @@ func (c *checkUint32) Range(min, max uint32) msg_[*checkUint32] {
 }
 
 func (c *checkUint32) Range_(min, max uint32, omitNil bool) msg_[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
 		if !omitNil {
-			return c.fail_(default_msg_uint32_range, c.ctx.uint32Confines(min, max))
+			return c.fail_(default_msg_uint32_range, uint32ToConfines(min, max))
 		}
 	} else if *c.u < min {
-		return c.fail_(default_msg_uint32_range, c.ctx.uint32Confines(min, max))
+		return c.fail_(default_msg_uint32_range, uint32ToConfines(min, max))
 	} else if *c.u > max {
-		return c.fail_(default_msg_uint32_range, c.ctx.uint32Confines(min, max))
+		return c.fail_(default_msg_uint32_range, uint32ToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -110,15 +110,15 @@ func (c *checkUint32) Gt(min uint32) msg_[*checkUint32] {
 }
 
 func (c *checkUint32) Gt_(min uint32, omitNil bool) msg_[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
 		if !omitNil {
-			return c.fail_(default_msg_uint32_gt, c.ctx.uint32Confines(min))
+			return c.fail_(default_msg_uint32_gt, uint32ToConfines(min))
 		}
 	} else if *c.u <= min {
-		return c.fail_(default_msg_uint32_gt, c.ctx.uint32Confines(min))
+		return c.fail_(default_msg_uint32_gt, uint32ToConfines(min))
 	}
 	return c.success_()
 }
@@ -128,15 +128,15 @@ func (c *checkUint32) Lt(max uint32) msg_[*checkUint32] {
 }
 
 func (c *checkUint32) Lt_(max uint32, omitNil bool) msg_[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
 		if !omitNil {
-			return c.fail_(default_msg_uint32_lt, c.ctx.uint32Confines(max))
+			return c.fail_(default_msg_uint32_lt, uint32ToConfines(max))
 		}
 	} else if *c.u >= max {
-		return c.fail_(default_msg_uint32_lt, c.ctx.uint32Confines(max))
+		return c.fail_(default_msg_uint32_lt, uint32ToConfines(max))
 	}
 	return c.success_()
 }
@@ -146,17 +146,17 @@ func (c *checkUint32) Within(min, max uint32) msg_[*checkUint32] {
 }
 
 func (c *checkUint32) Within_(min, max uint32, omitNil bool) msg_[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
 		if !omitNil {
-			return c.fail_(default_msg_uint32_within, c.ctx.uint32Confines(min, max))
+			return c.fail_(default_msg_uint32_within, uint32ToConfines(min, max))
 		}
 	} else if *c.u <= min {
-		return c.fail_(default_msg_uint32_within, c.ctx.uint32Confines(min, max))
+		return c.fail_(default_msg_uint32_within, uint32ToConfines(min, max))
 	} else if *c.u >= max {
-		return c.fail_(default_msg_uint32_within, c.ctx.uint32Confines(min, max))
+		return c.fail_(default_msg_uint32_within, uint32ToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -166,12 +166,12 @@ func (c *checkUint32) Options(options []uint32) msg_[*checkUint32] {
 }
 
 func (c *checkUint32) Options_(options []uint32, omitNil bool) msg_[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
 		if !omitNil {
-			return c.fail_(default_msg_uint32_options, c.ctx.uint32Confines(options...))
+			return c.fail_(default_msg_uint32_options, uint32ToConfines(options...))
 		}
 	} else {
 		match := false
@@ -181,7 +181,7 @@ func (c *checkUint32) Options_(options []uint32, omitNil bool) msg_[*checkUint32
 			}
 		}
 		if !match {
-			return c.fail_(default_msg_uint32_options, c.ctx.uint32Confines(options...))
+			return c.fail_(default_msg_uint32_options, uint32ToConfines(options...))
 		}
 	}
 	return c.success_()
@@ -192,7 +192,7 @@ func (c *checkUint32) Custom(custom func(u uint32) bool) msg[*checkUint32] {
 }
 
 func (c *checkUint32) Custom_(custom func(u uint32) bool, omitNil bool) msg[*checkUint32] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success()
 	}
 	if c.u == nil {

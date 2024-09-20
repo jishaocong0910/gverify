@@ -21,8 +21,8 @@ import (
 )
 
 type checkString struct {
-	ctx *Context
-	s   *string
+	*Context
+	s *string
 }
 
 func (c *checkString) success() msg[*checkString] {
@@ -34,11 +34,11 @@ func (c *checkString) success_() msg_[*checkString] {
 }
 
 func (c *checkString) fail(confines ...[]string) msg[*checkString] {
-	c.ctx.wronged = true
+	c.wronged = true
 	for _, cs := range confines {
-		c.ctx.confines = append(c.ctx.confines, cs...)
+		c.confines = append(c.confines, cs...)
 	}
-	return msg[*checkString]{ctx: c.ctx, t: c}
+	return msg[*checkString]{ctx: c.Context, t: c}
 }
 
 func (c *checkString) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkString] {
@@ -46,7 +46,7 @@ func (c *checkString) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkSt
 }
 
 func (c *checkString) NotNil() msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
@@ -60,7 +60,7 @@ func (c *checkString) NotBlank() msg_[*checkString] {
 }
 
 func (c *checkString) NotBlank_(omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
@@ -87,16 +87,16 @@ func (c *checkString) Length(l int) msg_[*checkString] {
 }
 
 func (c *checkString) Length_(l int, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_string_length, c.ctx.intConfines(l))
+			return c.fail_(default_msg_string_length, intToConfines(l))
 		}
 	} else {
 		if utf8.RuneCountInString(*c.s) != l {
-			return c.fail_(default_msg_string_length, c.ctx.intConfines(l))
+			return c.fail_(default_msg_string_length, intToConfines(l))
 		}
 	}
 	return c.success_()
@@ -107,7 +107,7 @@ func (c *checkString) Regex(r *regexp.Regexp) msg_[*checkString] {
 }
 
 func (c *checkString) Regex_(r *regexp.Regexp, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
@@ -127,15 +127,15 @@ func (c *checkString) Min(min int) msg_[*checkString] {
 }
 
 func (c *checkString) Min_(min int, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_string_min, c.ctx.intConfines(min))
+			return c.fail_(default_msg_string_min, intToConfines(min))
 		}
 	} else if utf8.RuneCountInString(*c.s) < min {
-		return c.fail_(default_msg_string_min, c.ctx.intConfines(min))
+		return c.fail_(default_msg_string_min, intToConfines(min))
 	}
 	return c.success_()
 }
@@ -145,15 +145,15 @@ func (c *checkString) Max(max int) msg_[*checkString] {
 }
 
 func (c *checkString) Max_(max int, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_string_max, c.ctx.intConfines(max))
+			return c.fail_(default_msg_string_max, intToConfines(max))
 		}
 	} else if utf8.RuneCountInString(*c.s) > max {
-		return c.fail_(default_msg_string_max, c.ctx.intConfines(max))
+		return c.fail_(default_msg_string_max, intToConfines(max))
 	}
 	return c.success_()
 }
@@ -163,17 +163,17 @@ func (c *checkString) Range(min, max int) msg_[*checkString] {
 }
 
 func (c *checkString) Range_(min, max int, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_string_range, c.ctx.intConfines(min, max))
+			return c.fail_(default_msg_string_range, intToConfines(min, max))
 		}
 	} else if utf8.RuneCountInString(*c.s) < min {
-		return c.fail_(default_msg_string_range, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_string_range, intToConfines(min, max))
 	} else if utf8.RuneCountInString(*c.s) > max {
-		return c.fail_(default_msg_string_range, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_string_range, intToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -183,15 +183,15 @@ func (c *checkString) Gt(min int) msg_[*checkString] {
 }
 
 func (c *checkString) Gt_(min int, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_string_gt, c.ctx.intConfines(min))
+			return c.fail_(default_msg_string_gt, intToConfines(min))
 		}
 	} else if utf8.RuneCountInString(*c.s) <= min {
-		return c.fail_(default_msg_string_gt, c.ctx.intConfines(min))
+		return c.fail_(default_msg_string_gt, intToConfines(min))
 	}
 	return c.success_()
 }
@@ -201,15 +201,15 @@ func (c *checkString) Lt(max int) msg_[*checkString] {
 }
 
 func (c *checkString) Lt_(max int, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_string_lt, c.ctx.intConfines(max))
+			return c.fail_(default_msg_string_lt, intToConfines(max))
 		}
 	} else if utf8.RuneCountInString(*c.s) >= max {
-		return c.fail_(default_msg_string_lt, c.ctx.intConfines(max))
+		return c.fail_(default_msg_string_lt, intToConfines(max))
 	}
 	return c.success_()
 }
@@ -219,17 +219,17 @@ func (c *checkString) Within(min, max int) msg_[*checkString] {
 }
 
 func (c *checkString) Within_(min, max int, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
 		if !omitNil {
-			return c.fail_(default_msg_string_within, c.ctx.intConfines(min, max))
+			return c.fail_(default_msg_string_within, intToConfines(min, max))
 		}
 	} else if utf8.RuneCountInString(*c.s) <= min {
-		return c.fail_(default_msg_string_within, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_string_within, intToConfines(min, max))
 	} else if utf8.RuneCountInString(*c.s) >= max {
-		return c.fail_(default_msg_string_within, c.ctx.intConfines(min, max))
+		return c.fail_(default_msg_string_within, intToConfines(min, max))
 	}
 	return c.success_()
 }
@@ -239,7 +239,7 @@ func (c *checkString) Options(options []string) msg_[*checkString] {
 }
 
 func (c *checkString) Options_(options []string, omitNil bool) msg_[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success_()
 	}
 	if c.s == nil {
@@ -265,7 +265,7 @@ func (c *checkString) Custom(custom func(i string) bool) msg[*checkString] {
 }
 
 func (c *checkString) Custom_(custom func(i string) bool, omitNil bool) msg[*checkString] {
-	if c.ctx.interrupt() {
+	if c.interrupt() {
 		return c.success()
 	}
 	if c.s == nil {
