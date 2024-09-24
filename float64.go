@@ -15,32 +15,32 @@
 package vfy
 
 type checkFloat64 struct {
-	*Context
-	f *float64
+	ctx *Context
+	f   *float64
 }
 
-func (c *checkFloat64) success() msg[*checkFloat64] {
-	return msg[*checkFloat64]{t: c}
+func (c *checkFloat64) success() setMsg[*checkFloat64] {
+	return setMsg[*checkFloat64]{t: c}
 }
 
-func (c *checkFloat64) success_() msg_[*checkFloat64] {
-	return msg_[*checkFloat64]{msg: c.success()}
+func (c *checkFloat64) success_() setMsgOrDefault[*checkFloat64] {
+	return setMsgOrDefault[*checkFloat64]{setMsg: c.success()}
 }
 
-func (c *checkFloat64) fail(confines ...[]string) msg[*checkFloat64] {
-	c.wronged = true
+func (c *checkFloat64) fail(confines ...[]string) setMsg[*checkFloat64] {
+	c.ctx.wronged = true
 	for _, cs := range confines {
-		c.confines = append(c.confines, cs...)
+		c.ctx.confines = append(c.ctx.confines, cs...)
 	}
-	return msg[*checkFloat64]{ctx: c.Context, t: c}
+	return setMsg[*checkFloat64]{ctx: c.ctx, t: c}
 }
 
-func (c *checkFloat64) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkFloat64] {
-	return msg_[*checkFloat64]{msg: c.fail(confines...), k: k}
+func (c *checkFloat64) fail_(k defaultMsgKey, confines ...[]string) setMsgOrDefault[*checkFloat64] {
+	return setMsgOrDefault[*checkFloat64]{setMsg: c.fail(confines...), k: k}
 }
 
-func (c *checkFloat64) NotNil() msg_[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) NotNil() setMsgOrDefault[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -49,12 +49,12 @@ func (c *checkFloat64) NotNil() msg_[*checkFloat64] {
 	return c.success_()
 }
 
-func (c *checkFloat64) Min(min float64) msg_[*checkFloat64] {
+func (c *checkFloat64) Min(min float64) setMsgOrDefault[*checkFloat64] {
 	return c.Min_(min, false)
 }
 
-func (c *checkFloat64) Min_(min float64, omitNil bool) msg_[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) Min_(min float64, omitNil bool) setMsgOrDefault[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -67,12 +67,12 @@ func (c *checkFloat64) Min_(min float64, omitNil bool) msg_[*checkFloat64] {
 	return c.success_()
 }
 
-func (c *checkFloat64) Max(max float64) msg_[*checkFloat64] {
+func (c *checkFloat64) Max(max float64) setMsgOrDefault[*checkFloat64] {
 	return c.Max_(max, false)
 }
 
-func (c *checkFloat64) Max_(max float64, omitNil bool) msg_[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) Max_(max float64, omitNil bool) setMsgOrDefault[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -85,12 +85,12 @@ func (c *checkFloat64) Max_(max float64, omitNil bool) msg_[*checkFloat64] {
 	return c.success_()
 }
 
-func (c *checkFloat64) Range(min, max float64) msg_[*checkFloat64] {
+func (c *checkFloat64) Range(min, max float64) setMsgOrDefault[*checkFloat64] {
 	return c.Range_(min, max, false)
 }
 
-func (c *checkFloat64) Range_(min, max float64, omitNil bool) msg_[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) Range_(min, max float64, omitNil bool) setMsgOrDefault[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -105,12 +105,12 @@ func (c *checkFloat64) Range_(min, max float64, omitNil bool) msg_[*checkFloat64
 	return c.success_()
 }
 
-func (c *checkFloat64) Gt(min float64) msg_[*checkFloat64] {
+func (c *checkFloat64) Gt(min float64) setMsgOrDefault[*checkFloat64] {
 	return c.Gt_(min, false)
 }
 
-func (c *checkFloat64) Gt_(min float64, omitNil bool) msg_[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) Gt_(min float64, omitNil bool) setMsgOrDefault[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -123,12 +123,12 @@ func (c *checkFloat64) Gt_(min float64, omitNil bool) msg_[*checkFloat64] {
 	return c.success_()
 }
 
-func (c *checkFloat64) Lt(max float64) msg_[*checkFloat64] {
+func (c *checkFloat64) Lt(max float64) setMsgOrDefault[*checkFloat64] {
 	return c.Lt_(max, false)
 }
 
-func (c *checkFloat64) Lt_(max float64, omitNil bool) msg_[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) Lt_(max float64, omitNil bool) setMsgOrDefault[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -141,12 +141,12 @@ func (c *checkFloat64) Lt_(max float64, omitNil bool) msg_[*checkFloat64] {
 	return c.success_()
 }
 
-func (c *checkFloat64) Within(min, max float64) msg_[*checkFloat64] {
+func (c *checkFloat64) Within(min, max float64) setMsgOrDefault[*checkFloat64] {
 	return c.Within_(min, max, false)
 }
 
-func (c *checkFloat64) Within_(min, max float64, omitNil bool) msg_[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) Within_(min, max float64, omitNil bool) setMsgOrDefault[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -161,12 +161,12 @@ func (c *checkFloat64) Within_(min, max float64, omitNil bool) msg_[*checkFloat6
 	return c.success_()
 }
 
-func (c *checkFloat64) Options(options []float64) msg_[*checkFloat64] {
+func (c *checkFloat64) Options(options []float64) setMsgOrDefault[*checkFloat64] {
 	return c.Options_(options, false)
 }
 
-func (c *checkFloat64) Options_(options []float64, omitNil bool) msg_[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) Options_(options []float64, omitNil bool) setMsgOrDefault[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.f == nil {
@@ -187,12 +187,12 @@ func (c *checkFloat64) Options_(options []float64, omitNil bool) msg_[*checkFloa
 	return c.success_()
 }
 
-func (c *checkFloat64) Custom(custom func(f float64) bool) msg[*checkFloat64] {
+func (c *checkFloat64) Custom(custom func(f float64) bool) setMsg[*checkFloat64] {
 	return c.Custom_(custom, false)
 }
 
-func (c *checkFloat64) Custom_(custom func(f float64) bool, omitNil bool) msg[*checkFloat64] {
-	if c.interrupt() {
+func (c *checkFloat64) Custom_(custom func(f float64) bool, omitNil bool) setMsg[*checkFloat64] {
+	if c.ctx.interrupt() {
 		return c.success()
 	}
 	if c.f == nil {

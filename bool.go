@@ -15,29 +15,29 @@
 package vfy
 
 type checkBool struct {
-	*Context
-	b *bool
+	ctx *Context
+	b   *bool
 }
 
-func (c *checkBool) success() msg[*checkBool] {
-	return msg[*checkBool]{t: c}
+func (c *checkBool) success() setMsg[*checkBool] {
+	return setMsg[*checkBool]{t: c}
 }
 
-func (c *checkBool) success_() msg_[*checkBool] {
-	return msg_[*checkBool]{msg: c.success()}
+func (c *checkBool) success_() setMsgOrDefault[*checkBool] {
+	return setMsgOrDefault[*checkBool]{setMsg: c.success()}
 }
 
-func (c *checkBool) fail() msg[*checkBool] {
-	c.wronged = true
-	return msg[*checkBool]{ctx: c.Context, t: c}
+func (c *checkBool) fail() setMsg[*checkBool] {
+	c.ctx.wronged = true
+	return setMsg[*checkBool]{ctx: c.ctx, t: c}
 }
 
-func (c *checkBool) fail_(k defaultMsgKey) msg_[*checkBool] {
-	return msg_[*checkBool]{msg: c.fail(), k: k}
+func (c *checkBool) fail_(k defaultMsgKey) setMsgOrDefault[*checkBool] {
+	return setMsgOrDefault[*checkBool]{setMsg: c.fail(), k: k}
 }
 
-func (c *checkBool) NotNil() msg_[*checkBool] {
-	if c.interrupt() {
+func (c *checkBool) NotNil() setMsgOrDefault[*checkBool] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -46,12 +46,12 @@ func (c *checkBool) NotNil() msg_[*checkBool] {
 	return c.success_()
 }
 
-func (c *checkBool) Custom(custom func(b bool) bool) msg[*checkBool] {
+func (c *checkBool) Custom(custom func(b bool) bool) setMsg[*checkBool] {
 	return c.Custom_(custom, false)
 }
 
-func (c *checkBool) Custom_(custom func(b bool) bool, omitNil bool) msg[*checkBool] {
-	if c.interrupt() {
+func (c *checkBool) Custom_(custom func(b bool) bool, omitNil bool) setMsg[*checkBool] {
+	if c.ctx.interrupt() {
 		return c.success()
 	}
 	if c.b == nil {

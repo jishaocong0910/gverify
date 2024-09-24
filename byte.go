@@ -15,32 +15,32 @@
 package vfy
 
 type checkByte struct {
-	*Context
-	b *byte
+	ctx *Context
+	b   *byte
 }
 
-func (c *checkByte) success() msg[*checkByte] {
-	return msg[*checkByte]{t: c}
+func (c *checkByte) success() setMsg[*checkByte] {
+	return setMsg[*checkByte]{t: c}
 }
 
-func (c *checkByte) success_() msg_[*checkByte] {
-	return msg_[*checkByte]{msg: c.success()}
+func (c *checkByte) success_() setMsgOrDefault[*checkByte] {
+	return setMsgOrDefault[*checkByte]{setMsg: c.success()}
 }
 
-func (c *checkByte) fail(confines ...[]string) msg[*checkByte] {
-	c.wronged = true
+func (c *checkByte) fail(confines ...[]string) setMsg[*checkByte] {
+	c.ctx.wronged = true
 	for _, cs := range confines {
-		c.confines = append(c.confines, cs...)
+		c.ctx.confines = append(c.ctx.confines, cs...)
 	}
-	return msg[*checkByte]{ctx: c.Context, t: c}
+	return setMsg[*checkByte]{ctx: c.ctx, t: c}
 }
 
-func (c *checkByte) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkByte] {
-	return msg_[*checkByte]{msg: c.fail(confines...), k: k}
+func (c *checkByte) fail_(k defaultMsgKey, confines ...[]string) setMsgOrDefault[*checkByte] {
+	return setMsgOrDefault[*checkByte]{setMsg: c.fail(confines...), k: k}
 }
 
-func (c *checkByte) NotNil() msg_[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) NotNil() setMsgOrDefault[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -49,12 +49,12 @@ func (c *checkByte) NotNil() msg_[*checkByte] {
 	return c.success_()
 }
 
-func (c *checkByte) Min(min byte) msg_[*checkByte] {
+func (c *checkByte) Min(min byte) setMsgOrDefault[*checkByte] {
 	return c.Min_(min, false)
 }
 
-func (c *checkByte) Min_(min byte, omitNil bool) msg_[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) Min_(min byte, omitNil bool) setMsgOrDefault[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -67,12 +67,12 @@ func (c *checkByte) Min_(min byte, omitNil bool) msg_[*checkByte] {
 	return c.success_()
 }
 
-func (c *checkByte) Max(max byte) msg_[*checkByte] {
+func (c *checkByte) Max(max byte) setMsgOrDefault[*checkByte] {
 	return c.Max_(max, false)
 }
 
-func (c *checkByte) Max_(max byte, omitNil bool) msg_[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) Max_(max byte, omitNil bool) setMsgOrDefault[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -85,12 +85,12 @@ func (c *checkByte) Max_(max byte, omitNil bool) msg_[*checkByte] {
 	return c.success_()
 }
 
-func (c *checkByte) Range(min, max byte) msg_[*checkByte] {
+func (c *checkByte) Range(min, max byte) setMsgOrDefault[*checkByte] {
 	return c.Range_(min, max, false)
 }
 
-func (c *checkByte) Range_(min, max byte, omitNil bool) msg_[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) Range_(min, max byte, omitNil bool) setMsgOrDefault[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -105,12 +105,12 @@ func (c *checkByte) Range_(min, max byte, omitNil bool) msg_[*checkByte] {
 	return c.success_()
 }
 
-func (c *checkByte) Gt(min byte) msg_[*checkByte] {
+func (c *checkByte) Gt(min byte) setMsgOrDefault[*checkByte] {
 	return c.Gt_(min, false)
 }
 
-func (c *checkByte) Gt_(min byte, omitNil bool) msg_[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) Gt_(min byte, omitNil bool) setMsgOrDefault[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -123,12 +123,12 @@ func (c *checkByte) Gt_(min byte, omitNil bool) msg_[*checkByte] {
 	return c.success_()
 }
 
-func (c *checkByte) Lt(max byte) msg_[*checkByte] {
+func (c *checkByte) Lt(max byte) setMsgOrDefault[*checkByte] {
 	return c.Lt_(max, false)
 }
 
-func (c *checkByte) Lt_(max byte, omitNil bool) msg_[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) Lt_(max byte, omitNil bool) setMsgOrDefault[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -141,12 +141,12 @@ func (c *checkByte) Lt_(max byte, omitNil bool) msg_[*checkByte] {
 	return c.success_()
 }
 
-func (c *checkByte) Within(min, max byte) msg_[*checkByte] {
+func (c *checkByte) Within(min, max byte) setMsgOrDefault[*checkByte] {
 	return c.Within_(min, max, false)
 }
 
-func (c *checkByte) Within_(min, max byte, omitNil bool) msg_[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) Within_(min, max byte, omitNil bool) setMsgOrDefault[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -161,12 +161,12 @@ func (c *checkByte) Within_(min, max byte, omitNil bool) msg_[*checkByte] {
 	return c.success_()
 }
 
-func (c *checkByte) Options(options []byte) msg_[*checkByte] {
+func (c *checkByte) Options(options []byte) setMsgOrDefault[*checkByte] {
 	return c.Options_(options, false)
 }
 
-func (c *checkByte) Options_(options []byte, omitNil bool) msg_[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) Options_(options []byte, omitNil bool) setMsgOrDefault[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.b == nil {
@@ -187,12 +187,12 @@ func (c *checkByte) Options_(options []byte, omitNil bool) msg_[*checkByte] {
 	return c.success_()
 }
 
-func (c *checkByte) Custom(custom func(b byte) bool) msg[*checkByte] {
+func (c *checkByte) Custom(custom func(b byte) bool) setMsg[*checkByte] {
 	return c.Custom_(custom, false)
 }
 
-func (c *checkByte) Custom_(custom func(b byte) bool, omitNil bool) msg[*checkByte] {
-	if c.interrupt() {
+func (c *checkByte) Custom_(custom func(b byte) bool, omitNil bool) setMsg[*checkByte] {
+	if c.ctx.interrupt() {
 		return c.success()
 	}
 	if c.b == nil {

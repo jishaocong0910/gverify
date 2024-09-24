@@ -42,13 +42,13 @@ func TestCheckUint16_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint16().NotNil(func(ctx *vfy.Context) string {
-			return "uint16 NotNil default msg"
+		vfy.SetDefaultMsg().Uint16().NotNil(func(ctx *vfy.Context) string {
+			return "uint16 NotNil default setMsg"
 		})
 		vfy.Uint16(c, (*uint16)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint16 NotNil default msg", msg)
+		r.Equal("uint16 NotNil default setMsg", msg)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestCheckUint16_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint16().Min(func(ctx *vfy.Context) string {
-			return "uint16 Min default msg"
+		vfy.SetDefaultMsg().Uint16().Min(func(ctx *vfy.Context) string {
+			return "uint16 Min default setMsg"
 		})
 		vfy.Uint16(c, ptr(uint16(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint16 Min default msg", msg)
+		r.Equal("uint16 Min default setMsg", msg)
 	}
 }
 
@@ -118,13 +118,13 @@ func TestCheckUint16_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint16().Max(func(ctx *vfy.Context) string {
-			return "uint16 Max default msg"
+		vfy.SetDefaultMsg().Uint16().Max(func(ctx *vfy.Context) string {
+			return "uint16 Max default setMsg"
 		})
 		vfy.Uint16(c, ptr(uint16(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint16 Max default msg", msg)
+		r.Equal("uint16 Max default setMsg", msg)
 	}
 }
 
@@ -163,13 +163,13 @@ func TestCheckUint16_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint16().Range(func(ctx *vfy.Context) string {
-			return "uint16 Range default msg"
+		vfy.SetDefaultMsg().Uint16().Range(func(ctx *vfy.Context) string {
+			return "uint16 Range default setMsg"
 		})
 		vfy.Uint16(c, ptr(uint16(11)), "param").Range(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint16 Range default msg", msg)
+		r.Equal("uint16 Range default setMsg", msg)
 	}
 }
 
@@ -201,13 +201,13 @@ func TestCheckUint16_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint16().Gt(func(ctx *vfy.Context) string {
-			return "uint16 Gt default msg"
+		vfy.SetDefaultMsg().Uint16().Gt(func(ctx *vfy.Context) string {
+			return "uint16 Gt default setMsg"
 		})
 		vfy.Uint16(c, ptr(uint16(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint16 Gt default msg", msg)
+		r.Equal("uint16 Gt default setMsg", msg)
 	}
 }
 
@@ -239,13 +239,13 @@ func TestCheckUint16_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint16().Lt(func(ctx *vfy.Context) string {
-			return "uint16 Lt default msg"
+		vfy.SetDefaultMsg().Uint16().Lt(func(ctx *vfy.Context) string {
+			return "uint16 Lt default setMsg"
 		})
 		vfy.Uint16(c, ptr(uint16(11)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint16 Lt default msg", msg)
+		r.Equal("uint16 Lt default setMsg", msg)
 	}
 }
 
@@ -284,13 +284,13 @@ func TestCheckUint16_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint16().Within(func(ctx *vfy.Context) string {
-			return "uint16 Within default msg"
+		vfy.SetDefaultMsg().Uint16().Within(func(ctx *vfy.Context) string {
+			return "uint16 Within default setMsg"
 		})
 		vfy.Uint16(c, ptr(uint16(10)), "param").Within(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint16 Within default msg", msg)
+		r.Equal("uint16 Within default setMsg", msg)
 	}
 }
 
@@ -322,13 +322,13 @@ func TestCheckUint16_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint16().Options(func(ctx *vfy.Context) string {
-			return "uint16 Options default msg"
+		vfy.SetDefaultMsg().Uint16().Options(func(ctx *vfy.Context) string {
+			return "uint16 Options default setMsg"
 		})
 		vfy.Uint16(c, ptr(uint16(4)), "param").Options([]uint16{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint16 Options default msg", msg)
+		r.Equal("uint16 Options default setMsg", msg)
 	}
 }
 

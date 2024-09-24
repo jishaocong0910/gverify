@@ -42,13 +42,13 @@ func TestCheckInt8_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int8().NotNil(func(ctx *vfy.Context) string {
-			return "int8 NotNil default msg"
+		vfy.SetDefaultMsg().Int8().NotNil(func(ctx *vfy.Context) string {
+			return "int8 NotNil default setMsg"
 		})
 		vfy.Int8(c, (*int8)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int8 NotNil default msg", msg)
+		r.Equal("int8 NotNil default setMsg", msg)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestCheckInt8_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int8().Min(func(ctx *vfy.Context) string {
-			return "int8 Min default msg"
+		vfy.SetDefaultMsg().Int8().Min(func(ctx *vfy.Context) string {
+			return "int8 Min default setMsg"
 		})
 		vfy.Int8(c, ptr(int8(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int8 Min default msg", msg)
+		r.Equal("int8 Min default setMsg", msg)
 	}
 }
 
@@ -118,13 +118,13 @@ func TestCheckInt8_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int8().Max(func(ctx *vfy.Context) string {
-			return "int8 Max default msg"
+		vfy.SetDefaultMsg().Int8().Max(func(ctx *vfy.Context) string {
+			return "int8 Max default setMsg"
 		})
 		vfy.Int8(c, ptr(int8(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int8 Max default msg", msg)
+		r.Equal("int8 Max default setMsg", msg)
 	}
 }
 
@@ -163,13 +163,13 @@ func TestCheckInt8_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int8().Range(func(ctx *vfy.Context) string {
-			return "int8 Range default msg"
+		vfy.SetDefaultMsg().Int8().Range(func(ctx *vfy.Context) string {
+			return "int8 Range default setMsg"
 		})
 		vfy.Int8(c, ptr(int8(11)), "param").Range(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int8 Range default msg", msg)
+		r.Equal("int8 Range default setMsg", msg)
 	}
 }
 
@@ -201,13 +201,13 @@ func TestCheckInt8_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int8().Gt(func(ctx *vfy.Context) string {
-			return "int8 Gt default msg"
+		vfy.SetDefaultMsg().Int8().Gt(func(ctx *vfy.Context) string {
+			return "int8 Gt default setMsg"
 		})
 		vfy.Int8(c, ptr(int8(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int8 Gt default msg", msg)
+		r.Equal("int8 Gt default setMsg", msg)
 	}
 }
 
@@ -239,13 +239,13 @@ func TestCheckInt8_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int8().Lt(func(ctx *vfy.Context) string {
-			return "int8 Lt default msg"
+		vfy.SetDefaultMsg().Int8().Lt(func(ctx *vfy.Context) string {
+			return "int8 Lt default setMsg"
 		})
 		vfy.Int8(c, ptr(int8(11)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int8 Lt default msg", msg)
+		r.Equal("int8 Lt default setMsg", msg)
 	}
 }
 
@@ -284,8 +284,8 @@ func TestCheckInt8_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int8().Within(func(ctx *vfy.Context) string {
-			return "int8 Within default msg"
+		vfy.SetDefaultMsg().Int8().Within(func(ctx *vfy.Context) string {
+			return "int8 Within default setMsg"
 		})
 		vfy.Int8(c, ptr(int8(10)), "param").Within(5, 10).Msg("%s must be > %s and < %s", c.FieldName(), c.Confine(0), c.Confine(1))
 		ok, msg, _ := vfy.GetResult(c)
@@ -322,13 +322,13 @@ func TestCheckInt8_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int8().Options(func(ctx *vfy.Context) string {
-			return "int8 Options default msg"
+		vfy.SetDefaultMsg().Int8().Options(func(ctx *vfy.Context) string {
+			return "int8 Options default setMsg"
 		})
 		vfy.Int8(c, ptr(int8(4)), "param").Options([]int8{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int8 Options default msg", msg)
+		r.Equal("int8 Options default setMsg", msg)
 	}
 }
 

@@ -42,13 +42,13 @@ func TestCheckUint_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint().NotNil(func(ctx *vfy.Context) string {
-			return "uint NotNil default msg"
+		vfy.SetDefaultMsg().Uint().NotNil(func(ctx *vfy.Context) string {
+			return "uint NotNil default setMsg"
 		})
 		vfy.Uint(c, (*uint)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint NotNil default msg", msg)
+		r.Equal("uint NotNil default setMsg", msg)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestCheckUint_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint().Min(func(ctx *vfy.Context) string {
-			return "uint Min default msg"
+		vfy.SetDefaultMsg().Uint().Min(func(ctx *vfy.Context) string {
+			return "uint Min default setMsg"
 		})
 		vfy.Uint(c, ptr(uint(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint Min default msg", msg)
+		r.Equal("uint Min default setMsg", msg)
 	}
 }
 
@@ -118,13 +118,13 @@ func TestCheckUint_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint().Max(func(ctx *vfy.Context) string {
-			return "uint Max default msg"
+		vfy.SetDefaultMsg().Uint().Max(func(ctx *vfy.Context) string {
+			return "uint Max default setMsg"
 		})
 		vfy.Uint(c, ptr(uint(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint Max default msg", msg)
+		r.Equal("uint Max default setMsg", msg)
 	}
 }
 
@@ -163,13 +163,13 @@ func TestCheckUint_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint().Range(func(ctx *vfy.Context) string {
-			return "uint Range default msg"
+		vfy.SetDefaultMsg().Uint().Range(func(ctx *vfy.Context) string {
+			return "uint Range default setMsg"
 		})
 		vfy.Uint(c, ptr(uint(11)), "param").Range(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint Range default msg", msg)
+		r.Equal("uint Range default setMsg", msg)
 	}
 }
 
@@ -201,13 +201,13 @@ func TestCheckUint_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint().Gt(func(ctx *vfy.Context) string {
-			return "uint Gt default msg"
+		vfy.SetDefaultMsg().Uint().Gt(func(ctx *vfy.Context) string {
+			return "uint Gt default setMsg"
 		})
 		vfy.Uint(c, ptr(uint(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint Gt default msg", msg)
+		r.Equal("uint Gt default setMsg", msg)
 	}
 }
 
@@ -239,13 +239,13 @@ func TestCheckUint_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint().Lt(func(ctx *vfy.Context) string {
-			return "uint Lt default msg"
+		vfy.SetDefaultMsg().Uint().Lt(func(ctx *vfy.Context) string {
+			return "uint Lt default setMsg"
 		})
 		vfy.Uint(c, ptr(uint(11)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint Lt default msg", msg)
+		r.Equal("uint Lt default setMsg", msg)
 	}
 }
 
@@ -284,13 +284,13 @@ func TestCheckUint_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint().Within(func(ctx *vfy.Context) string {
-			return "uint Within default msg"
+		vfy.SetDefaultMsg().Uint().Within(func(ctx *vfy.Context) string {
+			return "uint Within default setMsg"
 		})
 		vfy.Uint(c, ptr(uint(10)), "param").Within(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint Within default msg", msg)
+		r.Equal("uint Within default setMsg", msg)
 	}
 }
 
@@ -322,13 +322,13 @@ func TestCheckUint_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint().Options(func(ctx *vfy.Context) string {
-			return "uint Options default msg"
+		vfy.SetDefaultMsg().Uint().Options(func(ctx *vfy.Context) string {
+			return "uint Options default setMsg"
 		})
 		vfy.Uint(c, ptr(uint(4)), "param").Options([]uint{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint Options default msg", msg)
+		r.Equal("uint Options default setMsg", msg)
 	}
 }
 

@@ -42,13 +42,13 @@ func TestCheckInt64_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int64().NotNil(func(ctx *vfy.Context) string {
-			return "int64 NotNil default msg"
+		vfy.SetDefaultMsg().Int64().NotNil(func(ctx *vfy.Context) string {
+			return "int64 NotNil default setMsg"
 		})
 		vfy.Int64(c, (*int64)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int64 NotNil default msg", msg)
+		r.Equal("int64 NotNil default setMsg", msg)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestCheckInt64_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int64().Min(func(ctx *vfy.Context) string {
-			return "int64 Min default msg"
+		vfy.SetDefaultMsg().Int64().Min(func(ctx *vfy.Context) string {
+			return "int64 Min default setMsg"
 		})
 		vfy.Int64(c, ptr(int64(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int64 Min default msg", msg)
+		r.Equal("int64 Min default setMsg", msg)
 	}
 }
 
@@ -118,13 +118,13 @@ func TestCheckInt64_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int64().Max(func(ctx *vfy.Context) string {
-			return "int64 Max default msg"
+		vfy.SetDefaultMsg().Int64().Max(func(ctx *vfy.Context) string {
+			return "int64 Max default setMsg"
 		})
 		vfy.Int64(c, ptr(int64(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int64 Max default msg", msg)
+		r.Equal("int64 Max default setMsg", msg)
 	}
 }
 
@@ -163,13 +163,13 @@ func TestCheckInt64_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int64().Range(func(ctx *vfy.Context) string {
-			return "int64 Range default msg"
+		vfy.SetDefaultMsg().Int64().Range(func(ctx *vfy.Context) string {
+			return "int64 Range default setMsg"
 		})
 		vfy.Int64(c, ptr(int64(11)), "param").Range(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int64 Range default msg", msg)
+		r.Equal("int64 Range default setMsg", msg)
 	}
 }
 
@@ -194,13 +194,13 @@ func TestCheckInt64_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int64().Gt(func(ctx *vfy.Context) string {
-			return "int64 Gt default msg"
+		vfy.SetDefaultMsg().Int64().Gt(func(ctx *vfy.Context) string {
+			return "int64 Gt default setMsg"
 		})
 		vfy.Int64(c, ptr(int64(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int64 Gt default msg", msg)
+		r.Equal("int64 Gt default setMsg", msg)
 	}
 }
 
@@ -232,13 +232,13 @@ func TestCheckInt64_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int64().Lt(func(ctx *vfy.Context) string {
-			return "int64 Lt default msg"
+		vfy.SetDefaultMsg().Int64().Lt(func(ctx *vfy.Context) string {
+			return "int64 Lt default setMsg"
 		})
 		vfy.Int64(c, ptr(int64(11)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int64 Lt default msg", msg)
+		r.Equal("int64 Lt default setMsg", msg)
 	}
 }
 
@@ -277,13 +277,13 @@ func TestCheckInt64_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int64().Within(func(ctx *vfy.Context) string {
-			return "int64 Within default msg"
+		vfy.SetDefaultMsg().Int64().Within(func(ctx *vfy.Context) string {
+			return "int64 Within default setMsg"
 		})
 		vfy.Int64(c, ptr(int64(10)), "param").Within(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int64 Within default msg", msg)
+		r.Equal("int64 Within default setMsg", msg)
 	}
 }
 
@@ -308,13 +308,13 @@ func TestCheckInt64_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int64().Options(func(ctx *vfy.Context) string {
-			return "int64 Options default msg"
+		vfy.SetDefaultMsg().Int64().Options(func(ctx *vfy.Context) string {
+			return "int64 Options default setMsg"
 		})
 		vfy.Int64(c, ptr(int64(4)), "param").Options([]int64{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int64 Options default msg", msg)
+		r.Equal("int64 Options default setMsg", msg)
 	}
 }
 

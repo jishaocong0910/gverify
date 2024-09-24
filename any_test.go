@@ -43,13 +43,13 @@ func TestCheckAny_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Any().NotNil(func(ctx *vfy.Context) string {
-			return "any NotNil default msg"
+		vfy.SetDefaultMsg().Any().NotNil(func(ctx *vfy.Context) string {
+			return "any NotNil default setMsg"
 		})
 		vfy.Any(c, (*time.Time)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("any NotNil default msg", msg)
+		r.Equal("any NotNil default setMsg", msg)
 	}
 }
 

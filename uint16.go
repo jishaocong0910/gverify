@@ -15,32 +15,32 @@
 package vfy
 
 type checkUint16 struct {
-	*Context
-	u *uint16
+	ctx *Context
+	u   *uint16
 }
 
-func (c *checkUint16) success() msg[*checkUint16] {
-	return msg[*checkUint16]{t: c}
+func (c *checkUint16) success() setMsg[*checkUint16] {
+	return setMsg[*checkUint16]{t: c}
 }
 
-func (c *checkUint16) success_() msg_[*checkUint16] {
-	return msg_[*checkUint16]{msg: c.success()}
+func (c *checkUint16) success_() setMsgOrDefault[*checkUint16] {
+	return setMsgOrDefault[*checkUint16]{setMsg: c.success()}
 }
 
-func (c *checkUint16) fail(confines ...[]string) msg[*checkUint16] {
-	c.wronged = true
+func (c *checkUint16) fail(confines ...[]string) setMsg[*checkUint16] {
+	c.ctx.wronged = true
 	for _, cs := range confines {
-		c.confines = append(c.confines, cs...)
+		c.ctx.confines = append(c.ctx.confines, cs...)
 	}
-	return msg[*checkUint16]{ctx: c.Context, t: c}
+	return setMsg[*checkUint16]{ctx: c.ctx, t: c}
 }
 
-func (c *checkUint16) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkUint16] {
-	return msg_[*checkUint16]{msg: c.fail(confines...), k: k}
+func (c *checkUint16) fail_(k defaultMsgKey, confines ...[]string) setMsgOrDefault[*checkUint16] {
+	return setMsgOrDefault[*checkUint16]{setMsg: c.fail(confines...), k: k}
 }
 
-func (c *checkUint16) NotNil() msg_[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) NotNil() setMsgOrDefault[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -49,12 +49,12 @@ func (c *checkUint16) NotNil() msg_[*checkUint16] {
 	return c.success_()
 }
 
-func (c *checkUint16) Min(min uint16) msg_[*checkUint16] {
+func (c *checkUint16) Min(min uint16) setMsgOrDefault[*checkUint16] {
 	return c.Min_(min, false)
 }
 
-func (c *checkUint16) Min_(min uint16, omitNil bool) msg_[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) Min_(min uint16, omitNil bool) setMsgOrDefault[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -67,12 +67,12 @@ func (c *checkUint16) Min_(min uint16, omitNil bool) msg_[*checkUint16] {
 	return c.success_()
 }
 
-func (c *checkUint16) Max(max uint16) msg_[*checkUint16] {
+func (c *checkUint16) Max(max uint16) setMsgOrDefault[*checkUint16] {
 	return c.Max_(max, false)
 }
 
-func (c *checkUint16) Max_(max uint16, omitNil bool) msg_[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) Max_(max uint16, omitNil bool) setMsgOrDefault[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -85,12 +85,12 @@ func (c *checkUint16) Max_(max uint16, omitNil bool) msg_[*checkUint16] {
 	return c.success_()
 }
 
-func (c *checkUint16) Range(min, max uint16) msg_[*checkUint16] {
+func (c *checkUint16) Range(min, max uint16) setMsgOrDefault[*checkUint16] {
 	return c.Range_(min, max, false)
 }
 
-func (c *checkUint16) Range_(min, max uint16, omitNil bool) msg_[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) Range_(min, max uint16, omitNil bool) setMsgOrDefault[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -105,12 +105,12 @@ func (c *checkUint16) Range_(min, max uint16, omitNil bool) msg_[*checkUint16] {
 	return c.success_()
 }
 
-func (c *checkUint16) Gt(min uint16) msg_[*checkUint16] {
+func (c *checkUint16) Gt(min uint16) setMsgOrDefault[*checkUint16] {
 	return c.Gt_(min, false)
 }
 
-func (c *checkUint16) Gt_(min uint16, omitNil bool) msg_[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) Gt_(min uint16, omitNil bool) setMsgOrDefault[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -123,12 +123,12 @@ func (c *checkUint16) Gt_(min uint16, omitNil bool) msg_[*checkUint16] {
 	return c.success_()
 }
 
-func (c *checkUint16) Lt(max uint16) msg_[*checkUint16] {
+func (c *checkUint16) Lt(max uint16) setMsgOrDefault[*checkUint16] {
 	return c.Lt_(max, false)
 }
 
-func (c *checkUint16) Lt_(max uint16, omitNil bool) msg_[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) Lt_(max uint16, omitNil bool) setMsgOrDefault[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -141,12 +141,12 @@ func (c *checkUint16) Lt_(max uint16, omitNil bool) msg_[*checkUint16] {
 	return c.success_()
 }
 
-func (c *checkUint16) Within(min, max uint16) msg_[*checkUint16] {
+func (c *checkUint16) Within(min, max uint16) setMsgOrDefault[*checkUint16] {
 	return c.Within_(min, max, false)
 }
 
-func (c *checkUint16) Within_(min, max uint16, omitNil bool) msg_[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) Within_(min, max uint16, omitNil bool) setMsgOrDefault[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -161,12 +161,12 @@ func (c *checkUint16) Within_(min, max uint16, omitNil bool) msg_[*checkUint16] 
 	return c.success_()
 }
 
-func (c *checkUint16) Options(options []uint16) msg_[*checkUint16] {
+func (c *checkUint16) Options(options []uint16) setMsgOrDefault[*checkUint16] {
 	return c.Options_(options, false)
 }
 
-func (c *checkUint16) Options_(options []uint16, omitNil bool) msg_[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) Options_(options []uint16, omitNil bool) setMsgOrDefault[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.u == nil {
@@ -187,12 +187,12 @@ func (c *checkUint16) Options_(options []uint16, omitNil bool) msg_[*checkUint16
 	return c.success_()
 }
 
-func (c *checkUint16) Custom(custom func(u uint16) bool) msg[*checkUint16] {
+func (c *checkUint16) Custom(custom func(u uint16) bool) setMsg[*checkUint16] {
 	return c.Custom_(custom, false)
 }
 
-func (c *checkUint16) Custom_(custom func(u uint16) bool, omitNil bool) msg[*checkUint16] {
-	if c.interrupt() {
+func (c *checkUint16) Custom_(custom func(u uint16) bool, omitNil bool) setMsg[*checkUint16] {
+	if c.ctx.interrupt() {
 		return c.success()
 	}
 	if c.u == nil {

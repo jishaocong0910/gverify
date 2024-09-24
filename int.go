@@ -15,32 +15,32 @@
 package vfy
 
 type checkInt struct {
-	*Context
-	i *int
+	ctx *Context
+	i   *int
 }
 
-func (c *checkInt) success() msg[*checkInt] {
-	return msg[*checkInt]{t: c}
+func (c *checkInt) success() setMsg[*checkInt] {
+	return setMsg[*checkInt]{t: c}
 }
 
-func (c *checkInt) success_() msg_[*checkInt] {
-	return msg_[*checkInt]{msg: c.success()}
+func (c *checkInt) success_() setMsgOrDefault[*checkInt] {
+	return setMsgOrDefault[*checkInt]{setMsg: c.success()}
 }
 
-func (c *checkInt) fail(confines ...[]string) msg[*checkInt] {
-	c.wronged = true
+func (c *checkInt) fail(confines ...[]string) setMsg[*checkInt] {
+	c.ctx.wronged = true
 	for _, cs := range confines {
-		c.confines = append(c.confines, cs...)
+		c.ctx.confines = append(c.ctx.confines, cs...)
 	}
-	return msg[*checkInt]{ctx: c.Context, t: c}
+	return setMsg[*checkInt]{ctx: c.ctx, t: c}
 }
 
-func (c *checkInt) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkInt] {
-	return msg_[*checkInt]{msg: c.fail(confines...), k: k}
+func (c *checkInt) fail_(k defaultMsgKey, confines ...[]string) setMsgOrDefault[*checkInt] {
+	return setMsgOrDefault[*checkInt]{setMsg: c.fail(confines...), k: k}
 }
 
-func (c *checkInt) NotNil() msg_[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) NotNil() setMsgOrDefault[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -49,12 +49,12 @@ func (c *checkInt) NotNil() msg_[*checkInt] {
 	return c.success_()
 }
 
-func (c *checkInt) Min(min int) msg_[*checkInt] {
+func (c *checkInt) Min(min int) setMsgOrDefault[*checkInt] {
 	return c.Min_(min, false)
 }
 
-func (c *checkInt) Min_(min int, omitNil bool) msg_[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) Min_(min int, omitNil bool) setMsgOrDefault[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -67,12 +67,12 @@ func (c *checkInt) Min_(min int, omitNil bool) msg_[*checkInt] {
 	return c.success_()
 }
 
-func (c *checkInt) Max(max int) msg_[*checkInt] {
+func (c *checkInt) Max(max int) setMsgOrDefault[*checkInt] {
 	return c.Max_(max, false)
 }
 
-func (c *checkInt) Max_(max int, omitNil bool) msg_[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) Max_(max int, omitNil bool) setMsgOrDefault[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -85,12 +85,12 @@ func (c *checkInt) Max_(max int, omitNil bool) msg_[*checkInt] {
 	return c.success_()
 }
 
-func (c *checkInt) Range(min, max int) msg_[*checkInt] {
+func (c *checkInt) Range(min, max int) setMsgOrDefault[*checkInt] {
 	return c.Range_(min, max, false)
 }
 
-func (c *checkInt) Range_(min, max int, omitNil bool) msg_[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) Range_(min, max int, omitNil bool) setMsgOrDefault[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -105,12 +105,12 @@ func (c *checkInt) Range_(min, max int, omitNil bool) msg_[*checkInt] {
 	return c.success_()
 }
 
-func (c *checkInt) Gt(min int) msg_[*checkInt] {
+func (c *checkInt) Gt(min int) setMsgOrDefault[*checkInt] {
 	return c.Gt_(min, false)
 }
 
-func (c *checkInt) Gt_(min int, omitNil bool) msg_[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) Gt_(min int, omitNil bool) setMsgOrDefault[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -123,12 +123,12 @@ func (c *checkInt) Gt_(min int, omitNil bool) msg_[*checkInt] {
 	return c.success_()
 }
 
-func (c *checkInt) Lt(max int) msg_[*checkInt] {
+func (c *checkInt) Lt(max int) setMsgOrDefault[*checkInt] {
 	return c.Lt_(max, false)
 }
 
-func (c *checkInt) Lt_(max int, omitNil bool) msg_[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) Lt_(max int, omitNil bool) setMsgOrDefault[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -141,12 +141,12 @@ func (c *checkInt) Lt_(max int, omitNil bool) msg_[*checkInt] {
 	return c.success_()
 }
 
-func (c *checkInt) Within(min, max int) msg_[*checkInt] {
+func (c *checkInt) Within(min, max int) setMsgOrDefault[*checkInt] {
 	return c.Within_(min, max, false)
 }
 
-func (c *checkInt) Within_(min, max int, omitNil bool) msg_[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) Within_(min, max int, omitNil bool) setMsgOrDefault[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -161,12 +161,12 @@ func (c *checkInt) Within_(min, max int, omitNil bool) msg_[*checkInt] {
 	return c.success_()
 }
 
-func (c *checkInt) Options(options []int) msg_[*checkInt] {
+func (c *checkInt) Options(options []int) setMsgOrDefault[*checkInt] {
 	return c.Options_(options, false)
 }
 
-func (c *checkInt) Options_(options []int, omitNil bool) msg_[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) Options_(options []int, omitNil bool) setMsgOrDefault[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.i == nil {
@@ -187,12 +187,12 @@ func (c *checkInt) Options_(options []int, omitNil bool) msg_[*checkInt] {
 	return c.success_()
 }
 
-func (c *checkInt) Custom(custom func(i int) bool) msg[*checkInt] {
+func (c *checkInt) Custom(custom func(i int) bool) setMsg[*checkInt] {
 	return c.Custom_(custom, false)
 }
 
-func (c *checkInt) Custom_(custom func(i int) bool, omitNil bool) msg[*checkInt] {
-	if c.interrupt() {
+func (c *checkInt) Custom_(custom func(i int) bool, omitNil bool) setMsg[*checkInt] {
+	if c.ctx.interrupt() {
 		return c.success()
 	}
 	if c.i == nil {

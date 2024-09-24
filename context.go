@@ -31,6 +31,7 @@ const (
 
 type Context struct {
 	context.Context
+	code            string
 	all             bool
 	wronged         bool
 	msgs            []string

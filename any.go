@@ -15,29 +15,29 @@
 package vfy
 
 type checkAny[T any] struct {
-	*Context
-	t *T
+	ctx *Context
+	t   *T
 }
 
-func (c *checkAny[T]) success() msg[*checkAny[T]] {
-	return msg[*checkAny[T]]{t: c}
+func (c *checkAny[T]) success() setMsg[*checkAny[T]] {
+	return setMsg[*checkAny[T]]{t: c}
 }
 
-func (c *checkAny[T]) success_() msg_[*checkAny[T]] {
-	return msg_[*checkAny[T]]{msg: c.success()}
+func (c *checkAny[T]) success_() setMsgOrDefault[*checkAny[T]] {
+	return setMsgOrDefault[*checkAny[T]]{setMsg: c.success()}
 }
 
-func (c *checkAny[T]) fail() msg[*checkAny[T]] {
-	c.wronged = true
-	return msg[*checkAny[T]]{ctx: c.Context, t: c}
+func (c *checkAny[T]) fail() setMsg[*checkAny[T]] {
+	c.ctx.wronged = true
+	return setMsg[*checkAny[T]]{ctx: c.ctx, t: c}
 }
 
-func (c *checkAny[T]) fail_(k defaultMsgKey) msg_[*checkAny[T]] {
-	return msg_[*checkAny[T]]{msg: c.fail(), k: k}
+func (c *checkAny[T]) fail_(k defaultMsgKey) setMsgOrDefault[*checkAny[T]] {
+	return setMsgOrDefault[*checkAny[T]]{setMsg: c.fail(), k: k}
 }
 
-func (c *checkAny[T]) NotNil() msg_[*checkAny[T]] {
-	if c.interrupt() {
+func (c *checkAny[T]) NotNil() setMsgOrDefault[*checkAny[T]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.t == nil {
@@ -46,12 +46,12 @@ func (c *checkAny[T]) NotNil() msg_[*checkAny[T]] {
 	return c.success_()
 }
 
-func (c *checkAny[T]) Custom(custom func(t T) bool) msg[*checkAny[T]] {
+func (c *checkAny[T]) Custom(custom func(t T) bool) setMsg[*checkAny[T]] {
 	return c.Custom_(custom, false)
 }
 
-func (c *checkAny[T]) Custom_(custom func(t T) bool, omitNil bool) msg[*checkAny[T]] {
-	if c.interrupt() {
+func (c *checkAny[T]) Custom_(custom func(t T) bool, omitNil bool) setMsg[*checkAny[T]] {
+	if c.ctx.interrupt() {
 		return c.success()
 	}
 	if c.t == nil {

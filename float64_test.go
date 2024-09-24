@@ -42,13 +42,13 @@ func TestCheckFloat64_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Float64().NotNil(func(ctx *vfy.Context) string {
-			return "float64 NotNil default msg"
+		vfy.SetDefaultMsg().Float64().NotNil(func(ctx *vfy.Context) string {
+			return "float64 NotNil default setMsg"
 		})
 		vfy.Float64(c, (*float64)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("float64 NotNil default msg", msg)
+		r.Equal("float64 NotNil default setMsg", msg)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestCheckFloat64_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Float64().Min(func(ctx *vfy.Context) string {
-			return "float64 Min default msg"
+		vfy.SetDefaultMsg().Float64().Min(func(ctx *vfy.Context) string {
+			return "float64 Min default setMsg"
 		})
 		vfy.Float64(c, ptr(float64(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("float64 Min default msg", msg)
+		r.Equal("float64 Min default setMsg", msg)
 	}
 }
 
@@ -118,13 +118,13 @@ func TestCheckFloat64_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Float64().Max(func(ctx *vfy.Context) string {
-			return "float64 Max default msg"
+		vfy.SetDefaultMsg().Float64().Max(func(ctx *vfy.Context) string {
+			return "float64 Max default setMsg"
 		})
 		vfy.Float64(c, ptr(float64(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("float64 Max default msg", msg)
+		r.Equal("float64 Max default setMsg", msg)
 	}
 }
 
@@ -163,13 +163,13 @@ func TestCheckFloat64_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Float64().Range(func(ctx *vfy.Context) string {
-			return "float Range default msg"
+		vfy.SetDefaultMsg().Float64().Range(func(ctx *vfy.Context) string {
+			return "float Range default setMsg"
 		})
 		vfy.Float64(c, ptr(float64(11)), "param").Range(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("float Range default msg", msg)
+		r.Equal("float Range default setMsg", msg)
 	}
 }
 
@@ -201,13 +201,13 @@ func TestCheckFloat64_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Float64().Gt(func(ctx *vfy.Context) string {
-			return "float64 Gt default msg"
+		vfy.SetDefaultMsg().Float64().Gt(func(ctx *vfy.Context) string {
+			return "float64 Gt default setMsg"
 		})
 		vfy.Float64(c, ptr(float64(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("float64 Gt default msg", msg)
+		r.Equal("float64 Gt default setMsg", msg)
 	}
 }
 
@@ -239,13 +239,13 @@ func TestCheckFloat64_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Float64().Lt(func(ctx *vfy.Context) string {
-			return "float64 Lt default msg"
+		vfy.SetDefaultMsg().Float64().Lt(func(ctx *vfy.Context) string {
+			return "float64 Lt default setMsg"
 		})
 		vfy.Float64(c, ptr(float64(11)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("float64 Lt default msg", msg)
+		r.Equal("float64 Lt default setMsg", msg)
 	}
 }
 
@@ -284,13 +284,13 @@ func TestCheckFloat64_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Float64().Within(func(ctx *vfy.Context) string {
-			return "float64 Within default msg"
+		vfy.SetDefaultMsg().Float64().Within(func(ctx *vfy.Context) string {
+			return "float64 Within default setMsg"
 		})
 		vfy.Float64(c, ptr(float64(10)), "param").Within(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("float64 Within default msg", msg)
+		r.Equal("float64 Within default setMsg", msg)
 	}
 }
 
@@ -322,13 +322,13 @@ func TestCheckFloat64_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Float64().Options(func(ctx *vfy.Context) string {
-			return "float64 Options default msg"
+		vfy.SetDefaultMsg().Float64().Options(func(ctx *vfy.Context) string {
+			return "float64 Options default setMsg"
 		})
 		vfy.Float64(c, ptr(float64(4)), "param").Options([]float64{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("float64 Options default msg", msg)
+		r.Equal("float64 Options default setMsg", msg)
 	}
 }
 

@@ -43,13 +43,13 @@ func TestCheckMap_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().NotNil(func(ctx *vfy.Context) string {
-			return "map NotNil default msg"
+		vfy.SetDefaultMsg().Map().NotNil(func(ctx *vfy.Context) string {
+			return "map NotNil default setMsg"
 		})
 		vfy.Map[string, int](c, nil, "param").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map NotNil default msg", msg)
+		r.Equal("map NotNil default setMsg", msg)
 	}
 }
 
@@ -81,13 +81,13 @@ func TestCheckMap_NotEmpty(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().NotEmpty(func(ctx *vfy.Context) string {
-			return "map NotEmpty default msg"
+		vfy.SetDefaultMsg().Map().NotEmpty(func(ctx *vfy.Context) string {
+			return "map NotEmpty default setMsg"
 		})
 		vfy.Map[string, int](c, map[string]int{}, "param").NotEmpty().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map NotEmpty default msg", msg)
+		r.Equal("map NotEmpty default setMsg", msg)
 	}
 }
 
@@ -119,13 +119,13 @@ func TestCheckMap_Length(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().Length(func(ctx *vfy.Context) string {
-			return "map Length default msg"
+		vfy.SetDefaultMsg().Map().Length(func(ctx *vfy.Context) string {
+			return "map Length default setMsg"
 		})
 		vfy.Map[string, int](c, map[string]int{}, "param").Length(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map Length default msg", msg)
+		r.Equal("map Length default setMsg", msg)
 	}
 }
 
@@ -157,13 +157,13 @@ func TestCheckMap_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().Min(func(ctx *vfy.Context) string {
-			return "map Min default msg"
+		vfy.SetDefaultMsg().Map().Min(func(ctx *vfy.Context) string {
+			return "map Min default setMsg"
 		})
 		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Min(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map Min default msg", msg)
+		r.Equal("map Min default setMsg", msg)
 	}
 }
 
@@ -195,13 +195,13 @@ func TestCheckMap_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().Max(func(ctx *vfy.Context) string {
-			return "map Max default msg"
+		vfy.SetDefaultMsg().Map().Max(func(ctx *vfy.Context) string {
+			return "map Max default setMsg"
 		})
 		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Max(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map Max default msg", msg)
+		r.Equal("map Max default setMsg", msg)
 	}
 }
 
@@ -240,13 +240,13 @@ func TestCheckMap_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().Range(func(ctx *vfy.Context) string {
-			return "map Range default msg"
+		vfy.SetDefaultMsg().Map().Range(func(ctx *vfy.Context) string {
+			return "map Range default setMsg"
 		})
 		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Range(1, 2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map Range default msg", msg)
+		r.Equal("map Range default setMsg", msg)
 	}
 }
 
@@ -278,13 +278,13 @@ func TestCheckMap_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().Gt(func(ctx *vfy.Context) string {
-			return "map Gt default msg"
+		vfy.SetDefaultMsg().Map().Gt(func(ctx *vfy.Context) string {
+			return "map Gt default setMsg"
 		})
 		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Gt(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map Gt default msg", msg)
+		r.Equal("map Gt default setMsg", msg)
 	}
 }
 
@@ -316,13 +316,13 @@ func TestCheckMap_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().Lt(func(ctx *vfy.Context) string {
-			return "map Lt default msg"
+		vfy.SetDefaultMsg().Map().Lt(func(ctx *vfy.Context) string {
+			return "map Lt default setMsg"
 		})
 		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Lt(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map Lt default msg", msg)
+		r.Equal("map Lt default setMsg", msg)
 	}
 }
 
@@ -361,13 +361,13 @@ func TestCheckMap_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Map().Within(func(ctx *vfy.Context) string {
-			return "map Within default msg"
+		vfy.SetDefaultMsg().Map().Within(func(ctx *vfy.Context) string {
+			return "map Within default setMsg"
 		})
 		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Within(1, 3).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("map Within default msg", msg)
+		r.Equal("map Within default setMsg", msg)
 	}
 }
 

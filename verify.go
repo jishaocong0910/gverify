@@ -19,106 +19,119 @@ import (
 	"reflect"
 )
 
+const (
+	SUCCESS = "SUCCESS"
+	ERROR   = "ERROR"
+)
+
 type Verifiable interface {
 	Checklist(ctx *Context)
 }
 
-func Check[T Verifiable](ctx context.Context, t T) (ok bool, msg string) {
-	ok, msg, _ = Check_(ctx, t, false)
+func Check[V Verifiable](ctx context.Context, v V) (code string, msg string) {
+	code, msg, _ = Check_(ctx, v, false)
 	return
 }
 
-func Check_[T Verifiable](ctx context.Context, t T, all bool) (ok bool, first string, msgs []string) {
-	var ve Verifiable
-	if v := reflect.ValueOf(t); v.Kind() == reflect.Pointer {
-		if v.IsNil() {
-			ve = reflect.New(v.Type().Elem()).Interface().(Verifiable)
+func Check_[V Verifiable](ctx context.Context, v V, all bool) (code string, first string, msgs []string) {
+	var target Verifiable
+	if rv := reflect.ValueOf(v); rv.Kind() == reflect.Pointer {
+		if rv.IsNil() {
+			target = reflect.New(rv.Type().Elem()).Interface().(Verifiable)
 		} else {
-			ve = t
+			target = v
 		}
 	} else {
-		ve = t
+		target = v
 	}
+
 	c := &Context{Context: ctx, all: all}
-	ve.Checklist(c)
+	target.Checklist(c)
+
 	if len(c.msgs) > 0 {
 		first = c.msgs[0]
 	}
-	return !c.wronged, first, c.msgs
+	if !c.wronged {
+		c.code = SUCCESS
+	} else if c.code == "" {
+		c.code = ERROR
+	}
+
+	return c.code, first, c.msgs
 }
 
 func Bool(ctx *Context, b *bool, fieldName string) *checkBool {
-	return &checkBool{Context: ctx.reset(fieldName), b: b}
+	return &checkBool{ctx: ctx.reset(fieldName), b: b}
 }
 
 func Byte(ctx *Context, b *byte, fieldName string) *checkByte {
-	return &checkByte{Context: ctx.reset(fieldName), b: b}
+	return &checkByte{ctx: ctx.reset(fieldName), b: b}
 }
 
 func Int(ctx *Context, i *int, fieldName string) *checkInt {
-	return &checkInt{Context: ctx.reset(fieldName), i: i}
+	return &checkInt{ctx: ctx.reset(fieldName), i: i}
 }
 
 func Int8(ctx *Context, i *int8, fieldName string) *checkInt8 {
-	return &checkInt8{Context: ctx.reset(fieldName), i: i}
+	return &checkInt8{ctx: ctx.reset(fieldName), i: i}
 }
 
 func Int16(ctx *Context, i *int16, fieldName string) *checkInt16 {
-	return &checkInt16{Context: ctx.reset(fieldName), i: i}
+	return &checkInt16{ctx: ctx.reset(fieldName), i: i}
 }
 
 func Int32(ctx *Context, i *int32, fieldName string) *checkInt32 {
-	return &checkInt32{Context: ctx.reset(fieldName), i: i}
+	return &checkInt32{ctx: ctx.reset(fieldName), i: i}
 }
 
 func Int64(ctx *Context, i *int64, fieldName string) *checkInt64 {
-	return &checkInt64{Context: ctx.reset(fieldName), i: i}
+	return &checkInt64{ctx: ctx.reset(fieldName), i: i}
 }
 
 func Uint(ctx *Context, u *uint, fieldName string) *checkUint {
-	return &checkUint{Context: ctx.reset(fieldName), u: u}
+	return &checkUint{ctx: ctx.reset(fieldName), u: u}
 }
 
 func Uint8(ctx *Context, u *uint8, fieldName string) *checkUint8 {
-	return &checkUint8{Context: ctx.reset(fieldName), u: u}
+	return &checkUint8{ctx: ctx.reset(fieldName), u: u}
 }
 
 func Uint16(ctx *Context, u *uint16, fieldName string) *checkUint16 {
-	return &checkUint16{Context: ctx.reset(fieldName), u: u}
+	return &checkUint16{ctx: ctx.reset(fieldName), u: u}
 }
 
 func Uint32(ctx *Context, u *uint32, fieldName string) *checkUint32 {
-	return &checkUint32{Context: ctx.reset(fieldName), u: u}
+	return &checkUint32{ctx: ctx.reset(fieldName), u: u}
 }
 
 func Uint64(ctx *Context, u *uint64, fieldName string) *checkUint64 {
-	return &checkUint64{Context: ctx.reset(fieldName), u: u}
+	return &checkUint64{ctx: ctx.reset(fieldName), u: u}
 }
 
 func Float32(ctx *Context, f *float32, fieldName string) *checkFloat32 {
-	return &checkFloat32{Context: ctx.reset(fieldName), f: f}
+	return &checkFloat32{ctx: ctx.reset(fieldName), f: f}
 }
 
 func Float64(ctx *Context, f *float64, fieldName string) *checkFloat64 {
-	return &checkFloat64{Context: ctx.reset(fieldName), f: f}
+	return &checkFloat64{ctx: ctx.reset(fieldName), f: f}
 }
 
 func String(ctx *Context, s *string, fieldName string) *checkString {
-	return &checkString{Context: ctx.reset(fieldName), s: s}
+	return &checkString{ctx: ctx.reset(fieldName), s: s}
 }
 
-func Struct[T Verifiable](ctx *Context, t *T, fieldName string) *checkStruct[T] {
-	return &checkStruct[T]{Context: ctx.reset(fieldName), t: t}
+func Struct[V Verifiable](ctx *Context, v *V, fieldName string) *checkStruct[V] {
+	return &checkStruct[V]{ctx: ctx.reset(fieldName), v: v}
 }
 
 func Slices[T any](ctx *Context, s []T, fieldName string) *checkSlices[T] {
-	return &checkSlices[T]{Context: ctx.reset(fieldName), s: s}
+	return &checkSlices[T]{ctx: ctx.reset(fieldName), s: s}
 }
 
 func Map[K comparable, V any](ctx *Context, m map[K]V, fieldName string) *checkMap[K, V] {
-	return &checkMap[K, V]{Context: ctx.reset(fieldName), m: m}
+	return &checkMap[K, V]{ctx: ctx.reset(fieldName), m: m}
 }
 
 func Any[T any](ctx *Context, t *T, fieldName string) *checkAny[T] {
-	return &checkAny[T]{Context: ctx.reset(fieldName), t: t}
+	return &checkAny[T]{ctx: ctx.reset(fieldName), t: t}
 }

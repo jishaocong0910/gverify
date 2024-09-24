@@ -42,13 +42,13 @@ func TestCheckByte_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Byte().NotNil(func(ctx *vfy.Context) string {
-			return "byte NotNil default msg"
+		vfy.SetDefaultMsg().Byte().NotNil(func(ctx *vfy.Context) string {
+			return "byte NotNil default setMsg"
 		})
 		vfy.Byte(c, (*byte)(nil), "param").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("byte NotNil default msg", msg)
+		r.Equal("byte NotNil default setMsg", msg)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestCheckByte_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Byte().Min(func(ctx *vfy.Context) string {
-			return "byte Min default msg"
+		vfy.SetDefaultMsg().Byte().Min(func(ctx *vfy.Context) string {
+			return "byte Min default setMsg"
 		})
 		vfy.Byte(c, ptr(byte(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("byte Min default msg", msg)
+		r.Equal("byte Min default setMsg", msg)
 	}
 }
 
@@ -118,13 +118,13 @@ func TestCheckByte_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Byte().Max(func(ctx *vfy.Context) string {
-			return "byte Max default msg"
+		vfy.SetDefaultMsg().Byte().Max(func(ctx *vfy.Context) string {
+			return "byte Max default setMsg"
 		})
 		vfy.Byte(c, ptr(byte(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("byte Max default msg", msg)
+		r.Equal("byte Max default setMsg", msg)
 	}
 }
 
@@ -163,13 +163,13 @@ func TestCheckByte_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Byte().Range(func(ctx *vfy.Context) string {
-			return "byte Range default msg"
+		vfy.SetDefaultMsg().Byte().Range(func(ctx *vfy.Context) string {
+			return "byte Range default setMsg"
 		})
 		vfy.Byte(c, ptr(byte(11)), "param").Range(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("byte Range default msg", msg)
+		r.Equal("byte Range default setMsg", msg)
 	}
 }
 
@@ -201,13 +201,13 @@ func TestCheckByte_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Byte().Gt(func(ctx *vfy.Context) string {
-			return "byte Gt default msg"
+		vfy.SetDefaultMsg().Byte().Gt(func(ctx *vfy.Context) string {
+			return "byte Gt default setMsg"
 		})
 		vfy.Byte(c, ptr(byte(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("byte Gt default msg", msg)
+		r.Equal("byte Gt default setMsg", msg)
 	}
 }
 
@@ -239,13 +239,13 @@ func TestCheckByte_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Byte().Lt(func(ctx *vfy.Context) string {
-			return "byte Lt default msg"
+		vfy.SetDefaultMsg().Byte().Lt(func(ctx *vfy.Context) string {
+			return "byte Lt default setMsg"
 		})
 		vfy.Byte(c, ptr(byte(11)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("byte Lt default msg", msg)
+		r.Equal("byte Lt default setMsg", msg)
 	}
 }
 
@@ -284,13 +284,13 @@ func TestCheckByte_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Byte().Within(func(ctx *vfy.Context) string {
-			return "byte Within default msg"
+		vfy.SetDefaultMsg().Byte().Within(func(ctx *vfy.Context) string {
+			return "byte Within default setMsg"
 		})
 		vfy.Byte(c, ptr(byte(10)), "param").Within(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("byte Within default msg", msg)
+		r.Equal("byte Within default setMsg", msg)
 	}
 }
 
@@ -322,13 +322,13 @@ func TestCheckByte_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Byte().Options(func(ctx *vfy.Context) string {
-			return "byte Options default msg"
+		vfy.SetDefaultMsg().Byte().Options(func(ctx *vfy.Context) string {
+			return "byte Options default setMsg"
 		})
 		vfy.Byte(c, ptr(byte(4)), "param").Options([]byte{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("byte Options default msg", msg)
+		r.Equal("byte Options default setMsg", msg)
 	}
 }
 

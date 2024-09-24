@@ -43,13 +43,13 @@ func TestCheckString_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().NotNil(func(ctx *vfy.Context) string {
-			return "string NotNil default msg"
+		vfy.SetDefaultMsg().String().NotNil(func(ctx *vfy.Context) string {
+			return "string NotNil default setMsg"
 		})
 		vfy.String(c, (*string)(nil), "param").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string NotNil default msg", msg)
+		r.Equal("string NotNil default setMsg", msg)
 	}
 }
 
@@ -81,13 +81,13 @@ func TestCheckString_NotBlank(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().NotBlank(func(ctx *vfy.Context) string {
-			return "string NotBlank default msg"
+		vfy.SetDefaultMsg().String().NotBlank(func(ctx *vfy.Context) string {
+			return "string NotBlank default setMsg"
 		})
 		vfy.String(c, ptr(""), "param").NotBlank().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string NotBlank default msg", msg)
+		r.Equal("string NotBlank default setMsg", msg)
 	}
 }
 
@@ -119,13 +119,13 @@ func TestCheckString_Length(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Length(func(ctx *vfy.Context) string {
-			return "string Length default msg"
+		vfy.SetDefaultMsg().String().Length(func(ctx *vfy.Context) string {
+			return "string Length default setMsg"
 		})
 		vfy.String(c, ptr("hi"), "param").Length(5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Length default msg", msg)
+		r.Equal("string Length default setMsg", msg)
 	}
 }
 
@@ -158,13 +158,13 @@ func TestCheckString_Regex(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Regex(func(ctx *vfy.Context) string {
-			return "string Regex default msg"
+		vfy.SetDefaultMsg().String().Regex(func(ctx *vfy.Context) string {
+			return "string Regex default setMsg"
 		})
 		vfy.String(c, ptr("http://google.com"), "param").Regex(reg).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Regex default msg", msg)
+		r.Equal("string Regex default setMsg", msg)
 	}
 }
 
@@ -196,13 +196,13 @@ func TestCheckString_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Min(func(ctx *vfy.Context) string {
-			return "string Min default msg"
+		vfy.SetDefaultMsg().String().Min(func(ctx *vfy.Context) string {
+			return "string Min default setMsg"
 		})
 		vfy.String(c, ptr("hi"), "param").Min(5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Min default msg", msg)
+		r.Equal("string Min default setMsg", msg)
 	}
 }
 
@@ -234,13 +234,13 @@ func TestCheckString_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Max(func(ctx *vfy.Context) string {
-			return "string Max default msg"
+		vfy.SetDefaultMsg().String().Max(func(ctx *vfy.Context) string {
+			return "string Max default setMsg"
 		})
 		vfy.String(c, ptr("hello!"), "param").Max(5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Max default msg", msg)
+		r.Equal("string Max default setMsg", msg)
 	}
 }
 
@@ -279,13 +279,13 @@ func TestCheckString_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Range(func(ctx *vfy.Context) string {
-			return "string Range default msg"
+		vfy.SetDefaultMsg().String().Range(func(ctx *vfy.Context) string {
+			return "string Range default setMsg"
 		})
 		vfy.String(c, ptr("hello!"), "param").Range(3, 5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Range default msg", msg)
+		r.Equal("string Range default setMsg", msg)
 	}
 }
 
@@ -317,13 +317,13 @@ func TestCheckString_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Gt(func(ctx *vfy.Context) string {
-			return "string Gt default msg"
+		vfy.SetDefaultMsg().String().Gt(func(ctx *vfy.Context) string {
+			return "string Gt default setMsg"
 		})
 		vfy.String(c, ptr("hi"), "param").Gt(5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Gt default msg", msg)
+		r.Equal("string Gt default setMsg", msg)
 	}
 }
 
@@ -355,13 +355,13 @@ func TestCheckString_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Lt(func(ctx *vfy.Context) string {
-			return "string Lt default msg"
+		vfy.SetDefaultMsg().String().Lt(func(ctx *vfy.Context) string {
+			return "string Lt default setMsg"
 		})
 		vfy.String(c, ptr("hello!"), "param").Lt(5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Lt default msg", msg)
+		r.Equal("string Lt default setMsg", msg)
 	}
 }
 
@@ -400,13 +400,13 @@ func TestCheckString_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Within(func(ctx *vfy.Context) string {
-			return "string Within default msg"
+		vfy.SetDefaultMsg().String().Within(func(ctx *vfy.Context) string {
+			return "string Within default setMsg"
 		})
 		vfy.String(c, ptr("hello"), "param").Within(3, 5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Within default msg", msg)
+		r.Equal("string Within default setMsg", msg)
 	}
 }
 
@@ -438,13 +438,13 @@ func TestCheckString_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().String().Options(func(ctx *vfy.Context) string {
-			return "string Options default msg"
+		vfy.SetDefaultMsg().String().Options(func(ctx *vfy.Context) string {
+			return "string Options default setMsg"
 		})
 		vfy.String(c, ptr("d"), "param").Options([]string{"a", "b", "ctx"}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("string Options default msg", msg)
+		r.Equal("string Options default setMsg", msg)
 	}
 }
 

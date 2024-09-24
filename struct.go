@@ -14,43 +14,43 @@
 
 package vfy
 
-type checkStruct[T Verifiable] struct {
-	*Context
-	t *T
+type checkStruct[V Verifiable] struct {
+	ctx *Context
+	v   *V
 }
 
-func (c *checkStruct[T]) success() msg[*checkStruct[T]] {
-	return msg[*checkStruct[T]]{t: c}
+func (c *checkStruct[V]) success() setMsg[*checkStruct[V]] {
+	return setMsg[*checkStruct[V]]{t: c}
 }
 
-func (c *checkStruct[T]) success_() msg_[*checkStruct[T]] {
-	return msg_[*checkStruct[T]]{msg: c.success()}
+func (c *checkStruct[V]) success_() setMsgOrDefault[*checkStruct[V]] {
+	return setMsgOrDefault[*checkStruct[V]]{setMsg: c.success()}
 }
 
-func (c *checkStruct[T]) fail() msg[*checkStruct[T]] {
-	c.wronged = true
-	return msg[*checkStruct[T]]{ctx: c.Context, t: c}
+func (c *checkStruct[V]) fail() setMsg[*checkStruct[V]] {
+	c.ctx.wronged = true
+	return setMsg[*checkStruct[V]]{ctx: c.ctx, t: c}
 }
 
-func (c *checkStruct[T]) fail_(k defaultMsgKey) msg_[*checkStruct[T]] {
-	return msg_[*checkStruct[T]]{msg: c.fail(), k: k}
+func (c *checkStruct[V]) fail_(k defaultMsgKey) setMsgOrDefault[*checkStruct[V]] {
+	return setMsgOrDefault[*checkStruct[V]]{setMsg: c.fail(), k: k}
 }
 
-func (c *checkStruct[T]) NotNil() msg_[*checkStruct[T]] {
-	if c.interrupt() {
+func (c *checkStruct[V]) NotNil() setMsgOrDefault[*checkStruct[V]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
-	if c.t == nil {
+	if c.v == nil {
 		return c.fail_(default_msg_struct_notnil)
 	}
 	return c.success_()
 }
 
-func (c *checkStruct[T]) Dive() {
-	if c.t != nil {
-		s := c.savepoint()
-		c.beforeDive(dive_struct, "", ".", 0)
-		(*c.t).Checklist(c.Context)
-		c.afterDive(s)
+func (c *checkStruct[V]) Dive() {
+	if c.v != nil {
+		s := c.ctx.savepoint()
+		c.ctx.beforeDive(dive_struct, "", ".", 0)
+		(*c.v).Checklist(c.ctx)
+		c.ctx.afterDive(s)
 	}
 }

@@ -37,20 +37,20 @@ func TestCheck(t *testing.T) {
 	r := require.New(t)
 	{
 		i := &Image{}
-		ok, msg := vfy.Check(nil, i)
-		r.False(ok)
+		code, msg := vfy.Check(nil, i)
+		r.Equal(code, vfy.ERROR)
 		r.Equal("url must not be blank", msg)
 	}
 	{
 		i := Image{}
-		ok, msg := vfy.Check(nil, i)
-		r.False(ok)
+		code, msg := vfy.Check(nil, i)
+		r.Equal(code, vfy.ERROR)
 		r.Equal("url must not be blank", msg)
 	}
 	{
 		var i *Image
-		ok, msg := vfy.Check(nil, i)
-		r.False(ok)
+		code, msg := vfy.Check(nil, i)
+		r.Equal(code, vfy.ERROR)
 		r.Equal("url must not be blank", msg)
 	}
 }

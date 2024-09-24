@@ -43,13 +43,13 @@ func TestCheckSlice_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().NotNil(func(ctx *vfy.Context) string {
-			return "slices NotNil default msg"
+		vfy.SetDefaultMsg().Slices().NotNil(func(ctx *vfy.Context) string {
+			return "slices NotNil default setMsg"
 		})
 		vfy.Slices[string](c, ([]string)(nil), "param").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices NotNil default msg", msg)
+		r.Equal("slices NotNil default setMsg", msg)
 	}
 }
 
@@ -81,13 +81,13 @@ func TestCheckSlice_NotEmpty(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().NotEmpty(func(ctx *vfy.Context) string {
-			return "slices NotEmpty default msg"
+		vfy.SetDefaultMsg().Slices().NotEmpty(func(ctx *vfy.Context) string {
+			return "slices NotEmpty default setMsg"
 		})
 		vfy.Slices[string](c, []string{}, "param").NotEmpty().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices NotEmpty default msg", msg)
+		r.Equal("slices NotEmpty default setMsg", msg)
 	}
 }
 
@@ -119,13 +119,13 @@ func TestCheckSlice_Length(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().Length(func(ctx *vfy.Context) string {
-			return "slices Length default msg"
+		vfy.SetDefaultMsg().Slices().Length(func(ctx *vfy.Context) string {
+			return "slices Length default setMsg"
 		})
 		vfy.Slices[string](c, []string{}, "param").Length(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices Length default msg", msg)
+		r.Equal("slices Length default setMsg", msg)
 	}
 }
 
@@ -157,13 +157,13 @@ func TestCheckSlice_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().Min(func(ctx *vfy.Context) string {
-			return "slices Min default msg"
+		vfy.SetDefaultMsg().Slices().Min(func(ctx *vfy.Context) string {
+			return "slices Min default setMsg"
 		})
 		vfy.Slices[string](c, []string{"hello"}, "param").Min(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices Min default msg", msg)
+		r.Equal("slices Min default setMsg", msg)
 	}
 }
 
@@ -195,13 +195,13 @@ func TestCheckSlice_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().Max(func(ctx *vfy.Context) string {
-			return "slices Max default msg"
+		vfy.SetDefaultMsg().Slices().Max(func(ctx *vfy.Context) string {
+			return "slices Max default setMsg"
 		})
 		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Max(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices Max default msg", msg)
+		r.Equal("slices Max default setMsg", msg)
 	}
 }
 
@@ -240,13 +240,13 @@ func TestCheckSlice_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().Range(func(ctx *vfy.Context) string {
-			return "slices Range default msg"
+		vfy.SetDefaultMsg().Slices().Range(func(ctx *vfy.Context) string {
+			return "slices Range default setMsg"
 		})
 		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Range(1, 2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices Range default msg", msg)
+		r.Equal("slices Range default setMsg", msg)
 	}
 }
 
@@ -278,13 +278,13 @@ func TestCheckSlice_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().Gt(func(ctx *vfy.Context) string {
-			return "slices Gt default msg"
+		vfy.SetDefaultMsg().Slices().Gt(func(ctx *vfy.Context) string {
+			return "slices Gt default setMsg"
 		})
 		vfy.Slices[string](c, []string{"hello"}, "param").Gt(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices Gt default msg", msg)
+		r.Equal("slices Gt default setMsg", msg)
 	}
 }
 
@@ -309,13 +309,13 @@ func TestCheckSlice_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().Lt(func(ctx *vfy.Context) string {
-			return "slices Lt default msg"
+		vfy.SetDefaultMsg().Slices().Lt(func(ctx *vfy.Context) string {
+			return "slices Lt default setMsg"
 		})
 		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Lt(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices Lt default msg", msg)
+		r.Equal("slices Lt default setMsg", msg)
 	}
 }
 
@@ -354,13 +354,13 @@ func TestCheckSlice_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Slices().Within(func(ctx *vfy.Context) string {
-			return "slices Within default msg"
+		vfy.SetDefaultMsg().Slices().Within(func(ctx *vfy.Context) string {
+			return "slices Within default setMsg"
 		})
 		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Within(1, 3).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("slices Within default msg", msg)
+		r.Equal("slices Within default setMsg", msg)
 	}
 }
 

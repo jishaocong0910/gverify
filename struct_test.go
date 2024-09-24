@@ -98,13 +98,13 @@ func TestCheckStruct_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Struct().NotNil(func(ctx *vfy.Context) string {
-			return "struct NotNil default msg"
+		vfy.SetDefaultMsg().Struct().NotNil(func(ctx *vfy.Context) string {
+			return "struct NotNil default setMsg"
 		})
 		vfy.Struct(c, (*Video)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("struct NotNil default msg", msg)
+		r.Equal("struct NotNil default setMsg", msg)
 	}
 }
 

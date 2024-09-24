@@ -42,13 +42,13 @@ func TestCheckInt_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int().NotNil(func(ctx *vfy.Context) string {
-			return "int NotNil default msg"
+		vfy.SetDefaultMsg().Int().NotNil(func(ctx *vfy.Context) string {
+			return "int NotNil default setMsg"
 		})
 		vfy.Int(c, (*int)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int NotNil default msg", msg)
+		r.Equal("int NotNil default setMsg", msg)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestCheckInt_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int().Min(func(ctx *vfy.Context) string {
-			return "int Min default msg"
+		vfy.SetDefaultMsg().Int().Min(func(ctx *vfy.Context) string {
+			return "int Min default setMsg"
 		})
 		vfy.Int(c, ptr(9), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int Min default msg", msg)
+		r.Equal("int Min default setMsg", msg)
 	}
 }
 
@@ -118,13 +118,13 @@ func TestCheckInt_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int().Max(func(ctx *vfy.Context) string {
-			return "int Max default msg"
+		vfy.SetDefaultMsg().Int().Max(func(ctx *vfy.Context) string {
+			return "int Max default setMsg"
 		})
 		vfy.Int(c, ptr(11), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int Max default msg", msg)
+		r.Equal("int Max default setMsg", msg)
 	}
 }
 
@@ -163,13 +163,13 @@ func TestCheckInt_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int().Range(func(ctx *vfy.Context) string {
-			return "int Range default msg"
+		vfy.SetDefaultMsg().Int().Range(func(ctx *vfy.Context) string {
+			return "int Range default setMsg"
 		})
 		vfy.Int(c, ptr(11), "param").Range(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int Range default msg", msg)
+		r.Equal("int Range default setMsg", msg)
 	}
 }
 
@@ -201,13 +201,13 @@ func TestCheckInt_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int().Gt(func(ctx *vfy.Context) string {
-			return "int Gt default msg"
+		vfy.SetDefaultMsg().Int().Gt(func(ctx *vfy.Context) string {
+			return "int Gt default setMsg"
 		})
 		vfy.Int(c, ptr(10), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int Gt default msg", msg)
+		r.Equal("int Gt default setMsg", msg)
 	}
 }
 
@@ -239,13 +239,13 @@ func TestCheckInt_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int().Lt(func(ctx *vfy.Context) string {
-			return "int Lt default msg"
+		vfy.SetDefaultMsg().Int().Lt(func(ctx *vfy.Context) string {
+			return "int Lt default setMsg"
 		})
 		vfy.Int(c, ptr(11), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int Lt default msg", msg)
+		r.Equal("int Lt default setMsg", msg)
 	}
 }
 
@@ -284,13 +284,13 @@ func TestCheckInt_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int().Within(func(ctx *vfy.Context) string {
-			return "int Within default msg"
+		vfy.SetDefaultMsg().Int().Within(func(ctx *vfy.Context) string {
+			return "int Within default setMsg"
 		})
 		vfy.Int(c, ptr(10), "param").Within(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int Within default msg", msg)
+		r.Equal("int Within default setMsg", msg)
 	}
 }
 
@@ -322,13 +322,13 @@ func TestCheckInt_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Int().Options(func(ctx *vfy.Context) string {
-			return "int Options default msg"
+		vfy.SetDefaultMsg().Int().Options(func(ctx *vfy.Context) string {
+			return "int Options default setMsg"
 		})
 		vfy.Int(c, ptr(4), "param").Options([]int{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("int Options default msg", msg)
+		r.Equal("int Options default setMsg", msg)
 	}
 }
 

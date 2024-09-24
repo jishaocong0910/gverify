@@ -42,13 +42,13 @@ func TestCheckUint8_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint8().NotNil(func(ctx *vfy.Context) string {
-			return "uint NotNil default msg"
+		vfy.SetDefaultMsg().Uint8().NotNil(func(ctx *vfy.Context) string {
+			return "uint NotNil default setMsg"
 		})
 		vfy.Uint8(c, (*uint8)(nil), "").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint NotNil default msg", msg)
+		r.Equal("uint NotNil default setMsg", msg)
 	}
 }
 
@@ -80,13 +80,13 @@ func TestCheckUint8_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint8().Min(func(ctx *vfy.Context) string {
-			return "uint8 Min default msg"
+		vfy.SetDefaultMsg().Uint8().Min(func(ctx *vfy.Context) string {
+			return "uint8 Min default setMsg"
 		})
 		vfy.Uint8(c, ptr(uint8(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint8 Min default msg", msg)
+		r.Equal("uint8 Min default setMsg", msg)
 	}
 }
 
@@ -118,13 +118,13 @@ func TestCheckUint8_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint8().Max(func(ctx *vfy.Context) string {
-			return "uint8 Max default msg"
+		vfy.SetDefaultMsg().Uint8().Max(func(ctx *vfy.Context) string {
+			return "uint8 Max default setMsg"
 		})
 		vfy.Uint8(c, ptr(uint8(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint8 Max default msg", msg)
+		r.Equal("uint8 Max default setMsg", msg)
 	}
 }
 
@@ -163,13 +163,13 @@ func TestCheckUint8_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint8().Range(func(ctx *vfy.Context) string {
-			return "uint8 Range default msg"
+		vfy.SetDefaultMsg().Uint8().Range(func(ctx *vfy.Context) string {
+			return "uint8 Range default setMsg"
 		})
 		vfy.Uint8(c, ptr(uint8(11)), "param").Range(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint8 Range default msg", msg)
+		r.Equal("uint8 Range default setMsg", msg)
 	}
 }
 
@@ -201,13 +201,13 @@ func TestCheckUint8_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint8().Gt(func(ctx *vfy.Context) string {
-			return "uint8 Gt default msg"
+		vfy.SetDefaultMsg().Uint8().Gt(func(ctx *vfy.Context) string {
+			return "uint8 Gt default setMsg"
 		})
 		vfy.Uint8(c, ptr(uint8(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint8 Gt default msg", msg)
+		r.Equal("uint8 Gt default setMsg", msg)
 	}
 }
 
@@ -239,13 +239,13 @@ func TestCheckUint8_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint8().Lt(func(ctx *vfy.Context) string {
-			return "uint8 Lt default msg"
+		vfy.SetDefaultMsg().Uint8().Lt(func(ctx *vfy.Context) string {
+			return "uint8 Lt default setMsg"
 		})
 		vfy.Uint8(c, ptr(uint8(11)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint8 Lt default msg", msg)
+		r.Equal("uint8 Lt default setMsg", msg)
 	}
 }
 
@@ -284,13 +284,13 @@ func TestCheckUint8_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint8().Within(func(ctx *vfy.Context) string {
-			return "uint8 Within default msg"
+		vfy.SetDefaultMsg().Uint8().Within(func(ctx *vfy.Context) string {
+			return "uint8 Within default setMsg"
 		})
 		vfy.Uint8(c, ptr(uint8(10)), "param").Within(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint8 Within default msg", msg)
+		r.Equal("uint8 Within default setMsg", msg)
 	}
 }
 
@@ -322,13 +322,13 @@ func TestCheckUint8_Options(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.DefaultMsg().Uint8().Options(func(ctx *vfy.Context) string {
-			return "uint8 Options default msg"
+		vfy.SetDefaultMsg().Uint8().Options(func(ctx *vfy.Context) string {
+			return "uint8 Options default setMsg"
 		})
 		vfy.Uint8(c, ptr(uint8(4)), "param").Options([]uint8{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("uint8 Options default msg", msg)
+		r.Equal("uint8 Options default setMsg", msg)
 	}
 }
 

@@ -15,32 +15,32 @@
 package vfy
 
 type checkMap[K comparable, V any] struct {
-	*Context
-	m map[K]V
+	ctx *Context
+	m   map[K]V
 }
 
-func (c *checkMap[K, V]) success() msg[*checkMap[K, V]] {
-	return msg[*checkMap[K, V]]{t: c}
+func (c *checkMap[K, V]) success() setMsg[*checkMap[K, V]] {
+	return setMsg[*checkMap[K, V]]{t: c}
 }
 
-func (c *checkMap[K, V]) success_() msg_[*checkMap[K, V]] {
-	return msg_[*checkMap[K, V]]{msg: c.success()}
+func (c *checkMap[K, V]) success_() setMsgOrDefault[*checkMap[K, V]] {
+	return setMsgOrDefault[*checkMap[K, V]]{setMsg: c.success()}
 }
 
-func (c *checkMap[K, V]) fail(confines ...[]string) msg[*checkMap[K, V]] {
-	c.wronged = true
+func (c *checkMap[K, V]) fail(confines ...[]string) setMsg[*checkMap[K, V]] {
+	c.ctx.wronged = true
 	for _, cs := range confines {
-		c.confines = append(c.confines, cs...)
+		c.ctx.confines = append(c.ctx.confines, cs...)
 	}
-	return msg[*checkMap[K, V]]{ctx: c.Context, t: c}
+	return setMsg[*checkMap[K, V]]{ctx: c.ctx, t: c}
 }
 
-func (c *checkMap[K, V]) fail_(k defaultMsgKey, confines ...[]string) msg_[*checkMap[K, V]] {
-	return msg_[*checkMap[K, V]]{msg: c.fail(confines...), k: k}
+func (c *checkMap[K, V]) fail_(k defaultMsgKey, confines ...[]string) setMsgOrDefault[*checkMap[K, V]] {
+	return setMsgOrDefault[*checkMap[K, V]]{setMsg: c.fail(confines...), k: k}
 }
 
-func (c *checkMap[K, V]) NotNil() msg_[*checkMap[K, V]] {
-	if c.interrupt() {
+func (c *checkMap[K, V]) NotNil() setMsgOrDefault[*checkMap[K, V]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -49,12 +49,12 @@ func (c *checkMap[K, V]) NotNil() msg_[*checkMap[K, V]] {
 	return c.success_()
 }
 
-func (c *checkMap[K, V]) NotEmpty() msg_[*checkMap[K, V]] {
+func (c *checkMap[K, V]) NotEmpty() setMsgOrDefault[*checkMap[K, V]] {
 	return c.NotEmpty_(false)
 }
 
-func (c *checkMap[K, V]) NotEmpty_(omitNil bool) msg_[*checkMap[K, V]] {
-	if c.interrupt() {
+func (c *checkMap[K, V]) NotEmpty_(omitNil bool) setMsgOrDefault[*checkMap[K, V]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -67,12 +67,12 @@ func (c *checkMap[K, V]) NotEmpty_(omitNil bool) msg_[*checkMap[K, V]] {
 	return c.success_()
 }
 
-func (c *checkMap[K, V]) Length(l int) msg_[*checkMap[K, V]] {
+func (c *checkMap[K, V]) Length(l int) setMsgOrDefault[*checkMap[K, V]] {
 	return c.Length_(l, false)
 }
 
-func (c *checkMap[K, V]) Length_(l int, omitNil bool) msg_[*checkMap[K, V]] {
-	if c.interrupt() {
+func (c *checkMap[K, V]) Length_(l int, omitNil bool) setMsgOrDefault[*checkMap[K, V]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -87,12 +87,12 @@ func (c *checkMap[K, V]) Length_(l int, omitNil bool) msg_[*checkMap[K, V]] {
 	return c.success_()
 }
 
-func (c *checkMap[K, V]) Min(min int) msg_[*checkMap[K, V]] {
+func (c *checkMap[K, V]) Min(min int) setMsgOrDefault[*checkMap[K, V]] {
 	return c.Min_(min, false)
 }
 
-func (c *checkMap[K, V]) Min_(min int, omitNil bool) msg_[*checkMap[K, V]] {
-	if c.interrupt() {
+func (c *checkMap[K, V]) Min_(min int, omitNil bool) setMsgOrDefault[*checkMap[K, V]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -105,12 +105,12 @@ func (c *checkMap[K, V]) Min_(min int, omitNil bool) msg_[*checkMap[K, V]] {
 	return c.success_()
 }
 
-func (c *checkMap[K, V]) Max(max int) msg_[*checkMap[K, V]] {
+func (c *checkMap[K, V]) Max(max int) setMsgOrDefault[*checkMap[K, V]] {
 	return c.Max_(max, false)
 }
 
-func (c *checkMap[K, V]) Max_(max int, omitNil bool) msg_[*checkMap[K, V]] {
-	if c.interrupt() {
+func (c *checkMap[K, V]) Max_(max int, omitNil bool) setMsgOrDefault[*checkMap[K, V]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -123,12 +123,12 @@ func (c *checkMap[K, V]) Max_(max int, omitNil bool) msg_[*checkMap[K, V]] {
 	return c.success_()
 }
 
-func (c *checkMap[K, V]) Range(min, max int) msg_[*checkMap[K, V]] {
+func (c *checkMap[K, V]) Range(min, max int) setMsgOrDefault[*checkMap[K, V]] {
 	return c.Range_(min, max, false)
 }
 
-func (c *checkMap[K, V]) Range_(min, max int, omitNil bool) msg_[*checkMap[K, V]] {
-	if c.interrupt() {
+func (c *checkMap[K, V]) Range_(min, max int, omitNil bool) setMsgOrDefault[*checkMap[K, V]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -143,12 +143,12 @@ func (c *checkMap[K, V]) Range_(min, max int, omitNil bool) msg_[*checkMap[K, V]
 	return c.success_()
 }
 
-func (c *checkMap[k, v]) Gt(min int) msg_[*checkMap[k, v]] {
+func (c *checkMap[k, v]) Gt(min int) setMsgOrDefault[*checkMap[k, v]] {
 	return c.Gt_(min, false)
 }
 
-func (c *checkMap[k, v]) Gt_(min int, omitNil bool) msg_[*checkMap[k, v]] {
-	if c.interrupt() {
+func (c *checkMap[k, v]) Gt_(min int, omitNil bool) setMsgOrDefault[*checkMap[k, v]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -161,12 +161,12 @@ func (c *checkMap[k, v]) Gt_(min int, omitNil bool) msg_[*checkMap[k, v]] {
 	return c.success_()
 }
 
-func (c *checkMap[k, v]) Lt(max int) msg_[*checkMap[k, v]] {
+func (c *checkMap[k, v]) Lt(max int) setMsgOrDefault[*checkMap[k, v]] {
 	return c.Lt_(max, false)
 }
 
-func (c *checkMap[k, v]) Lt_(max int, omitNil bool) msg_[*checkMap[k, v]] {
-	if c.interrupt() {
+func (c *checkMap[k, v]) Lt_(max int, omitNil bool) setMsgOrDefault[*checkMap[k, v]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -179,12 +179,12 @@ func (c *checkMap[k, v]) Lt_(max int, omitNil bool) msg_[*checkMap[k, v]] {
 	return c.success_()
 }
 
-func (c *checkMap[k, v]) Within(min, max int) msg_[*checkMap[k, v]] {
+func (c *checkMap[k, v]) Within(min, max int) setMsgOrDefault[*checkMap[k, v]] {
 	return c.Within_(min, max, false)
 }
 
-func (c *checkMap[k, v]) Within_(min, max int, omitNil bool) msg_[*checkMap[k, v]] {
-	if c.interrupt() {
+func (c *checkMap[k, v]) Within_(min, max int, omitNil bool) setMsgOrDefault[*checkMap[k, v]] {
+	if c.ctx.interrupt() {
 		return c.success_()
 	}
 	if c.m == nil {
@@ -201,21 +201,21 @@ func (c *checkMap[k, v]) Within_(min, max int, omitNil bool) msg_[*checkMap[k, v
 
 func (c *checkMap[K, V]) Dive(key func(k K), value func(v V)) {
 	if c.m != nil {
-		s := c.savepoint()
+		s := c.ctx.savepoint()
 		for k, v := range c.m {
 			if key != nil {
-				c.beforeDive(dive_map, "$key", "", 0)
+				c.ctx.beforeDive(dive_map, "$key", "", 0)
 				key(k)
-				c.afterDive(s)
-				if c.interrupt() {
+				c.ctx.afterDive(s)
+				if c.ctx.interrupt() {
 					break
 				}
 			}
 			if value != nil {
-				c.beforeDive(dive_map, "$value", "", 0)
+				c.ctx.beforeDive(dive_map, "$value", "", 0)
 				value(v)
-				c.afterDive(s)
-				if c.interrupt() {
+				c.ctx.afterDive(s)
+				if c.ctx.interrupt() {
 					break
 				}
 			}
