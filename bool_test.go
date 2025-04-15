@@ -42,10 +42,18 @@ func TestCheckBool_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Bool(c, (*bool)(nil), "param").NotNil().DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be nil", msg)
+	}
+	{
+
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Bool().NotNil(func(ctx *vfy.Context) string {
 			return "bool NotNil default setMsg"
 		})
-		vfy.Bool(c, (*bool)(nil), "").NotNil().DefaultMsg()
+		vfy.Bool(c, (*bool)(nil), "param").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("bool NotNil default setMsg", msg)

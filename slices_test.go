@@ -43,6 +43,13 @@ func TestCheckSlice_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, ([]string)(nil), "param").NotNil().DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be nil", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Slices().NotNil(func(ctx *vfy.Context) string {
 			return "slices NotNil default setMsg"
 		})
@@ -75,6 +82,13 @@ func TestCheckSlice_NotEmpty(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Slices[string](c, []string{}, "param").NotEmpty().Msg("%s must not be empty", c.FieldName())
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be empty", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, []string{}, "param").NotEmpty().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must not be empty", msg)
@@ -119,6 +133,13 @@ func TestCheckSlice_Length(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, []string{}, "param").Length(2).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be 2", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Slices().Length(func(ctx *vfy.Context) string {
 			return "slices Length default setMsg"
 		})
@@ -157,6 +178,13 @@ func TestCheckSlice_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, []string{"hello"}, "param").Min(2).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must not be less than 2", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Slices().Min(func(ctx *vfy.Context) string {
 			return "slices Min default setMsg"
 		})
@@ -189,6 +217,13 @@ func TestCheckSlice_Max(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Max(2).Msg("%s's length must not be greater than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must not be greater than 2", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Max(2).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param's length must not be greater than 2", msg)
@@ -240,6 +275,13 @@ func TestCheckSlice_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Range(1, 2).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be 1 to 2", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Slices().Range(func(ctx *vfy.Context) string {
 			return "slices Range default setMsg"
 		})
@@ -278,6 +320,13 @@ func TestCheckSlice_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, []string{"hello"}, "param").Gt(2).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be greater than 2", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Slices().Gt(func(ctx *vfy.Context) string {
 			return "slices Gt default setMsg"
 		})
@@ -304,6 +353,13 @@ func TestCheckSlice_Lt(t *testing.T) {
 
 		vfy.Slices[string](c, ([]string)(nil), "param").Lt(2).Msg("test already fail")
 		ok, msg, _ = vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be less than 2", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Lt(2).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param's length must be less than 2", msg)
 	}
@@ -351,6 +407,13 @@ func TestCheckSlice_Within(t *testing.T) {
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param's length must be > 1 and < 3", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Within(1, 3).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be greater than 1 and less than 3", msg)
 	}
 	{
 		c := vfy.NewDefaultContext()

@@ -42,10 +42,17 @@ func TestCheckFloat32_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Float32(c, (*float32)(nil), "param").NotNil().DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be nil", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Float32().NotNil(func(ctx *vfy.Context) string {
 			return "float32 NotNil default setMsg"
 		})
-		vfy.Float32(c, (*float32)(nil), "").NotNil().DefaultMsg()
+		vfy.Float32(c, (*float32)(nil), "param").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("float32 NotNil default setMsg", msg)
@@ -74,6 +81,13 @@ func TestCheckFloat32_Min(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Float32(c, ptr(float32(9)), "param").Min(10).Msg("%s must not be less than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Float32(c, ptr(float32(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must not be less than 10", msg)
@@ -112,6 +126,13 @@ func TestCheckFloat32_Max(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Float32(c, ptr(float32(11)), "param").Max(10).Msg("%s must not be greater than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be greater than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Float32(c, ptr(float32(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must not be greater than 10", msg)
@@ -163,6 +184,13 @@ func TestCheckFloat32_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Float32(c, ptr(float32(11)), "param").Range(5, 10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be 5 to 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Float32().Range(func(ctx *vfy.Context) string {
 			return "float32 Range default setMsg"
 		})
@@ -201,6 +229,13 @@ func TestCheckFloat32_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Float32(c, ptr(float32(10)), "param").Gt(10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be greater than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Float32().Gt(func(ctx *vfy.Context) string {
 			return "float32 Gt default setMsg"
 		})
@@ -233,6 +268,13 @@ func TestCheckFloat32_Lt(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Float32(c, ptr(float32(11)), "param").Lt(10).Msg("%s must be less than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Float32(c, ptr(float32(11)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must be less than 10", msg)
@@ -284,6 +326,13 @@ func TestCheckFloat32_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Float32(c, ptr(float32(10)), "param").Within(5, 10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be greater than 5 and less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Float32().Within(func(ctx *vfy.Context) string {
 			return "float32 Within default setMsg"
 		})
@@ -316,6 +365,13 @@ func TestCheckFloat32_Options(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Float32(c, ptr(float32(4)), "param").Options([]float32{1, 2, 3}).Msg("%s must be %s", c.FieldName(), c.Confines())
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be 1, 2 or 3", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Float32(c, ptr(float32(4)), "param").Options([]float32{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must be 1, 2 or 3", msg)

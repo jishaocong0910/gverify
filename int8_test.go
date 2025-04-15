@@ -42,10 +42,17 @@ func TestCheckInt8_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Int8(c, (*int8)(nil), "param").NotNil().DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be nil", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Int8().NotNil(func(ctx *vfy.Context) string {
 			return "int8 NotNil default setMsg"
 		})
-		vfy.Int8(c, (*int8)(nil), "").NotNil().DefaultMsg()
+		vfy.Int8(c, (*int8)(nil), "param").NotNil().DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("int8 NotNil default setMsg", msg)
@@ -74,6 +81,13 @@ func TestCheckInt8_Min(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Int8(c, ptr(int8(9)), "param").Min(10).Msg("%s must not be less than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Int8(c, ptr(int8(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must not be less than 10", msg)
@@ -112,6 +126,13 @@ func TestCheckInt8_Max(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Int8(c, ptr(int8(11)), "param").Max(10).Msg("%s must not be greater than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be greater than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Int8(c, ptr(int8(11)), "param").Max(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must not be greater than 10", msg)
@@ -163,6 +184,13 @@ func TestCheckInt8_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Int8(c, ptr(int8(11)), "param").Range(5, 10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be 5 to 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Int8().Range(func(ctx *vfy.Context) string {
 			return "int8 Range default setMsg"
 		})
@@ -195,6 +223,13 @@ func TestCheckInt8_Gt(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Int8(c, ptr(int8(10)), "param").Gt(10).Msg("%s must be greater than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be greater than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Int8(c, ptr(int8(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must be greater than 10", msg)
@@ -239,10 +274,17 @@ func TestCheckInt8_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Int8(c, ptr(int8(10)), "param").Lt(10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Int8().Lt(func(ctx *vfy.Context) string {
 			return "int8 Lt default setMsg"
 		})
-		vfy.Int8(c, ptr(int8(11)), "param").Lt(10).DefaultMsg()
+		vfy.Int8(c, ptr(int8(10)), "param").Lt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("int8 Lt default setMsg", msg)
@@ -284,13 +326,20 @@ func TestCheckInt8_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Int8(c, ptr(int8(10)), "param").Within(5, 10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be greater than 5 and less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Int8().Within(func(ctx *vfy.Context) string {
 			return "int8 Within default setMsg"
 		})
-		vfy.Int8(c, ptr(int8(10)), "param").Within(5, 10).Msg("%s must be > %s and < %s", c.FieldName(), c.Confine(0), c.Confine(1))
+		vfy.Int8(c, ptr(int8(10)), "param").Within(5, 10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("param must be > 5 and < 10", msg)
+		r.Equal("int8 Within default setMsg", msg)
 	}
 }
 
@@ -316,6 +365,13 @@ func TestCheckInt8_Options(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Int8(c, ptr(int8(4)), "param").Options([]int8{1, 2, 3}).Msg("%s must be %s", c.FieldName(), c.Confines())
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be 1, 2 or 3", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Int8(c, ptr(int8(4)), "param").Options([]int8{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must be 1, 2 or 3", msg)

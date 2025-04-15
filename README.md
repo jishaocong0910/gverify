@@ -44,23 +44,23 @@ func (b *Book) Checklist(ctx *vfy.Context) {
         Max(10).Msg("%s's length exceed %s", ctx.FieldName(), ctx.Confine(0))
 
     vfy.String(ctx, &b.Isbn, "isbn").
-        NotBlank().Msg("%s must not be blank", ctx.FieldName()).
-        Regex(regexp.MustCompile(`^[0-9]{13}$`)).Msg("%s's format is illegal", ctx.FieldName())
+        NotBlank().DefaultMsg().
+        Regex(regexp.MustCompile(`^[0-9]{13}$`)).DefaultMsg()
 
     vfy.String(ctx, b.Description, "description").
-        NotNil().Msg("%s must not be nil", ctx.FieldName())
+        NotNil().DefaultMsg()
 
     vfy.Int(ctx, &b.Stock, "stock").
-        Range(0, 100).Msg("%s must between %s and %s", ctx.FieldName(), ctx.Confine(0), ctx.Confine(1))
+        Range(0, 100).Msg("%s must be %s to %s", ctx.FieldName(), ctx.Confine(0), ctx.Confine(1))
 
     vfy.Float64(ctx, &b.Price, "price").
-        Gt(0).Msg("%s must be greater than %s", ctx.FieldName(), ctx.Confine(0))
+        Gt(0).DefaultMsg()
 
     vfy.String(ctx, b.Language, "language").
         Options([]string{"zh-cn", "en-US", "ja-JP"}).Msg("%s must be %s", ctx.FieldName(), ctx.Confines())
 
     vfy.Struct(ctx, b.Author, "author").
-        NotNil().Msg("%s must not be nil", ctx.FieldName()).
+        NotNil().DefaultMsg().
         Dive()
 
     vfy.Slices(ctx, b.Categories, "categories").
@@ -309,8 +309,7 @@ func main() {
 
 ## 默认消息
 
-有些*校验方法*调用后可链式调用`DefaultMsg`方法，使用默认的错误消息。**每个*校验方法*的默认错误消息必须进行设置**
-，否则默认消息为空字符串。默认消息的设置方式为`vfy.SetDefaultMsg().<字段验证函数名>().<校验方法名>(<默认消息处理函数>）`
+有些*校验方法*调用后可链式调用`DefaultMsg`方法，使用默认的错误消息。可自定义默认消息，设置方式为`vfy.SetDefaultMsg().<字段验证函数名>().<校验方法名>(<默认消息处理函数>）`
 
 *代码示例*
 
@@ -326,26 +325,21 @@ import (
 
 type Demo struct {
     Name  string
-    Email string
     Phone string
     Age   int
 }
 
 func init() {
+    // 自定义默认消息
     vfy.SetDefaultMsg().String().NotBlank(func(ctx *vfy.Context) string {
-        return fmt.Sprintf(`%s must not be blank`, ctx.FieldName())
-    }).Regex(func(ctx *vfy.Context) string {
-        return fmt.Sprintf(`%s's format is illegal`, ctx.FieldName())
-    })
-
-    vfy.SetDefaultMsg().Int().Gt(func(ctx *vfy.Context) string {
-        return fmt.Sprintf(`%s must greater than %s`, ctx.FieldName(), ctx.Confine(0))
+        return fmt.Sprintf(`%s is blank`, ctx.FieldName())
+    }).Gt(func(ctx *vfy.Context) string {
+        return fmt.Sprintf(`%s is to short`, ctx.FieldName())
     })
 }
 
 func (d Demo) Checklist(ctx *vfy.Context) {
     vfy.String(ctx, &d.Name, "name").NotBlank().DefaultMsg()
-    vfy.String(ctx, &d.Email, "email").Regex(regexp.MustCompile(`\w+@\w+.\w+`)).DefaultMsg()
     vfy.String(ctx, &d.Phone, "phone").Gt(10).DefaultMsg()
     vfy.Int(ctx, &d.Age, "age").Gt(0).DefaultMsg()
 }
@@ -359,12 +353,9 @@ func main() {
         }
     }
     // Output:
-    // 0 name must not be blank
-    // 1 email's format is illegal
-    // 2 
-    // 3 age must greater than 0
-    //
-    // 由于没有设置string的Gt校验方法的默认消息，第二个错误消息为空字符串。
+    // 0 name is blank
+    // 1 phone is too short
+    // 2 age must be greater than 0
 }
 ```
 

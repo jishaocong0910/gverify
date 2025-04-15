@@ -43,6 +43,13 @@ func TestCheckString_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.String(c, (*string)(nil), "param").NotNil().DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be nil", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().String().NotNil(func(ctx *vfy.Context) string {
 			return "string NotNil default setMsg"
 		})
@@ -81,6 +88,13 @@ func TestCheckString_NotBlank(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr(""), "param").NotBlank().DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be blank", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().String().NotBlank(func(ctx *vfy.Context) string {
 			return "string NotBlank default setMsg"
 		})
@@ -113,6 +127,13 @@ func TestCheckString_Length(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.String(c, ptr("hi"), "param").Length(5).Msg("%s's length must be %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be 5", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("hi"), "param").Length(5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param's length must be 5", msg)
@@ -158,6 +179,13 @@ func TestCheckString_Regex(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("http://google.com"), "param").Regex(reg).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's format is illegal", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().String().Regex(func(ctx *vfy.Context) string {
 			return "string Regex default setMsg"
 		})
@@ -196,6 +224,13 @@ func TestCheckString_Min(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("hi"), "param").Min(5).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must not be less than 5", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().String().Min(func(ctx *vfy.Context) string {
 			return "string Min default setMsg"
 		})
@@ -228,6 +263,13 @@ func TestCheckString_Max(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.String(c, ptr("hello!"), "param").Max(5).Msg("%s's length must not be greater than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must not be greater than 5", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("hello!"), "param").Max(5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param's length must not be greater than 5", msg)
@@ -279,6 +321,13 @@ func TestCheckString_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("hello!"), "param").Range(3, 5).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be 3 to 5", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().String().Range(func(ctx *vfy.Context) string {
 			return "string Range default setMsg"
 		})
@@ -317,6 +366,13 @@ func TestCheckString_Gt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("hi"), "param").Gt(5).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be greater than 5", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().String().Gt(func(ctx *vfy.Context) string {
 			return "string Gt default setMsg"
 		})
@@ -349,6 +405,13 @@ func TestCheckString_Lt(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.String(c, ptr("hello!"), "param").Lt(5).Msg("%s's length must be less than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be less than 5", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("hello!"), "param").Lt(5).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param's length must be less than 5", msg)
@@ -400,6 +463,13 @@ func TestCheckString_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("hello"), "param").Within(3, 5).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param's length must be greater than 3 and less than 5", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().String().Within(func(ctx *vfy.Context) string {
 			return "string Within default setMsg"
 		})
@@ -414,34 +484,41 @@ func TestCheckString_Options(t *testing.T) {
 	r := require.New(t)
 	{
 		c := vfy.NewDefaultContext()
-		vfy.String(c, ptr("b"), "param").Options([]string{"a", "b", "ctx"}).Msg("test success")
+		vfy.String(c, ptr("b"), "param").Options([]string{"a", "b", "c"}).Msg("test success")
 		ok, msg, _ := vfy.GetResult(c)
 		r.True(ok)
 		r.Equal("", msg)
 
-		vfy.String(c, (*string)(nil), "param").Options([]string{"a", "b", "ctx"}).Msg("%s must be %s", c.FieldName(), c.Confines())
+		vfy.String(c, (*string)(nil), "param").Options([]string{"a", "b", "c"}).Msg("%s must be %s", c.FieldName(), c.Confines())
 		ok, msg, _ = vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("param must be a, b or ctx", msg)
+		r.Equal("param must be a, b or c", msg)
 
 		vfy.String(c, (*string)(nil), "param").Options(nil).Msg("test already fail")
 		ok, msg, _ = vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("param must be a, b or ctx", msg)
+		r.Equal("param must be a, b or c", msg)
 	}
 	{
 		c := vfy.NewDefaultContext()
-		vfy.String(c, ptr("d"), "param").Options([]string{"a", "b", "ctx"}).Msg("%s must be %s", c.FieldName(), c.Confines())
+		vfy.String(c, ptr("d"), "param").Options([]string{"a", "b", "c"}).Msg("%s must be %s", c.FieldName(), c.Confines())
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
-		r.Equal("param must be a, b or ctx", msg)
+		r.Equal("param must be a, b or c", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.String(c, ptr("d"), "param").Options([]string{"a", "b", "c"}).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be a, b or c", msg)
 	}
 	{
 		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().String().Options(func(ctx *vfy.Context) string {
 			return "string Options default setMsg"
 		})
-		vfy.String(c, ptr("d"), "param").Options([]string{"a", "b", "ctx"}).DefaultMsg()
+		vfy.String(c, ptr("d"), "param").Options([]string{"a", "b", "c"}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("string Options default setMsg", msg)

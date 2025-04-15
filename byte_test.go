@@ -42,6 +42,13 @@ func TestCheckByte_NotNil(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Byte(c, (*byte)(nil), "param").NotNil().DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be nil", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Byte().NotNil(func(ctx *vfy.Context) string {
 			return "byte NotNil default setMsg"
 		})
@@ -74,6 +81,13 @@ func TestCheckByte_Min(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Byte(c, ptr(byte(9)), "param").Min(10).Msg("%s must not be less than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Byte(c, ptr(byte(9)), "param").Min(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must not be less than 10", msg)
@@ -118,6 +132,13 @@ func TestCheckByte_Max(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Byte(c, ptr(byte(11)), "param").Max(10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must not be greater than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Byte().Max(func(ctx *vfy.Context) string {
 			return "byte Max default setMsg"
 		})
@@ -125,6 +146,7 @@ func TestCheckByte_Max(t *testing.T) {
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("byte Max default setMsg", msg)
+
 	}
 }
 
@@ -163,6 +185,13 @@ func TestCheckByte_Range(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Byte(c, ptr(byte(11)), "param").Range(5, 10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be 5 to 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Byte().Range(func(ctx *vfy.Context) string {
 			return "byte Range default setMsg"
 		})
@@ -170,6 +199,7 @@ func TestCheckByte_Range(t *testing.T) {
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("byte Range default setMsg", msg)
+
 	}
 }
 
@@ -195,6 +225,13 @@ func TestCheckByte_Gt(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Byte(c, ptr(byte(10)), "param").Gt(10).Msg("%s must be greater than %s", c.FieldName(), c.Confine(0))
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be greater than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Byte(c, ptr(byte(10)), "param").Gt(10).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must be greater than 10", msg)
@@ -239,6 +276,13 @@ func TestCheckByte_Lt(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Byte(c, ptr(byte(11)), "param").Lt(10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Byte().Lt(func(ctx *vfy.Context) string {
 			return "byte Lt default setMsg"
 		})
@@ -246,6 +290,7 @@ func TestCheckByte_Lt(t *testing.T) {
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("byte Lt default setMsg", msg)
+
 	}
 }
 
@@ -284,6 +329,13 @@ func TestCheckByte_Within(t *testing.T) {
 	}
 	{
 		c := vfy.NewDefaultContext()
+		vfy.Byte(c, ptr(byte(10)), "param").Within(5, 10).DefaultMsg()
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be greater than 5 and less than 10", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
 		vfy.SetDefaultMsg().Byte().Within(func(ctx *vfy.Context) string {
 			return "byte Within default setMsg"
 		})
@@ -316,6 +368,13 @@ func TestCheckByte_Options(t *testing.T) {
 	{
 		c := vfy.NewDefaultContext()
 		vfy.Byte(c, ptr(byte(4)), "param").Options([]byte{1, 2, 3}).Msg("%s must be %s", c.FieldName(), c.Confines())
+		ok, msg, _ := vfy.GetResult(c)
+		r.False(ok)
+		r.Equal("param must be 1, 2 or 3", msg)
+	}
+	{
+		c := vfy.NewDefaultContext()
+		vfy.Byte(c, ptr(byte(4)), "param").Options([]byte{1, 2, 3}).DefaultMsg()
 		ok, msg, _ := vfy.GetResult(c)
 		r.False(ok)
 		r.Equal("param must be 1, 2 or 3", msg)
