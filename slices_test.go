@@ -1,532 +1,145 @@
-// Copyright 2024 jishaocong0910/@163.com
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package vfy_test
 
 import (
-	"strconv"
 	"testing"
 
 	vfy "github.com/jishaocong0910/gverify"
 	"github.com/stretchr/testify/require"
 )
 
-func TestCheckSlice_NotNil(t *testing.T) {
+func TestCheckSlice_Required(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world"}, "param").NotNil().Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").NotNil().Msg("%s must not be nil", c.FieldName())
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be nil", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").NotNil().Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be nil", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, ([]string)(nil), "param").NotNil().DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be nil", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().NotNil(func(ctx *vfy.Context) string {
-			return "slices NotNil default setMsg"
-		})
-		vfy.Slices[string](c, ([]string)(nil), "param").NotNil().DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices NotNil default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, ([]int)(nil), "param").Required()
+	}, "param is required")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{}, "param").Required()
+	})
 }
 
 func TestCheckSlice_NotEmpty(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world"}, "param").NotEmpty().Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").NotEmpty().Msg("%s must not be empty", c.FieldName())
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be empty", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").NotEmpty().Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be empty", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{}, "param").NotEmpty().Msg("%s must not be empty", c.FieldName())
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be empty", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{}, "param").NotEmpty().DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be empty", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().NotEmpty(func(ctx *vfy.Context) string {
-			return "slices NotEmpty default setMsg"
-		})
-		vfy.Slices[string](c, []string{}, "param").NotEmpty().DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices NotEmpty default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, ([]int)(nil), "param").NotEmpty()
+	}, "param must not be empty")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1}, "param").NotEmpty()
+	})
 }
 
 func TestCheckSlice_Length(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world"}, "param").Length(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Length(2).Msg("%s's length must be %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be 2", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Length(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{}, "param").Length(2).Msg("%s's length must be %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{}, "param").Length(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().Length(func(ctx *vfy.Context) string {
-			return "slices Length default setMsg"
-		})
-		vfy.Slices[string](c, []string{}, "param").Length(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices Length default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1}, "param").Length(2)
+	}, "param's length must be 2")
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2, 3}, "param").Length(2)
+	}, "param's length must be 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2}, "param").Length(2)
+	})
 }
 
 func TestCheckSlice_Min(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world"}, "param").Min(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Min(2).Msg("%s's length must not be less than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be less than 2", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Min(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello"}, "param").Min(2).Msg("%s's length must not be less than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello"}, "param").Min(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().Min(func(ctx *vfy.Context) string {
-			return "slices Min default setMsg"
-		})
-		vfy.Slices[string](c, []string{"hello"}, "param").Min(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices Min default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1}, "param").Min(2)
+	}, "param's length must not be less than 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2}, "param").Min(2)
+	})
 }
 
 func TestCheckSlice_Max(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world"}, "param").Max(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Max(2).Msg("%s's length must not be greater than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be greater than 2", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Max(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Max(2).Msg("%s's length must not be greater than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Max(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().Max(func(ctx *vfy.Context) string {
-			return "slices Max default setMsg"
-		})
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Max(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices Max default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2, 3}, "param").Max(2)
+	}, "param's length must not be greater than 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2}, "param").Max(2)
+	})
 }
 
 func TestCheckSlice_Range(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world"}, "param").Range(1, 2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Range(1, 2).Msg("%s's length must between %s and %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must between 1 and 2", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Range(1, 2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must between 1 and 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{}, "param").Range(1, 2).Msg("%s's length must between %s and %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must between 1 and 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Range(1, 2).Msg("%s's length must between %s and %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must between 1 and 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Range(1, 2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be 1 to 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().Range(func(ctx *vfy.Context) string {
-			return "slices Range default setMsg"
-		})
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Range(1, 2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices Range default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1}, "param").Range(2, 3)
+	}, "param's length must be 2 to 3")
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2, 3, 4}, "param").Range(2, 3)
+	}, "param's length must be 2 to 3")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2, 3}, "param").Range(2, 3)
+	})
 }
 
 func TestCheckSlice_Gt(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Gt(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Gt(2).Msg("%s's length must be greater than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 2", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Gt(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello"}, "param").Gt(2).Msg("%s's length must be greater than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello"}, "param").Gt(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().Gt(func(ctx *vfy.Context) string {
-			return "slices Gt default setMsg"
-		})
-		vfy.Slices[string](c, []string{"hello"}, "param").Gt(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices Gt default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2}, "param").Gt(2)
+	}, "param's length must be greater than 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2, 3}, "param").Gt(2)
+	})
 }
 
 func TestCheckSlice_Lt(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello"}, "param").Lt(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Lt(2).Msg("%s's length must be less than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be less than 2", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Lt(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Lt(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().Lt(func(ctx *vfy.Context) string {
-			return "slices Lt default setMsg"
-		})
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Lt(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices Lt default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2}, "param").Lt(2)
+	}, "param's length must be less than 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1}, "param").Lt(2)
+	})
 }
 
 func TestCheckSlice_Within(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world"}, "param").Within(1, 3).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Within(1, 3).Msg("%s's length must be > %s and < %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be > 1 and < 3", msg)
-
-		vfy.Slices[string](c, ([]string)(nil), "param").Within(1, 3).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be > 1 and < 3", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{}, "param").Within(1, 3).Msg("%s's length must be > %s and < %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be > 1 and < 3", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Within(1, 3).Msg("%s's length must be > %s and < %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be > 1 and < 3", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Within(1, 3).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 1 and less than 3", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Slices().Within(func(ctx *vfy.Context) string {
-			return "slices Within default setMsg"
-		})
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Within(1, 3).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("slices Within default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1}, "param").Within(2, 5)
+	}, "param's length must be greater than 2 and less than 5")
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2, 3, 4, 5, 6}, "param").Within(2, 5)
+	}, "param's length must be greater than 2 and less than 5")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{1, 2, 3}, "param").Within(2, 5)
+	})
 }
 
-func TestCheckSlice_Dive(t *testing.T) {
+func TestCheckSlice_Custom(t *testing.T) {
+	r := require.New(t)
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{}, "param").Custom(func(t []int) bool {
+			return false
+		})
+	}, "param is illegal")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Slice(vc, []int{}, "param").Custom(func(t []int) bool {
+			return true
+		})
+	})
+}
+
+func TestCheckSlice_Interrupt(t *testing.T) {
 	r := require.New(t)
 	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world"}, "param").Dive(func(t string) {
-			vfy.String(c, &t, "").Length(5).Msg("%s's length must be %s", c.FieldName(), c.Confine(0))
+		vc := vfy.NewDefaultContext()
+		vfy.SetAll(vc)
+		vfy.Slice(vc, []int{8, 3}, "param").Dive(func(t int) {
+			vfy.Int(vc, &t, "").Lt(7).Gt(4)
 		})
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetChecklistFalse(c)
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Dive(nil)
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Slices[string](c, []string{"hello", "world", "!"}, "param").Dive(func(t string) {
-			vfy.String(c, &t, "").Length(5).Msg("%s's length must be %s", c.FieldName(), c.Confine(0))
-		})
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param[2]'s length must be 5", msg)
-	}
-	{
-		m := MyStruct{
-			MySlice: []string{"", ""},
-		}
-		c := vfy.NewCheckAllContext()
-		vfy.Struct(c, &m, "myStruct").Dive()
-		ok, _, msgs := vfy.GetResult(c)
-		r.False(ok)
+		_, _, msgs := vfy.GetResult(vc)
 		r.Len(msgs, 2)
-		r.Equal("myStruct.mySlice[0] must not be blank", msgs[0])
-		r.Equal("myStruct.mySlice[1] must not be blank", msgs[1])
+		r.Equal("param[0] must be less than 7", msgs[0])
+		r.Equal("param[1] must be greater than 4", msgs[1])
 	}
 	{
-		m := MyStruct2{
-			MySlice: []string{"", ""},
-		}
-		c := vfy.NewCheckAllContext()
-		vfy.Struct(c, &m, "myStruct").Dive()
-		ok, _, msgs := vfy.GetResult(c)
-		r.False(ok)
-		r.Len(msgs, 2)
-		r.Equal("myStruct.mySlice[1] must not be blank", msgs[0])
-		r.Equal("myStruct.mySlice[2] must not be blank", msgs[1])
-	}
-	{
-		c := vfy.NewCheckAllContext()
-		vfy.Slices[MyStruct3](c, []MyStruct3{{}}, "param").Dive(func(t MyStruct3) {
-			vfy.Struct(c, &t, "").Dive()
+		vc := vfy.NewDefaultContext()
+		vfy.Slice(vc, []int{8, 3}, "param").Dive(func(t int) {
+			vfy.Int(vc, &t, "").Lt(7).Gt(4)
 		})
-		ok, _, msgs := vfy.GetResult(c)
-		r.False(ok)
+		_, _, msgs := vfy.GetResult(vc)
 		r.Len(msgs, 1)
-		r.Equal("param[0].myField must not be blank", msgs[0])
+		r.Equal("param[0] must be less than 7", msgs[0])
 	}
-	{
-		c := vfy.NewCheckAllContext()
-		vfy.Slices[[]MyStruct3](c, [][]MyStruct3{{{MyField: "a"}, {}}}, "param").Dive(func(t []MyStruct3) {
-			vfy.Slices(c, t, "").Dive(func(t MyStruct3) {
-				vfy.Struct(c, &t, "").Dive()
-			})
-		})
-		ok, _, msgs := vfy.GetResult(c)
-		r.False(ok)
-		r.Len(msgs, 1)
-		r.Equal("param[0][1].myField must not be blank", msgs[0])
-	}
-}
-
-type MyStruct struct {
-	MySlice []string
-}
-
-func (m MyStruct) Checklist(ctx *vfy.Context) {
-	vfy.Slices(ctx, m.MySlice, "mySlice").Dive(func(e string) {
-		vfy.String(ctx, &e, "").NotBlank().Msg("%s must not be blank", ctx.FieldName())
-	})
-}
-
-type MyStruct2 struct {
-	MySlice []string
-}
-
-func (m MyStruct2) Checklist(ctx *vfy.Context) {
-	vfy.Slices(ctx, m.MySlice, "mySlice").Dive(func(e string) {
-		vfy.String(ctx, &e, "["+strconv.Itoa(ctx.Index()+1)+"]").NotBlank().Msg("%s must not be blank", ctx.FieldName())
-	})
-}
-
-type MyStruct3 struct {
-	MyField string
-}
-
-func (s MyStruct3) Checklist(ctx *vfy.Context) {
-	vfy.String(ctx, &s.MyField, "myField").NotBlank().Msg("%s must not be blank", ctx.FieldName())
 }
