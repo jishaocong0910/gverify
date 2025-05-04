@@ -38,19 +38,19 @@ func (m *mockContext) Value(key any) any {
 type demoStruct struct {
 }
 
-func (d demoStruct) Checklist(ctx *vfy.Context) {
-	ctx.Deadline()
-	ctx.Done()
-	ctx.Err()
-	ctx.Value("")
+func (d demoStruct) Checklist(vc *vfy.VContext) {
+	vc.Deadline()
+	vc.Done()
+	vc.Err()
+	vc.Value("")
 }
 
 func TestContext(t *testing.T) {
 	r := require.New(t)
-	ctx := &mockContext{}
-	vfy.Check(ctx, &demoStruct{})
-	r.True(ctx.invokeDeadline)
-	r.True(ctx.invokeDone)
-	r.True(ctx.invokeErr)
-	r.True(ctx.invokeValue)
+	vc := &mockContext{}
+	vfy.Check(vc, (*demoStruct)(nil))
+	r.True(vc.invokeDeadline)
+	r.True(vc.invokeDone)
+	r.True(vc.invokeErr)
+	r.True(vc.invokeValue)
 }

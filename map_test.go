@@ -1,486 +1,156 @@
-// Copyright 2024 jishaocong0910/@163.com
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package vfy_test
 
 import (
-	"strings"
 	"testing"
 
 	vfy "github.com/jishaocong0910/gverify"
 	"github.com/stretchr/testify/require"
 )
 
-func TestCheckMap_NotNil(t *testing.T) {
+func TestCheckMap_Required(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "param").NotNil().Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").NotNil().Msg("test fail by nil")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("test fail by nil", msg)
-
-		vfy.Map[string, int](c, nil, "param").NotNil().Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("test fail by nil", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, nil, "param").NotNil().DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be nil", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().NotNil(func(ctx *vfy.Context) string {
-			return "map NotNil default setMsg"
-		})
-		vfy.Map[string, int](c, nil, "param").NotNil().DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map NotNil default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, (map[string]int)(nil), "param").Required()
+	}, "param is required")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{}, "param").Required()
+	})
 }
 
 func TestCheckMap_NotEmpty(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "param").NotEmpty().Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").NotEmpty().Msg("%s must not be empty", c.FieldName())
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be empty", msg)
-
-		vfy.Map[string, int](c, nil, "param").NotEmpty().Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be empty", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{}, "param").NotEmpty().Msg("%s must not be empty", c.FieldName())
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be empty", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{}, "param").NotEmpty().DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param must not be empty", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().NotEmpty(func(ctx *vfy.Context) string {
-			return "map NotEmpty default setMsg"
-		})
-		vfy.Map[string, int](c, map[string]int{}, "param").NotEmpty().DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map NotEmpty default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, (map[string]int)(nil), "param").NotEmpty()
+	}, "param must not be empty")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1}, "param").NotEmpty()
+	})
 }
 
 func TestCheckMap_Length(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "param").Length(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").Length(2).Msg("test fail by nil")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("test fail by nil", msg)
-
-		vfy.Map[string, int](c, nil, "param").Length(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("test fail by nil", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{}, "param").Length(2).Msg("%s's length must be %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{}, "param").Length(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().Length(func(ctx *vfy.Context) string {
-			return "map Length default setMsg"
-		})
-		vfy.Map[string, int](c, map[string]int{}, "param").Length(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map Length default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1}, "param").Length(2)
+	}, "param's length must be 2")
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2, "c": 3}, "param").Length(2)
+	}, "param's length must be 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2}, "param").Length(2)
+	})
 }
 
 func TestCheckMap_Min(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "param").Min(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").Min(2).Msg("%s's length must not be less than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be less than 2", msg)
-
-		vfy.Map[string, int](c, nil, "param").Min(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Min(2).Msg("%s's length must not be less than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Min(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().Min(func(ctx *vfy.Context) string {
-			return "map Min default setMsg"
-		})
-		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Min(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map Min default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1}, "param").Min(2)
+	}, "param's length must not be less than 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2}, "param").Min(2)
+	})
 }
 
 func TestCheckMap_Max(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "param").Max(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").Max(2).Msg("%s's length must not be greater than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be greater than 2", msg)
-
-		vfy.Map[string, int](c, nil, "param").Max(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Max(2).Msg("%s's length must not be greater than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Max(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must not be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().Max(func(ctx *vfy.Context) string {
-			return "map Max default setMsg"
-		})
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Max(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map Max default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2, "c": 3}, "param").Max(2)
+	}, "param's length must not be greater than 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2}, "param").Max(2)
+	})
 }
 
 func TestCheckMap_Range(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "param").Range(1, 2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").Range(1, 2).Msg("%s' length must between %s and %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param' length must between 1 and 2", msg)
-
-		vfy.Map[string, int](c, nil, "param").Range(1, 2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param' length must between 1 and 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{}, "param").Range(1, 2).Msg("%s' length must between %s and %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param' length must between 1 and 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Range(1, 2).Msg("%s' length must between %s and %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param' length must between 1 and 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Range(1, 2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be 1 to 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().Range(func(ctx *vfy.Context) string {
-			return "map Range default setMsg"
-		})
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Range(1, 2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map Range default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1}, "param").Range(2, 3)
+	}, "param's length must be 2 to 3")
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2, "c": 3, "d": 4}, "param").Range(2, 3)
+	}, "param's length must be 2 to 3")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2, "c": 3}, "param").Range(2, 3)
+	})
 }
 
 func TestCheckMap_Gt(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "key3": 3}, "param").Gt(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").Gt(2).Msg("%s's length must be greater than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 2", msg)
-
-		vfy.Map[string, int](c, nil, "param").Gt(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Gt(2).Msg("%s's length must be greater than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Gt(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().Gt(func(ctx *vfy.Context) string {
-			return "map Gt default setMsg"
-		})
-		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Gt(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map Gt default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2}, "param").Gt(2)
+	}, "param's length must be greater than 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2, "c": 3}, "param").Gt(2)
+	})
 }
 
 func TestCheckMap_Lt(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1}, "param").Lt(2).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").Lt(2).Msg("%s's length must be less than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be less than 2", msg)
-
-		vfy.Map[string, int](c, nil, "param").Lt(2).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Lt(2).Msg("%s's length must be less than %s", c.FieldName(), c.Confine(0))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Lt(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be less than 2", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().Lt(func(ctx *vfy.Context) string {
-			return "map Lt default setMsg"
-		})
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Lt(2).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map Lt default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2, "c": 3}, "param").Lt(2)
+	}, "param's length must be less than 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1}, "param").Lt(2)
+	})
 }
 
 func TestCheckMap_Within(t *testing.T) {
 	r := require.New(t)
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "param").Within(1, 3).Msg("test success")
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
-
-		vfy.Map[string, int](c, nil, "param").Within(1, 3).Msg("%s' length must be > %s and < %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param' length must be > 1 and < 3", msg)
-
-		vfy.Map[string, int](c, nil, "param").Within(1, 3).Msg("test already fail")
-		ok, msg, _ = vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param' length must be > 1 and < 3", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{}, "param").Within(1, 3).Msg("%s' length must be > %s and < %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param' length must be > 1 and < 3", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Within(1, 3).Msg("%s' length must be > %s and < %s", c.FieldName(), c.Confine(0), c.Confine(1))
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param' length must be > 1 and < 3", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Within(1, 3).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param's length must be greater than 1 and less than 3", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.SetDefaultMsg().Map().Within(func(ctx *vfy.Context) string {
-			return "map Within default setMsg"
-		})
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2, "C": 67}, "param").Within(1, 3).DefaultMsg()
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("map Within default setMsg", msg)
-	}
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1}, "param").Within(2, 5)
+	}, "param's length must be greater than 2 and less than 5")
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2, "c": 3, "d": 4, "e": 5, "f": 6}, "param").Within(2, 5)
+	}, "param's length must be greater than 2 and less than 5")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{"a": 1, "fieldInfo": 2, "c": 3}, "param").Within(2, 5)
+	})
 }
 
-func TestCheckMap_Dive(t *testing.T) {
+func TestCheckMaps_Custom(t *testing.T) {
+	r := require.New(t)
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{}, "param").Custom(func(t map[string]int) bool {
+			return false
+		})
+	}, "param is illegal")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int{}, "param").Custom(func(t map[string]int) bool {
+			return true
+		})
+	})
+}
+
+func TestCheckMap_Interrupt(t *testing.T) {
 	r := require.New(t)
 	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "map").Dive(func(k string) {
-			vfy.String(c, &k, "").Custom(func(k string) bool {
-				return strings.Index(k, "key") == 0
-			}).Msg(c.FieldName() + " must start with 'key'")
+		vc := vfy.NewDefaultContext()
+		vfy.SetAll(vc)
+		vfy.Map(vc, map[string]int{"aaa": 5, "bbb": 5, "a": 11, "b": 11}, "param").Dive(func(k string) {
+			vfy.String(vc, &k, "").Lt(3)
 		}, func(v int) {
-			vfy.Int(c, &v, "").Range(1, 99).Msg(c.FieldName() + " must between 1 to 99")
+			vfy.Int(vc, &v, "").Lt(10)
 		})
-		ok, msg, _ := vfy.GetResult(c)
-		r.True(ok)
-		r.Equal("", msg)
+		_, _, msgs := vfy.GetResult(vc)
+		r.Len(msgs, 4)
 	}
 	{
-		c := vfy.NewDefaultContext()
-		vfy.SetChecklistFalse(c)
-		vfy.Map[string, int](c, map[string]int{"key1": 1, "key2": 2}, "map").Dive(nil, nil)
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("", msg)
+		vc := vfy.NewDefaultContext()
+		vfy.Map(vc, map[string]int{"aaa": 5, "bbb": 5}, "param").Dive(func(k string) {
+			vfy.String(vc, &k, "").Lt(3)
+		}, func(v int) {
+			vfy.Int(vc, &v, "").Lt(10)
+		})
+		_, _, msgs := vfy.GetResult(vc)
+		r.Len(msgs, 1)
 	}
 	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"k1": 1, "key2": 2}, "param").Dive(func(k string) {
-			vfy.String(c, &k, "").Custom(func(k string) bool {
-				return strings.Index(k, "key") == 0
-			}).Msg(c.FieldName() + " must start with 'key'")
+		vc := vfy.NewDefaultContext()
+		vfy.Map(vc, map[string]int{"a": 11, "b": 11}, "param").Dive(func(k string) {
+			vfy.String(vc, &k, "").Lt(3)
 		}, func(v int) {
-			vfy.Int(c, &v, "").Range(1, 99).Msg(c.FieldName() + " must between 1 to 99")
+			vfy.Int(vc, &v, "").Lt(10)
 		})
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param$key must start with 'key'", msg)
-	}
-	{
-		c := vfy.NewDefaultContext()
-		vfy.Map[string, int](c, map[string]int{"key1": 0, "key2": 2}, "param").Dive(func(k string) {
-			vfy.String(c, &k, "").Custom(func(k string) bool {
-				return strings.Index(k, "key") == 0
-			}).Msg(c.FieldName() + " must start with 'key'")
-		}, func(v int) {
-			vfy.Int(c, &v, "").Range(1, 99).Msg(c.FieldName() + " must between 1 to 99")
-		})
-		ok, msg, _ := vfy.GetResult(c)
-		r.False(ok)
-		r.Equal("param$value must between 1 to 99", msg)
+		_, _, msgs := vfy.GetResult(vc)
+		r.Len(msgs, 1)
 	}
 }
