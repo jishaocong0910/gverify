@@ -84,7 +84,7 @@ func (c *checkSlice[T]) Within(min, max int, opts ...ItemOption) *checkSlice[T] 
 	return c
 }
 
-func (c *checkSlice[T]) Custom(custom func(b []T) bool, opts ...ItemOption) *checkSlice[T] {
+func (c *checkSlice[T]) Custom(custom func(s []T) bool, opts ...ItemOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncDefault, nil, func() bool {
 		return custom(c.s)
 	})

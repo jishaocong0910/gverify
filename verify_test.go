@@ -68,13 +68,13 @@ func TestCheckPredicate(t *testing.T) {
 		vfy.CheckPredicate(vc, ptr(5), []vfy.ItemOption{vfy.Code("MY_CODE"), vfy.Msg(func(b *vfy.FieldInfo) {
 			b.Msg("%s %s", b.FieldName(), b.Confines())
 		})}, func() []string {
-			return []string{"a", "fieldInfo", "c"}
+			return []string{"a", "b", "c"}
 		}, func() bool {
 			return false
 		})
 		code, msg, _ := vfy.GetResult(vc)
 		r.Equal("MY_CODE", code)
-		r.Equal("param a, fieldInfo or c", msg)
+		r.Equal("param a, b or c", msg)
 	}
 	{
 		// 默认code和msg

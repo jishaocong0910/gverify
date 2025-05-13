@@ -134,9 +134,9 @@ func TestCheckString_Within(t *testing.T) {
 func TestCheckString_Enum(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("d"), "param").Enum([]string{"a", "fieldInfo", "c"})
-	}, "param must be a, fieldInfo or c")
+		vfy.String(vc, ptr("d"), "param").Enum([]string{"a", "b", "c"})
+	}, `param must be "a", "b" or "c"`)
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("c"), "param").Enum([]string{"a", "fieldInfo", "c"})
+		vfy.String(vc, ptr("c"), "param").Enum([]string{"a", "b", "c"})
 	})
 }

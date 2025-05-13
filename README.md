@@ -178,51 +178,51 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
     <tr>
         <td>Required</td>
-        <td>必填，即不能为nil</td>
+        <td>必填，即不能为nil。</td>
     </tr>
     <tr>
         <td>NotBlank</td>
-        <td>string不能为空白</td>
+        <td>string不能为空白。</td>
     </tr>
     <tr>
         <td>Regex</td>
-        <td>string必须匹配正则表达式</td>
+        <td>string必须匹配正则表达式。</td>
     </tr>
     <tr>
         <td>NotEmpty</td>
-        <td>slice和map长度必须大于0</td>
+        <td>slice和map长度必须大于0。</td>
     </tr>
     <tr>
         <td>Length</td>
-        <td>string字符长度、slice和map长度的固定值</td>
+        <td>string字符长度、slice和map长度的固定值。</td>
     </tr>
     <tr>
         <td>Min</td>
-        <td>数值、string字符长度、slice和map长度的最小值</td>
+        <td>数值、string字符长度、slice和map长度的最小值。</td>
     </tr>
     <tr>
         <td>Max</td>
-        <td>数值、string字符长度、slice和map长度的最大值</td>
+        <td>数值、string字符长度、slice和map长度的最大值。</td>
     </tr>
     <tr>
         <td>Range</td>
-        <td>数值、string字符长度、slice和map长度的范围值，包含边界</td>
+        <td>数值、string字符长度、slice和map长度的范围值，包含边界。</td>
     </tr>
     <tr>
         <td>Gt</td>
-        <td>数值、string字符长度、slice和map长度，必须大于指定值</td>
+        <td>数值、string字符长度、slice和map长度，必须大于指定值。</td>
     </tr>
     <tr>
         <td>Lt</td>
-        <td>数值、string字符长度、slice和map长度，必须小于指定值</td>
+        <td>数值、string字符长度、slice和map长度，必须小于指定值。</td>
     </tr>
     <tr>
         <td>Within</td>
-        <td>数值、string字符长度、slice和map长度的范围值，不包含边界</td>
+        <td>数值、string字符长度、slice和map长度的范围值，不包含边界。</td>
     </tr>
     <tr>
         <td>Enum</td>
-        <td>可选值</td>
+        <td>枚举值</td>
     </tr>
     <tr>
         <td>Custom</td>
@@ -230,7 +230,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
     <tr>
         <td>Dive</td>
-        <td>下沉校验struct字段、slice元素、map的key和value</td>
+        <td>下沉校验struct字段、slice元素、map的key和value。</td>
     </tr>
 </table>
 

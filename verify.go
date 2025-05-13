@@ -53,55 +53,55 @@ func Bool(vc *VContext, b *bool, fieldName string, opts ...FieldOption) *checkBo
 }
 
 func Byte(vc *VContext, b *byte, fieldName string, opts ...FieldOption) *checkNumber[byte] {
-	return &checkNumber[byte]{vc: vc.beforeCheckField(fieldName, opts), t: b, ntsf: uint8ToStr}
+	return &checkNumber[byte]{vc: vc.beforeCheckField(fieldName, opts), n: b, ntsf: uint8ToStr}
 }
 
 func Int(vc *VContext, i *int, fieldName string, opts ...FieldOption) *checkNumber[int] {
-	return &checkNumber[int]{vc: vc.beforeCheckField(fieldName, opts), t: i, ntsf: intToStr}
+	return &checkNumber[int]{vc: vc.beforeCheckField(fieldName, opts), n: i, ntsf: intToStr}
 }
 
 func Int8(vc *VContext, i *int8, fieldName string, opts ...FieldOption) *checkNumber[int8] {
-	return &checkNumber[int8]{vc: vc.beforeCheckField(fieldName, opts), t: i, ntsf: int8ToStr}
+	return &checkNumber[int8]{vc: vc.beforeCheckField(fieldName, opts), n: i, ntsf: int8ToStr}
 }
 
 func Int16(vc *VContext, i *int16, fieldName string, opts ...FieldOption) *checkNumber[int16] {
-	return &checkNumber[int16]{vc: vc.beforeCheckField(fieldName, opts), t: i, ntsf: int16ToStr}
+	return &checkNumber[int16]{vc: vc.beforeCheckField(fieldName, opts), n: i, ntsf: int16ToStr}
 }
 
 func Int32(vc *VContext, i *int32, fieldName string, opts ...FieldOption) *checkNumber[int32] {
-	return &checkNumber[int32]{vc: vc.beforeCheckField(fieldName, opts), t: i, ntsf: int32ToStr}
+	return &checkNumber[int32]{vc: vc.beforeCheckField(fieldName, opts), n: i, ntsf: int32ToStr}
 }
 
 func Int64(vc *VContext, i *int64, fieldName string, opts ...FieldOption) *checkNumber[int64] {
-	return &checkNumber[int64]{vc: vc.beforeCheckField(fieldName, opts), t: i, ntsf: int64ToStr}
+	return &checkNumber[int64]{vc: vc.beforeCheckField(fieldName, opts), n: i, ntsf: int64ToStr}
 }
 
 func Uint(vc *VContext, u *uint, fieldName string, opts ...FieldOption) *checkNumber[uint] {
-	return &checkNumber[uint]{vc: vc.beforeCheckField(fieldName, opts), t: u, ntsf: uintToStr}
+	return &checkNumber[uint]{vc: vc.beforeCheckField(fieldName, opts), n: u, ntsf: uintToStr}
 }
 
 func Uint8(vc *VContext, u *uint8, fieldName string, opts ...FieldOption) *checkNumber[uint8] {
-	return &checkNumber[uint8]{vc: vc.beforeCheckField(fieldName, opts), t: u, ntsf: uint8ToStr}
+	return &checkNumber[uint8]{vc: vc.beforeCheckField(fieldName, opts), n: u, ntsf: uint8ToStr}
 }
 
 func Uint16(vc *VContext, u *uint16, fieldName string, opts ...FieldOption) *checkNumber[uint16] {
-	return &checkNumber[uint16]{vc: vc.beforeCheckField(fieldName, opts), t: u, ntsf: uint16ToStr}
+	return &checkNumber[uint16]{vc: vc.beforeCheckField(fieldName, opts), n: u, ntsf: uint16ToStr}
 }
 
 func Uint32(vc *VContext, u *uint32, fieldName string, opts ...FieldOption) *checkNumber[uint32] {
-	return &checkNumber[uint32]{vc: vc.beforeCheckField(fieldName, opts), t: u, ntsf: uint32ToStr}
+	return &checkNumber[uint32]{vc: vc.beforeCheckField(fieldName, opts), n: u, ntsf: uint32ToStr}
 }
 
 func Uint64(vc *VContext, u *uint64, fieldName string, opts ...FieldOption) *checkNumber[uint64] {
-	return &checkNumber[uint64]{vc: vc.beforeCheckField(fieldName, opts), t: u, ntsf: uint64ToStr}
+	return &checkNumber[uint64]{vc: vc.beforeCheckField(fieldName, opts), n: u, ntsf: uint64ToStr}
 }
 
 func Float32(vc *VContext, f *float32, fieldName string, opts ...FieldOption) *checkNumber[float32] {
-	return &checkNumber[float32]{vc: vc.beforeCheckField(fieldName, opts), t: f, ntsf: float32ToStr}
+	return &checkNumber[float32]{vc: vc.beforeCheckField(fieldName, opts), n: f, ntsf: float32ToStr}
 }
 
 func Float64(vc *VContext, f *float64, fieldName string, opts ...FieldOption) *checkNumber[float64] {
-	return &checkNumber[float64]{vc: vc.beforeCheckField(fieldName, opts), t: f, ntsf: float64ToStr}
+	return &checkNumber[float64]{vc: vc.beforeCheckField(fieldName, opts), n: f, ntsf: float64ToStr}
 }
 
 func String(vc *VContext, s *string, fieldName string, opts ...FieldOption) *checkString {
@@ -120,8 +120,8 @@ func Map[K comparable, V any](vc *VContext, m map[K]V, fieldName string, opts ..
 	return &checkMap[K, V]{vc: vc.beforeCheckField(fieldName, opts), m: m}
 }
 
-func Any[T any](vc *VContext, t *T, fieldName string, opts ...FieldOption) *checkAny[T] {
-	return &checkAny[T]{vc: vc.beforeCheckField(fieldName, opts), t: t}
+func Any[T any](vc *VContext, a *T, fieldName string, opts ...FieldOption) *checkAny[T] {
+	return &checkAny[T]{vc: vc.beforeCheckField(fieldName, opts), a: a}
 }
 
 func checkRequired[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T, opts []ItemOption) {
@@ -152,11 +152,11 @@ func checkPredicate[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T
 		fail = true
 	}
 	if fail {
-		var confine []string
+		var confines []string
 		if confineFunc != nil {
-			confine = confineFunc()
+			confines = confineFunc()
 		}
-		vc.fail(mbf, confine)
+		vc.fail(mbf, confines)
 	}
 }
 

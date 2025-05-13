@@ -101,7 +101,11 @@ func (c *checkString) Within(min, max int, opts ...ItemOption) *checkString {
 
 func (c *checkString) Enum(enums []string, opts ...ItemOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncEnum, func() []string {
-		return enums
+		var confines []string
+		for _, e := range enums {
+			confines = append(confines, "\""+e+"\"")
+		}
+		return confines
 	}, func() bool {
 		for _, o := range enums {
 			if *c.s == o {
