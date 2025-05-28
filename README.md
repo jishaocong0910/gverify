@@ -1,6 +1,6 @@
 # Gverify
 
-一款用于Golang的结构体校验工具。它不通过标签来指定校验规则，而是由代码指定。使用标签的校验工具需要修改结构体，在一些代码生成器生成的结构体上使用，可能导致代码覆盖或冲突问题。gverify可实现零代码入侵，支持自定义错误码和错误消息，不使用反射，处理速度理论上比使用标签的校验工具快。
+一款用于Golang的结构体校验工具。它不通过标签来指定校验规则，而是由代码指定。使用标签的校验工具需要修改结构体，在一些代码生成器生成的结构体上使用时，可能导致代码覆盖或冲突问题。gverify可实现零代码入侵，支持自定义错误码和错误消息，不使用反射，处理速度理论上比使用标签的校验工具快。
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/jishaocong0910/gverify.svg)](https://pkg.go.dev/github.com/jishaocong0910/gverify)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jishaocong0910/gverify)](https://goreportcard.com/report/github.com/jishaocong0910/gverify)
@@ -98,7 +98,7 @@ func main() {
     <th>入参</th>
     <th>说明</th>
     <tr>
-        <td width=170px>vc context.Context</td>
+        <td width=170px>ctx context.Context</td>
         <td>可为nil</td>
     </tr>
     <tr>
@@ -139,7 +139,7 @@ func main() {
 
 # 字段校验
 
-校验字段时，根据字段类型，调用对应的***字段函数***，传入<i>Checklist</i>方法的<i>vc</i>参数、字段值的指针、字段名称，再链式调用***校验方法***，可指定一些选项。
+校验字段时，根据字段类型，调用对应的***字段类型函数***，传入<i>Checklist</i>方法的<i>vc</i>参数、字段值的指针和字段名称，再链式调用***校验方法***，可指定一些选项。
 
 *e.g.*
 
@@ -149,7 +149,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 }
 ```
 
-| 字段函数      | 对应类型    |
+| 字段类型函数      | 对应类型    |
 |-------------|---------|
 | vfy.Bool    | bool    |
 | vfy.Byte    | byte    |
@@ -234,7 +234,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
 </table>
 
-| 字段函数选项        | 说明       |
+| 字段类型函数选项      | 说明       |
 |---------------|----------|
 | vfy.Omittable | 值为nil时忽略 |
 
@@ -245,7 +245,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 
 # 自定义错误码&错误消息
 
-<i>vfy.Code</i>只在不使用<i>vfy.All()</i>选项的情况下有效，因为***校验函数***只会返回一个错误码。
+<i>vfy.Code</i>只在不使用<i>vfy.All()</i>选项的情况下有效。
 
 <i>vfy.Msg</i>选项须传入一个函数，通过函数参数<i> f </i>的<i>Msg</i>方法设置错误消息，同时参数<i> f </i>还提供了一些动态参数用于构建错误消息。
 
