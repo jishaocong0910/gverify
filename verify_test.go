@@ -11,51 +11,14 @@ func ptr[T any](t T) *T {
 	return &t
 }
 
-func TestCheckRequired(t *testing.T) {
-	r := require.New(t)
-	{
-		// 成功
-		vc := vfy.NewDefaultContext()
-		vfy.CheckRequired(vc, ptr(5), nil)
-		code, _, _ := vfy.GetResult(vc)
-		r.Equal(vfy.SUCCESS, code)
-	}
-	{
-		// 指定code和msg
-		vc := vfy.NewDefaultContext()
-		vfy.SetFieldName(vc, "param")
-		vfy.CheckRequired(vc, (*int)(nil), []vfy.ItemOption{vfy.Code("MY_CODE"), vfy.Msg(func(b *vfy.FieldInfo) {
-			b.Msg("%s is nil", b.FieldName())
-		})})
-		code, msg, _ := vfy.GetResult(vc)
-		r.Equal("MY_CODE", code)
-		r.Equal("param is nil", msg)
-	}
-	{
-		// 默认code和msg
-		vc := vfy.NewDefaultContext()
-		vfy.SetFieldName(vc, "param")
-		vfy.CheckRequired(vc, (*int)(nil), nil)
-		code, msg, _ := vfy.GetResult(vc)
-		r.Equal(vfy.FAIL, code)
-		r.Equal("param is required", msg)
-	}
-	{
-		// 中断
-		vc := vfy.NewDefaultContext()
-		vfy.SetHasWrong(vc)
-		vfy.CheckRequired(vc, (*int)(nil), []vfy.ItemOption{vfy.Code("MY_CODE")})
-		code, _, _ := vfy.GetResult(vc)
-		r.Equal(vfy.FAIL, code)
-	}
-}
-
 func TestCheckPredicate(t *testing.T) {
 	r := require.New(t)
 	{
 		// 成功
 		vc := vfy.NewDefaultContext()
 		vfy.CheckPredicate(vc, ptr(5), nil, nil, func() bool {
+			return false
+		}, func() bool {
 			return true
 		})
 		code, _, _ := vfy.GetResult(vc)
@@ -65,10 +28,12 @@ func TestCheckPredicate(t *testing.T) {
 		// 指定code和msg
 		vc := vfy.NewDefaultContext()
 		vfy.SetFieldName(vc, "param")
-		vfy.CheckPredicate(vc, ptr(5), []vfy.ItemOption{vfy.Code("MY_CODE"), vfy.Msg(func(b *vfy.FieldInfo) {
+		vfy.CheckPredicate(vc, ptr(5), []vfy.CheckOption{vfy.Code("MY_CODE"), vfy.Msg(func(b *vfy.FieldInfo) {
 			b.Msg("%s %s", b.FieldName(), b.Confines())
 		})}, func() []string {
 			return []string{"a", "b", "c"}
+		}, func() bool {
+			return true
 		}, func() bool {
 			return false
 		})
@@ -81,6 +46,8 @@ func TestCheckPredicate(t *testing.T) {
 		vc := vfy.NewDefaultContext()
 		vfy.SetFieldName(vc, "param")
 		vfy.CheckPredicate(vc, ptr(5), nil, nil, func() bool {
+			return true
+		}, func() bool {
 			return false
 		})
 		code, msg, _ := vfy.GetResult(vc)
@@ -92,6 +59,8 @@ func TestCheckPredicate(t *testing.T) {
 		vc := vfy.NewDefaultContext()
 		vfy.SetFieldName(vc, "param")
 		vfy.CheckPredicate(vc, (*int)(nil), nil, nil, func() bool {
+			return false
+		}, func() bool {
 			return true
 		})
 		code, _, _ := vfy.GetResult(vc)
@@ -103,6 +72,8 @@ func TestCheckPredicate(t *testing.T) {
 		vfy.SetOmittable(vc)
 		vfy.CheckPredicate(vc, (*int)(nil), nil, nil, func() bool {
 			return false
+		}, func() bool {
+			return false
 		})
 		code, _, _ := vfy.GetResult(vc)
 		r.Equal(vfy.SUCCESS, code)
@@ -111,7 +82,9 @@ func TestCheckPredicate(t *testing.T) {
 		// 中断
 		vc := vfy.NewDefaultContext()
 		vfy.SetHasWrong(vc)
-		vfy.CheckPredicate(vc, (*int)(nil), []vfy.ItemOption{vfy.Code("MY_CODE")}, nil, func() bool {
+		vfy.CheckPredicate(vc, (*int)(nil), []vfy.CheckOption{vfy.Code("MY_CODE")}, nil, func() bool {
+			return false
+		}, func() bool {
 			return false
 		})
 		code, _, _ := vfy.GetResult(vc)

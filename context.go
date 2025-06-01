@@ -39,7 +39,7 @@ func (c *VContext) beforeCheckElem(elemName string) {
 	}
 }
 
-func (c *VContext) beforeCheckField(fieldName string, opts []FieldOption) *VContext {
+func (c *VContext) beforeCheckField(fieldName string, opts []fieldOption) *VContext {
 	if c.fieldInfo.elemName != "" {
 		fieldName = c.fieldInfo.elemName
 	}

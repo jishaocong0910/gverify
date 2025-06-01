@@ -20,17 +20,27 @@ func TestCheckAny_Required(t *testing.T) {
 func TestCheckAny_Custom(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.Any(vc, ptr(5), "param").Custom(func(t int) bool {
+		vfy.Any(vc, ptr(5), "param").Custom(true, func(t int) bool {
 			return false
 		})
 	}, "param is illegal")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.Any(vc, ptr(5), "param").Custom(func(t int) bool {
+		vfy.Any(vc, ptr(5), "param").Custom(false, func(t int) bool {
 			return true
 		})
 	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Any(vc, (*any)(nil), "param").Custom(false, func(t any) bool {
+			return true
+		})
+	}, "param is illegal")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.Any(vc, (*int)(nil), "param", vfy.Omittable()).Custom(func(t int) bool {
+		vfy.Any(vc, (*any)(nil), "param").Custom(true, func(t any) bool {
+			return false
+		})
+	})
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Any(vc, (*any)(nil), "param", vfy.Omittable()).Custom(false, func(t any) bool {
 			return false
 		})
 	})

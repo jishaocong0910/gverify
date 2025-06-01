@@ -20,12 +20,22 @@ func TestCheckBool_Required(t *testing.T) {
 func TestCheckBool_Custom(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.Bool(vc, ptr(true), "param").Custom(func(t bool) bool {
+		vfy.Bool(vc, ptr(true), "param").Custom(true, func(t bool) bool {
 			return false
 		})
 	}, "param is illegal")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.Bool(vc, ptr(true), "param").Custom(func(t bool) bool {
+		vfy.Bool(vc, ptr(true), "param").Custom(false, func(t bool) bool {
+			return true
+		})
+	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Bool(vc, nil, "param").Custom(false, func(t bool) bool {
+			return true
+		})
+	}, "param is illegal")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Bool(vc, nil, "param").Custom(true, func(t bool) bool {
 			return true
 		})
 	})

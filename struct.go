@@ -5,13 +5,17 @@ type checkStruct[V Verifiable] struct {
 	s  *V
 }
 
-func (c *checkStruct[V]) Required(opts ...ItemOption) *checkStruct[V] {
-	checkRequired[int, V](c.vc, c.s, opts)
+func (c *checkStruct[V]) Required(opts ...checkOption) *checkStruct[V] {
+	checkPredicate[int, V](c.vc, c.s, opts, msgBuildFuncRequired, nil, func() bool {
+		return false
+	}, nil)
 	return c
 }
 
-func (c *checkStruct[V]) Custom(custom func(s V) bool, opts ...ItemOption) *checkStruct[V] {
+func (c *checkStruct[V]) Custom(successIfNil bool, custom func(s V) bool, opts ...checkOption) *checkStruct[V] {
 	checkPredicate[int, V](c.vc, c.s, opts, msgBuildFuncDefault, nil, func() bool {
+		return successIfNil
+	}, func() bool {
 		return custom(*c.s)
 	})
 	return c

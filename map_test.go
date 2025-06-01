@@ -20,11 +20,14 @@ func TestCheckMap_Required(t *testing.T) {
 func TestCheckMap_NotEmpty(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.Map(vc, (map[string]int)(nil), "param").NotEmpty()
+		vfy.Map(vc, map[string]int{}, "param").NotEmpty()
 	}, "param must not be empty")
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Map(vc, map[string]int{"a": 1}, "param").NotEmpty()
 	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, (map[string]int)(nil), "param").NotEmpty()
+	}, "param must not be empty")
 }
 
 func TestCheckMap_Length(t *testing.T) {
@@ -38,6 +41,12 @@ func TestCheckMap_Length(t *testing.T) {
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Map(vc, map[string]int{"a": 1, "b": 2}, "param").Length(2)
 	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Length(2)
+	}, "param's length must be 2")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Length(0)
+	})
 }
 
 func TestCheckMap_Min(t *testing.T) {
@@ -48,6 +57,12 @@ func TestCheckMap_Min(t *testing.T) {
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Map(vc, map[string]int{"a": 1, "b": 2}, "param").Min(2)
 	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Min(1)
+	}, "param's length must not be less than 1")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Min(0)
+	})
 }
 
 func TestCheckMap_Max(t *testing.T) {
@@ -57,6 +72,12 @@ func TestCheckMap_Max(t *testing.T) {
 	}, "param's length must not be greater than 2")
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Map(vc, map[string]int{"a": 1, "b": 2}, "param").Max(2)
+	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Max(-1)
+	}, "param's length must not be greater than -1")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Max(0)
 	})
 }
 
@@ -71,6 +92,18 @@ func TestCheckMap_Range(t *testing.T) {
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Map(vc, map[string]int{"a": 1, "b": 2, "c": 3}, "param").Range(2, 3)
 	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Range(1, 3)
+	}, "param's length must be 1 to 3")
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Range(-3, -1)
+	}, "param's length must be -3 to -1")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Range(0, 3)
+	})
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Range(-1, 0)
+	})
 }
 
 func TestCheckMap_Gt(t *testing.T) {
@@ -81,6 +114,12 @@ func TestCheckMap_Gt(t *testing.T) {
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Map(vc, map[string]int{"a": 1, "b": 2, "c": 3}, "param").Gt(2)
 	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Gt(0)
+	}, "param's length must be greater than 0")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Gt(-1)
+	})
 }
 
 func TestCheckMap_Lt(t *testing.T) {
@@ -90,6 +129,12 @@ func TestCheckMap_Lt(t *testing.T) {
 	}, "param's length must be less than 2")
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Map(vc, map[string]int{"a": 1}, "param").Lt(2)
+	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Lt(0)
+	}, "param's length must be less than 0")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Lt(1)
 	})
 }
 
@@ -104,17 +149,39 @@ func TestCheckMap_Within(t *testing.T) {
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Map(vc, map[string]int{"a": 1, "b": 2, "c": 3}, "param").Within(2, 5)
 	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Within(0, 5)
+	}, "param's length must be greater than 0 and less than 5")
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Within(-5, 0)
+	}, "param's length must be greater than -5 and less than 0")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Within(-1, 5)
+	})
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Within(-5, 1)
+	})
 }
 
-func TestCheckMaps_Custom(t *testing.T) {
+func TestCheckMap_Custom(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.Map(vc, map[string]int{}, "param").Custom(func(t map[string]int) bool {
+		vfy.Map(vc, map[string]int{}, "param").Custom(true, func(t map[string]int) bool {
 			return false
 		})
 	}, "param is illegal")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.Map(vc, map[string]int{}, "param").Custom(func(t map[string]int) bool {
+		vfy.Map(vc, map[string]int{}, "param").Custom(false, func(t map[string]int) bool {
+			return true
+		})
+	})
+	testFail(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Custom(false, func(t map[string]int) bool {
+			return true
+		})
+	}, "param is illegal")
+	testSuccess(r, func(vc *vfy.VContext) {
+		vfy.Map(vc, map[string]int(nil), "param").Custom(true, func(t map[string]int) bool {
 			return true
 		})
 	})

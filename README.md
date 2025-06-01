@@ -96,7 +96,7 @@ func main() {
 
 <table>
     <th>入参</th>
-    <th>说明</th>
+    <th>描述</th>
     <tr>
         <td width=170px>ctx context.Context</td>
         <td>可为nil</td>
@@ -114,7 +114,7 @@ func main() {
 
 <table>
     <th>返回</th>
-    <th>说明</th>
+    <th>描述</th>
     <tr>
         <td width=160px>code string</td>
         <td>错误码，"SUCCESS"为校验成功，"FAIL"为校验失败，可使用常量<i>vfy.SUCCESS</i>和<i>vfy.FAIL</i>进行比较。</td>
@@ -129,7 +129,7 @@ func main() {
     </tr>
 </table>
 
-| 选项      | 说明                              |
+| 选项      | 描述                              |
 |---------|---------------------------------|
 | vfy.All | 校验所有校验规则，不使用此选项时，首个校验错误出现既停止校验。 |
 
@@ -174,7 +174,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 <table>
     <tr>
         <th>校验方法</th>
-        <th>说明</th>
+        <th>描述</th>
     </tr>
     <tr>
         <td>Required</td>
@@ -182,43 +182,43 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
     <tr>
         <td>NotBlank</td>
-        <td>string不能为空白。</td>
+        <td>string不能为空白。nil值处理：视为空字符串。</td>
     </tr>
     <tr>
         <td>Regex</td>
-        <td>string必须匹配正则表达式。</td>
+        <td>string必须匹配正则表达式。nil值处理：视为空字符串。</td>
     </tr>
     <tr>
         <td>NotEmpty</td>
-        <td>slice和map长度必须大于0。</td>
+        <td>slice和map长度必须大于0。nil值处理：长度视为0。</td>
     </tr>
     <tr>
         <td>Length</td>
-        <td>string字符长度、slice和map长度的固定值。</td>
+        <td>string字符长度、slice和map长度的固定值。nil值处理：视为0长度。</td>
     </tr>
     <tr>
         <td>Min</td>
-        <td>数值、string字符长度、slice和map长度的最小值。</td>
+        <td>数值、string字符长度、slice和map长度的最小值。nil值处理：数字视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Max</td>
-        <td>数值、string字符长度、slice和map长度的最大值。</td>
+        <td>数值、string字符长度、slice和map长度的最大值。nil值处理：数字视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Range</td>
-        <td>数值、string字符长度、slice和map长度的范围值，包含边界。</td>
+        <td>数值、string字符长度、slice和map长度的范围值，包含边界。nil值处理：数字视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Gt</td>
-        <td>数值、string字符长度、slice和map长度，必须大于指定值。</td>
+        <td>数值、string字符长度、slice和map长度，必须大于指定值。nil值处理：数字视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Lt</td>
-        <td>数值、string字符长度、slice和map长度，必须小于指定值。</td>
+        <td>数值、string字符长度、slice和map长度，必须小于指定值。nil值处理：数字视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Within</td>
-        <td>数值、string字符长度、slice和map长度的范围值，不包含边界。</td>
+        <td>数值、string字符长度、slice和map长度的范围值，不包含边界。nil值处理：数字视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Enum</td>
@@ -234,11 +234,11 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
 </table>
 
-| 字段类型函数选项      | 说明       |
+| 字段类型函数选项      | 描述       |
 |---------------|----------|
 | vfy.Omittable | 值为nil时忽略 |
 
-| 校验方法选项   | 说明      |
+| 校验方法选项   | 描述      |
 |----------|---------|
 | vfy.Code | 自定义错误码  |
 | vfy.Msg  | 自定义错误消息 |
@@ -261,7 +261,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 
 <table>
     <th width="130px">动态参数方法</th>
-    <th>说明</th>
+    <th>描述</th>
     <tr>
         <td>FieldName</td>
         <td>返回具有路径的字段名称。例如：<i>title</i>、<i>author.name</i>、<i>categoryId[2].sort</i>。</td>
