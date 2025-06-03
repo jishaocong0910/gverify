@@ -5,14 +5,14 @@ type checkMap[K comparable, V any] struct {
 	m  map[K]V
 }
 
-func (c *checkMap[K, V]) Required(opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Required(opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncRequired, nil, func() bool {
 		return false
 	}, nil)
 	return c
 }
 
-func (c *checkMap[K, V]) NotEmpty(opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) NotEmpty(opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncNotEmpty, nil, func() bool {
 		return false
 	}, func() bool {
@@ -21,7 +21,7 @@ func (c *checkMap[K, V]) NotEmpty(opts ...checkOption) *checkMap[K, V] {
 	return c
 }
 
-func (c *checkMap[K, V]) Length(l int, opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Length(l int, opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncLength, func() []string {
 		return intToStr(l)
 	}, func() bool {
@@ -32,7 +32,7 @@ func (c *checkMap[K, V]) Length(l int, opts ...checkOption) *checkMap[K, V] {
 	return c
 }
 
-func (c *checkMap[K, V]) Min(min int, opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Min(min int, opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncLengthMin, func() []string {
 		return intToStr(min)
 	}, func() bool {
@@ -43,7 +43,7 @@ func (c *checkMap[K, V]) Min(min int, opts ...checkOption) *checkMap[K, V] {
 	return c
 }
 
-func (c *checkMap[K, V]) Max(max int, opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Max(max int, opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncLengthMax, func() []string {
 		return intToStr(max)
 	}, func() bool {
@@ -54,7 +54,7 @@ func (c *checkMap[K, V]) Max(max int, opts ...checkOption) *checkMap[K, V] {
 	return c
 }
 
-func (c *checkMap[K, V]) Range(min, max int, opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Range(min, max int, opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncLengthRange, func() []string {
 		return intToStr(min, max)
 	}, func() bool {
@@ -66,7 +66,7 @@ func (c *checkMap[K, V]) Range(min, max int, opts ...checkOption) *checkMap[K, V
 	return c
 }
 
-func (c *checkMap[K, V]) Gt(min int, opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Gt(min int, opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncLengthGt, func() []string {
 		return intToStr(min)
 	}, func() bool {
@@ -77,7 +77,7 @@ func (c *checkMap[K, V]) Gt(min int, opts ...checkOption) *checkMap[K, V] {
 	return c
 }
 
-func (c *checkMap[K, V]) Lt(max int, opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Lt(max int, opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncLengthLt, func() []string {
 		return intToStr(max)
 	}, func() bool {
@@ -88,7 +88,7 @@ func (c *checkMap[K, V]) Lt(max int, opts ...checkOption) *checkMap[K, V] {
 	return c
 }
 
-func (c *checkMap[K, V]) Within(min, max int, opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Within(min, max int, opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncLengthWithin, func() []string {
 		return intToStr(min, max)
 	}, func() bool {
@@ -100,7 +100,7 @@ func (c *checkMap[K, V]) Within(min, max int, opts ...checkOption) *checkMap[K, 
 	return c
 }
 
-func (c *checkMap[K, V]) Custom(successIfNil bool, custom func(m map[K]V) bool, opts ...checkOption) *checkMap[K, V] {
+func (c *checkMap[K, V]) Custom(successIfNil bool, custom func(m map[K]V) bool, opts ...ruleOption) *checkMap[K, V] {
 	checkPredicate[K, V](c.vc, c.m, opts, msgBuildFuncDefault, nil, func() bool {
 		return successIfNil
 	}, func() bool {

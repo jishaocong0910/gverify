@@ -99,7 +99,7 @@ func main() {
     <th>描述</th>
     <tr>
         <td width=170px>ctx context.Context</td>
-        <td>可为nil</td>
+        <td>Context</td>
     </tr>
     <tr>
         <td>s vfy.Verifiable</td>
@@ -139,7 +139,7 @@ func main() {
 
 # 字段校验
 
-校验字段时，根据字段类型，调用对应的***字段类型函数***，传入<i>Checklist</i>方法的<i>vc</i>参数、字段值的指针和字段名称，再链式调用***校验方法***，可指定一些选项。
+校验字段时，根据字段类型，调用对应的***字段类型函数***，传入<i>Checklist</i>方法的<i>vc</i>参数、字段值的指针和字段名称，再链式调用***规则方法***，可指定一些选项。
 
 *e.g.*
 
@@ -173,7 +173,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 
 <table>
     <tr>
-        <th>校验方法</th>
+        <th>规则方法</th>
         <th>描述</th>
     </tr>
     <tr>
@@ -190,7 +190,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
     <tr>
         <td>NotEmpty</td>
-        <td>slice和map长度必须大于0。nil值处理：长度视为0。</td>
+        <td>slice和map长度必须大于0。nil值处理：视为0长度。</td>
     </tr>
     <tr>
         <td>Length</td>
@@ -238,7 +238,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 |---------------|----------|
 | vfy.Omittable | 值为nil时忽略 |
 
-| 校验方法选项   | 描述      |
+| 规则方法选项   | 描述      |
 |----------|---------|
 | vfy.Code | 自定义错误码  |
 | vfy.Msg  | 自定义错误消息 |
@@ -268,11 +268,11 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
     <tr>
         <td>Confine</td>
-        <td>返回<i>校验方法</i>的指定索引的限制值的字符串形式。例如：对于<i>Max(10)</i>，<i>vc.Confine(0)</i>返回<i>10</i>；对于<i>Range(5, 15)</i>，<i>vc.Confine(0)</i>返回<i>5</i>，<i>vc.Confine(1)</i>返回<i>15</i>。</td>
+        <td>返回<i>规则方法</i>的指定索引的限制值的字符串形式。例如：对于<i>Max(10)</i>，<i>vc.Confine(0)</i>返回<i>10</i>；对于<i>Range(5, 15)</i>，<i>vc.Confine(0)</i>返回<i>5</i>，<i>vc.Confine(1)</i>返回<i>15</i>。</td>
     </tr>
     <tr>
         <td>Confines</td>
-        <td>返回<i>校验项方法</i>的所有限制值的字符串形式，用","拼接，若数量超过两个，则最后一个用"or"拼接。例如：对于<i>Enum("zh-cn", "en-US")</i>，返回"zh-cn, en-US"；对于<i>Enum("zh-cn", "en-US", "ja-JP")</i>，返回"zh-cn, en-US or ja-JP"。</td>
+        <td>返回<i>规则方法</i>的所有限制值的字符串形式，用","拼接，若数量超过两个，则最后一个用"or"拼接。例如：对于<i>Enum("zh-cn", "en-US")</i>，返回"zh-cn, en-US"；对于<i>Enum("zh-cn", "en-US", "ja-JP")</i>，返回"zh-cn, en-US or ja-JP"。</td>
     </tr>
 </table>
 
@@ -436,7 +436,7 @@ import (
 
 func main() {
     g := model.GenStruct{}
-    code, _, msgs := vfy.Check_(context.Background(), &check.GenStruct{g}, true)
+    code, _, msgs := vfy.Check_(context.Background(), &check.GenStruct{g}, vfy.All())
     if code != vfy.SUCCESS {
         for i, msg := range msgs {
             fmt.Println(i, msg)
