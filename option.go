@@ -1,16 +1,16 @@
 package vfy
 
-type checkOption func(*FieldInfo)
+type ruleOption func(*FieldInfo)
 type fieldOption func(*FieldInfo)
 type structOption func(ctx *VContext)
 
-func Code(code string) checkOption {
+func Code(code string) ruleOption {
 	return func(o *FieldInfo) {
 		o.code = code
 	}
 }
 
-func Msg(mbf msgBuildFunc) checkOption {
+func Msg(mbf msgBuildFunc) ruleOption {
 	return func(o *FieldInfo) {
 		o.mbf = mbf
 	}

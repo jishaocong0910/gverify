@@ -35,13 +35,13 @@ func SetOmittable(vc *VContext) {
 	Omittable()(vc.fieldInfo)
 }
 
-func CheckPredicate[T any](vc *VContext, t *T, opts []checkOption, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
+func CheckPredicate[T any](vc *VContext, t *T, opts []ruleOption, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
 	checkPredicate[int, T](vc, t, opts, msgBuildFuncDefault, confineFunc, predicateNil, predicate)
 }
 
 type Number = number
 
-type CheckOption = checkOption
+type CheckOption = ruleOption
 
 func IntToConfine(confines ...int) []string {
 	return intToStr(confines...)

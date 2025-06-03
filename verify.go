@@ -124,7 +124,7 @@ func Any[T any](vc *VContext, a *T, fieldName string, opts ...fieldOption) *chec
 	return &checkAny[T]{vc: vc.beforeCheckField(fieldName, opts), a: a}
 }
 
-func checkPredicate[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T, opts []checkOption, mbf msgBuildFunc, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
+func checkPredicate[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T, opts []ruleOption, mbf msgBuildFunc, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
 	if vc.interrupt() {
 		return
 	}

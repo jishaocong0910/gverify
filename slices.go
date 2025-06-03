@@ -7,14 +7,14 @@ type checkSlice[T any] struct {
 	s  []T
 }
 
-func (c *checkSlice[T]) Required(opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Required(opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncRequired, nil, func() bool {
 		return false
 	}, nil)
 	return c
 }
 
-func (c *checkSlice[T]) NotEmpty(opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) NotEmpty(opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncNotEmpty, nil, func() bool {
 		return false
 	}, func() bool {
@@ -23,7 +23,7 @@ func (c *checkSlice[T]) NotEmpty(opts ...checkOption) *checkSlice[T] {
 	return c
 }
 
-func (c *checkSlice[T]) Length(l int, opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Length(l int, opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLength, func() []string {
 		return intToStr(l)
 	}, func() bool {
@@ -34,7 +34,7 @@ func (c *checkSlice[T]) Length(l int, opts ...checkOption) *checkSlice[T] {
 	return c
 }
 
-func (c *checkSlice[T]) Min(min int, opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Min(min int, opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthMin, func() []string {
 		return intToStr(min)
 	}, func() bool {
@@ -45,7 +45,7 @@ func (c *checkSlice[T]) Min(min int, opts ...checkOption) *checkSlice[T] {
 	return c
 }
 
-func (c *checkSlice[T]) Max(max int, opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Max(max int, opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthMax, func() []string {
 		return intToStr(max)
 	}, func() bool {
@@ -56,7 +56,7 @@ func (c *checkSlice[T]) Max(max int, opts ...checkOption) *checkSlice[T] {
 	return c
 }
 
-func (c *checkSlice[T]) Range(min, max int, opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Range(min, max int, opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthRange, func() []string {
 		return intToStr(min, max)
 	}, func() bool {
@@ -68,7 +68,7 @@ func (c *checkSlice[T]) Range(min, max int, opts ...checkOption) *checkSlice[T] 
 	return c
 }
 
-func (c *checkSlice[T]) Gt(min int, opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Gt(min int, opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthGt, func() []string {
 		return intToStr(min)
 	}, func() bool {
@@ -79,7 +79,7 @@ func (c *checkSlice[T]) Gt(min int, opts ...checkOption) *checkSlice[T] {
 	return c
 }
 
-func (c *checkSlice[T]) Lt(max int, opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Lt(max int, opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthLt, func() []string {
 		return intToStr(max)
 	}, func() bool {
@@ -90,7 +90,7 @@ func (c *checkSlice[T]) Lt(max int, opts ...checkOption) *checkSlice[T] {
 	return c
 }
 
-func (c *checkSlice[T]) Within(min, max int, opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Within(min, max int, opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthWithin, func() []string {
 		return intToStr(min, max)
 	}, func() bool {
@@ -102,7 +102,7 @@ func (c *checkSlice[T]) Within(min, max int, opts ...checkOption) *checkSlice[T]
 	return c
 }
 
-func (c *checkSlice[T]) Custom(successIfNil bool, custom func(s []T) bool, opts ...checkOption) *checkSlice[T] {
+func (c *checkSlice[T]) Custom(successIfNil bool, custom func(s []T) bool, opts ...ruleOption) *checkSlice[T] {
 	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncDefault, nil, func() bool {
 		return successIfNil
 	}, func() bool {
