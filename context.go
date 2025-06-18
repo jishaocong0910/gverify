@@ -15,78 +15,74 @@ type VContext struct {
 	fieldInfo *FieldInfo
 }
 
-func (c *VContext) interrupt() bool {
-	return c.hasWrong && !c.all
+func (vc *VContext) interrupt() bool {
+	return vc.hasWrong && !vc.all
 }
 
-func (c *VContext) diveStruct() {
-	c.fieldInfo = &FieldInfo{
-		fieldNamePrefix: c.fieldInfo.fieldName + ".",
-	}
-}
-
-func (c *VContext) diveSliceMap() {
-	c.fieldInfo = &FieldInfo{
-		fieldNamePrefix: c.fieldInfo.fieldName,
+func (vc *VContext) beforeDiveStruct() {
+	vc.fieldInfo = &FieldInfo{
+		fieldNamePrefix: vc.fieldInfo.fieldName + ".",
 	}
 }
 
-func (c *VContext) beforeCheckElem(elemName string) {
-	c.fieldInfo = &FieldInfo{
-		fieldNamePrefix: c.fieldInfo.fieldNamePrefix,
-		omittable:       c.fieldInfo.omittable,
-		elemName:        elemName,
+func (vc *VContext) beforeDiveSliceMap(elemName string) {
+	vc.fieldInfo = &FieldInfo{
+		fieldName:   vc.fieldInfo.fieldName + elemName,
+		hasElemName: true,
 	}
 }
 
-func (c *VContext) beforeCheckField(fieldName string, opts []fieldOption) *VContext {
-	if c.fieldInfo.elemName != "" {
-		fieldName = c.fieldInfo.elemName
-	}
-	c.fieldInfo = &FieldInfo{
-		fieldNamePrefix: c.fieldInfo.fieldNamePrefix,
-		omittable:       c.fieldInfo.omittable,
-	}
-	c.fieldInfo.fieldName = c.fieldInfo.fieldNamePrefix + fieldName
-	for _, o := range opts {
-		o(c.fieldInfo)
-	}
-	return c
-}
-
-func (c *VContext) fail(mbf msgBuildFunc, confines []string) {
-	c.hasWrong = true
-	if !c.all {
-		c.code = c.fieldInfo.code
-	}
-	c.fieldInfo.confines = confines
-	var msg string
-	if c.fieldInfo.mbf == nil {
-		if mbf != nil {
-			mbf(c.fieldInfo)
+func (vc *VContext) beforeCheckField(fieldName string, opts []fieldOption) *VContext {
+	if vc.fieldInfo.hasElemName {
+		vc.fieldInfo = &FieldInfo{
+			fieldName:   vc.fieldInfo.fieldName,
+			hasElemName: true,
 		}
 	} else {
-		c.fieldInfo.mbf(c.fieldInfo)
+		vc.fieldInfo = &FieldInfo{
+			fieldNamePrefix: vc.fieldInfo.fieldNamePrefix,
+			fieldName:       vc.fieldInfo.fieldNamePrefix + fieldName,
+		}
 	}
-	msg = c.fieldInfo.msg
-	c.msgs = append(c.msgs, msg)
+	for _, o := range opts {
+		o(vc.fieldInfo)
+	}
+	return vc
 }
 
-func (c *VContext) copyFieldInfo() *FieldInfo {
-	f := *c.fieldInfo
-	f.mbf = nil
-	f.confines = nil
-	return &f
+func (vc *VContext) beforeCheckEmbed() *VContext {
+	vc.fieldInfo = &FieldInfo{
+		fieldNamePrefix: vc.fieldInfo.fieldNamePrefix,
+	}
+	return vc
+}
+
+func (vc *VContext) fail(mbf msgBuildFunc, confines []string) {
+	vc.hasWrong = true
+	if !vc.all {
+		vc.code = vc.fieldInfo.code
+	}
+	vc.fieldInfo.confines = confines
+	var msg string
+	if vc.fieldInfo.mbf == nil {
+		if mbf != nil {
+			mbf(vc.fieldInfo)
+		}
+	} else {
+		vc.fieldInfo.mbf(vc.fieldInfo)
+	}
+	msg = vc.fieldInfo.msg
+	vc.msgs = append(vc.msgs, msg)
 }
 
 type FieldInfo struct {
 	fieldNamePrefix string
+	hasElemName     bool
 	omittable       bool
 	fieldName       string
-	code            string
-	mbf             msgBuildFunc
-	elemName        string
 	confines        []string
+	mbf             msgBuildFunc
+	code            string
 	msg             string
 }
 

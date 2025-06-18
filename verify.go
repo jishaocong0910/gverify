@@ -112,6 +112,10 @@ func Struct[V Verifiable](vc *VContext, s *V, fieldName string, opts ...fieldOpt
 	return &checkStruct[V]{vc: vc.beforeCheckField(fieldName, opts), s: s}
 }
 
+func Embed[V Verifiable](vc *VContext, s *V) *checkEmbed[V] {
+	return &checkEmbed[V]{vc: vc.beforeCheckEmbed(), s: s}
+}
+
 func Slice[T any](vc *VContext, s []T, fieldName string, opts ...fieldOption) *checkSlice[T] {
 	return &checkSlice[T]{vc: vc.beforeCheckField(fieldName, opts), s: s}
 }

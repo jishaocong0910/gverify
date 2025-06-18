@@ -77,6 +77,7 @@ func main() {
             fmt.Println(i, msg)
         }
     }
+	// Output:
     // 0 title must not be blank
     // 1 isbn must not be blank
     // 2 isbn's format is illegal
@@ -149,27 +150,28 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 }
 ```
 
-| 字段类型函数      | 对应类型    |
-|-------------|---------|
-| vfy.Bool    | bool    |
-| vfy.Byte    | byte    |
-| vfy.Int     | int     |
-| vfy.Int8    | int8    |
-| vfy.Int16   | int16   |
-| vfy.Int32   | int32   |
-| vfy.Int64   | int64   |
-| vfy.Uint    | uint    |
-| vfy.Uint8   | uint8   |
-| vfy.Uint16  | uint16  |
-| vfy.Uint32  | uint32  |
-| vfy.Uint64  | uint64  |
-| vfy.Float32 | float32 |
-| vfy.Float64 | float64 |
-| vfy.String  | string  |
-| vfy.Slice   | slice   |
-| vfy.Map     | map     |
-| vfy.Struct  | struct  |
-| vfy.Any     | any     |
+| 字段类型函数      | 对应类型     |
+|-------------|----------|
+| vfy.Bool    | bool     |
+| vfy.Byte    | byte     |
+| vfy.Int     | int      |
+| vfy.Int8    | int8     |
+| vfy.Int16   | int16    |
+| vfy.Int32   | int32    |
+| vfy.Int64   | int64    |
+| vfy.Uint    | uint     |
+| vfy.Uint8   | uint8    |
+| vfy.Uint16  | uint16   |
+| vfy.Uint32  | uint32   |
+| vfy.Uint64  | uint64   |
+| vfy.Float32 | float32  |
+| vfy.Float64 | float64  |
+| vfy.String  | string   |
+| vfy.Slice   | slice    |
+| vfy.Map     | map      |
+| vfy.Struct  | struct   |
+| vfy.Embed   | 内嵌struct |
+| vfy.Any     | any      |
 
 <table>
     <tr>
