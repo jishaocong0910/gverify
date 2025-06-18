@@ -23,9 +23,9 @@ func (c *checkStruct[V]) Custom(successIfNil bool, custom func(s V) bool, opts .
 
 func (c *checkStruct[V]) Dive() {
 	if c.s != nil {
-		f := c.vc.copyFieldInfo()
-		c.vc.diveStruct()
+		fi := c.vc.fieldInfo
+		c.vc.beforeDiveStruct()
 		(*c.s).Checklist(c.vc)
-		c.vc.fieldInfo = f
+		c.vc.fieldInfo = fi
 	}
 }

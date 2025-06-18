@@ -114,28 +114,25 @@ func (c *checkMap[K, V]) Dive(key func(k K), value func(v V)) {
 		return
 	}
 	if c.m != nil {
-		f := c.vc.copyFieldInfo()
-		c.vc.diveSliceMap()
 		for k, v := range c.m {
 			if key != nil {
 				if c.vc.interrupt() {
 					break
 				}
-				f := c.vc.copyFieldInfo()
-				c.vc.beforeCheckElem("$key")
+				fi := c.vc.fieldInfo
+				c.vc.beforeDiveSliceMap("$key")
 				key(k)
-				c.vc.fieldInfo = f
+				c.vc.fieldInfo = fi
 			}
 			if value != nil {
 				if c.vc.interrupt() {
 					break
 				}
-				f := c.vc.copyFieldInfo()
-				c.vc.beforeCheckElem("$value")
+				fi := c.vc.fieldInfo
+				c.vc.beforeDiveSliceMap("$value")
 				value(v)
-				c.vc.fieldInfo = f
+				c.vc.fieldInfo = fi
 			}
 		}
-		c.vc.fieldInfo = f
 	}
 }

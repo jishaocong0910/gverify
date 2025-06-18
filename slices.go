@@ -116,17 +116,14 @@ func (c *checkSlice[T]) Dive(f func(t T)) {
 		return
 	}
 	if c.s != nil && f != nil {
-		fi := c.vc.copyFieldInfo()
-		c.vc.diveSliceMap()
 		for i, t := range c.s {
 			if c.vc.interrupt() {
 				break
 			}
-			fi := c.vc.copyFieldInfo()
-			c.vc.beforeCheckElem("[" + strconv.Itoa(i) + "]")
+			fi := c.vc.fieldInfo
+			c.vc.beforeDiveSliceMap("[" + strconv.Itoa(i) + "]")
 			f(t)
 			c.vc.fieldInfo = fi
 		}
-		c.vc.fieldInfo = fi
 	}
 }

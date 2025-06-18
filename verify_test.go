@@ -1,6 +1,7 @@
 package vfy_test
 
 import (
+	"fmt"
 	"testing"
 
 	vfy "github.com/jishaocong0910/gverify"
@@ -116,25 +117,35 @@ func TestNumberToConfine(t *testing.T) {
 	testNumberToConfine(r, vfy.Float64ToConfine)
 }
 
+type base struct {
+	id string
+}
+
+func (p base) Checklist(vc *vfy.VContext) {
+	vfy.String(vc, &p.id, "id").NotBlank()
+}
+
 type user struct {
-	name   string
+	name string
+	base
 	attach attach
 }
 
 func (u user) Checklist(vc *vfy.VContext) {
 	vfy.String(vc, &u.name, "name").NotBlank()
+	vfy.Embed(vc, &u.base).Dive()
 	vfy.Struct(vc, &u.attach, "attach").Dive()
 }
 
 type attach struct {
-	id      string
+	base
 	images  []image
 	score   map[string]int
 	schools map[string]school
 }
 
 func (a attach) Checklist(vc *vfy.VContext) {
-	vfy.String(vc, &a.id, "id").NotBlank().Length(10)
+	vfy.Embed(vc, &a.base).Dive()
 	vfy.Slice(vc, a.images, "images").Dive(func(i image) {
 		vfy.Struct(vc, &i, "not work").Dive()
 	})
@@ -150,10 +161,12 @@ func (a attach) Checklist(vc *vfy.VContext) {
 
 type image struct {
 	url string
+	base
 }
 
 func (i image) Checklist(vc *vfy.VContext) {
 	vfy.String(vc, &i.url, "url").NotBlank()
+	vfy.Embed(vc, &i.base).Dive()
 }
 
 type school struct {
@@ -180,16 +193,22 @@ func TestDive(t *testing.T) {
 	r.Len(msgs, 1)
 
 	code, _, msgs = vfy.Check(nil, &u, vfy.All())
+	for _, m := range msgs {
+		fmt.Println(m)
+
+	}
 	r.Equal(vfy.FAIL, code)
-	r.Len(msgs, 8)
+	r.Len(msgs, 10)
 	r.Equal("name must not be blank", msgs[0])
-	r.Equal("attach.id must not be blank", msgs[1])
-	r.Equal("attach.id's length must be 10", msgs[2])
+	r.Equal("id must not be blank", msgs[1])
+	r.Equal("attach.id must not be blank", msgs[2])
 	r.Equal("attach.images[0].url must not be blank", msgs[3])
-	r.Equal("attach.images[1].url must not be blank", msgs[4])
-	r.Equal("attach.score$value must not be greater than 100", msgs[5])
-	r.Equal("attach.schools$key's length must not be greater than 4", msgs[6])
-	r.Equal("attach.schools$value.name must not be blank", msgs[7])
+	r.Equal("attach.images[0].id must not be blank", msgs[4])
+	r.Equal("attach.images[1].url must not be blank", msgs[5])
+	r.Equal("attach.images[1].id must not be blank", msgs[6])
+	r.Equal("attach.score$value must not be greater than 100", msgs[7])
+	r.Equal("attach.schools$key's length must not be greater than 4", msgs[8])
+	r.Equal("attach.schools$value.name must not be blank", msgs[9])
 }
 
 func TestFieldVerifyFunc(t *testing.T) {

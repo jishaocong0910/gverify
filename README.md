@@ -1,6 +1,6 @@
 # Gverify
 
-一款用于Golang的结构体校验工具。它不通过标签来指定校验规则，而是由代码指定。使用标签的校验工具需要修改结构体，在一些代码生成器生成的结构体上使用时，可能导致代码覆盖或冲突问题。gverify可实现零代码入侵，支持自定义错误码和错误消息，不使用反射，处理速度理论上比使用标签的校验工具快。
+一款用于Golang的结构体校验工具。它不通过标签来指定校验规则，而是由代码指定。使用标签的校验工具需要修改结构体，在一些代码生成器生成的结构体上使用时，可能导致代码覆盖或冲突问题。gverify可实现**零代码入侵**，支持自定义错误码和错误消息，不使用反射，处理速度理论上比使用标签的校验工具快。
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/jishaocong0910/gverify.svg)](https://pkg.go.dev/github.com/jishaocong0910/gverify)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jishaocong0910/gverify)](https://goreportcard.com/report/github.com/jishaocong0910/gverify)
@@ -77,6 +77,7 @@ func main() {
             fmt.Println(i, msg)
         }
     }
+    // Output:
     // 0 title must not be blank
     // 1 isbn must not be blank
     // 2 isbn's format is illegal
@@ -149,27 +150,28 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 }
 ```
 
-| 字段类型函数      | 对应类型    |
-|-------------|---------|
-| vfy.Bool    | bool    |
-| vfy.Byte    | byte    |
-| vfy.Int     | int     |
-| vfy.Int8    | int8    |
-| vfy.Int16   | int16   |
-| vfy.Int32   | int32   |
-| vfy.Int64   | int64   |
-| vfy.Uint    | uint    |
-| vfy.Uint8   | uint8   |
-| vfy.Uint16  | uint16  |
-| vfy.Uint32  | uint32  |
-| vfy.Uint64  | uint64  |
-| vfy.Float32 | float32 |
-| vfy.Float64 | float64 |
-| vfy.String  | string  |
-| vfy.Slice   | slice   |
-| vfy.Map     | map     |
-| vfy.Struct  | struct  |
-| vfy.Any     | any     |
+| 字段类型函数      | 对应类型     |
+|-------------|----------|
+| vfy.Bool    | bool     |
+| vfy.Byte    | byte     |
+| vfy.Int     | int      |
+| vfy.Int8    | int8     |
+| vfy.Int16   | int16    |
+| vfy.Int32   | int32    |
+| vfy.Int64   | int64    |
+| vfy.Uint    | uint     |
+| vfy.Uint8   | uint8    |
+| vfy.Uint16  | uint16   |
+| vfy.Uint32  | uint32   |
+| vfy.Uint64  | uint64   |
+| vfy.Float32 | float32  |
+| vfy.Float64 | float64  |
+| vfy.String  | string   |
+| vfy.Slice   | slice    |
+| vfy.Map     | map      |
+| vfy.Struct  | struct   |
+| vfy.Embed   | 内嵌struct |
+| vfy.Any     | any      |
 
 <table>
     <tr>
