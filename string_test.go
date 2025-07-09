@@ -74,13 +74,13 @@ func TestCheckString_Custom(t *testing.T) {
 func TestCheckString_Length(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("a"), "param").Length(2)
+		vfy.String(vc, ptr("中"), "param").Length(2)
 	}, "param's length must be 2")
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aaa"), "param").Length(2)
+		vfy.String(vc, ptr("中文中"), "param").Length(2)
 	}, "param's length must be 2")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aa"), "param").Length(2)
+		vfy.String(vc, ptr("中文"), "param").Length(2)
 	})
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.String(vc, (*string)(nil), "param").Length(1)
@@ -93,10 +93,10 @@ func TestCheckString_Length(t *testing.T) {
 func TestCheckString_Min(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("a"), "param").Min(2)
+		vfy.String(vc, ptr("中"), "param").Min(2)
 	}, "param's length must not be less than 2")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aa"), "param").Min(2)
+		vfy.String(vc, ptr("中文"), "param").Min(2)
 	})
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.String(vc, (*string)(nil), "param").Min(1)
@@ -109,10 +109,10 @@ func TestCheckString_Min(t *testing.T) {
 func TestCheckString_Max(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aaa"), "param").Max(2)
+		vfy.String(vc, ptr("中文中"), "param").Max(2)
 	}, "param's length must not be greater than 2")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aa"), "param").Max(2)
+		vfy.String(vc, ptr("中文"), "param").Max(2)
 	})
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.String(vc, (*string)(nil), "param").Max(-1)
@@ -125,13 +125,13 @@ func TestCheckString_Max(t *testing.T) {
 func TestCheckString_Range(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("a"), "param").Range(2, 3)
+		vfy.String(vc, ptr("中"), "param").Range(2, 3)
 	}, "param's length must be 2 to 3")
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aaaa"), "param").Range(2, 3)
+		vfy.String(vc, ptr("中文中文"), "param").Range(2, 3)
 	}, "param's length must be 2 to 3")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aaa"), "param").Range(2, 3)
+		vfy.String(vc, ptr("中文中"), "param").Range(2, 3)
 	})
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.String(vc, (*string)(nil), "param").Range(1, 3)
@@ -150,10 +150,10 @@ func TestCheckString_Range(t *testing.T) {
 func TestCheckString_Gt(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aa"), "param").Gt(2)
+		vfy.String(vc, ptr("中文"), "param").Gt(2)
 	}, "param's length must be greater than 2")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aaa"), "param").Gt(2)
+		vfy.String(vc, ptr("中文中"), "param").Gt(2)
 	})
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.String(vc, (*string)(nil), "param").Gt(0)
@@ -166,10 +166,10 @@ func TestCheckString_Gt(t *testing.T) {
 func TestCheckString_Lt(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aa"), "param").Lt(2)
+		vfy.String(vc, ptr("中文"), "param").Lt(2)
 	}, "param's length must be less than 2")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("a"), "param").Lt(2)
+		vfy.String(vc, ptr("中"), "param").Lt(2)
 	})
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.String(vc, (*string)(nil), "param").Lt(0)
@@ -182,13 +182,13 @@ func TestCheckString_Lt(t *testing.T) {
 func TestCheckString_Within(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("a"), "param").Within(2, 5)
+		vfy.String(vc, ptr("中"), "param").Within(2, 5)
 	}, "param's length must be greater than 2 and less than 5")
 	testFail(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aaaaaa"), "param").Within(2, 5)
+		vfy.String(vc, ptr("中文中文中文"), "param").Within(2, 5)
 	}, "param's length must be greater than 2 and less than 5")
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.String(vc, ptr("aaa"), "param").Within(2, 5)
+		vfy.String(vc, ptr("中文中"), "param").Within(2, 5)
 	})
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.String(vc, (*string)(nil), "param").Within(0, 5)

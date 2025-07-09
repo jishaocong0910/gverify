@@ -2,7 +2,7 @@ package vfy
 
 type ruleOption func(*FieldInfo)
 type fieldOption func(*FieldInfo)
-type structOption func(ctx *VContext)
+type structOption func(vc *VContext)
 
 func Code(code string) ruleOption {
 	return func(o *FieldInfo) {

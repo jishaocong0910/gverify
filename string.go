@@ -3,6 +3,7 @@ package vfy
 import (
 	"regexp"
 	"unicode"
+	"unicode/utf8"
 )
 
 type checkString struct {
@@ -46,7 +47,7 @@ func (c *checkString) Length(l int, opts ...ruleOption) *checkString {
 	}, func() bool {
 		return l == 0
 	}, func() bool {
-		return len(*c.s) == l
+		return utf8.RuneCountInString(*c.s) == l
 	})
 	return c
 }
@@ -57,7 +58,7 @@ func (c *checkString) Min(min int, opts ...ruleOption) *checkString {
 	}, func() bool {
 		return min <= 0
 	}, func() bool {
-		return len(*c.s) >= min
+		return utf8.RuneCountInString(*c.s) >= min
 	})
 	return c
 }
@@ -68,7 +69,7 @@ func (c *checkString) Max(max int, opts ...ruleOption) *checkString {
 	}, func() bool {
 		return max >= 0
 	}, func() bool {
-		return len(*c.s) <= max
+		return utf8.RuneCountInString(*c.s) <= max
 	})
 	return c
 }
@@ -79,7 +80,7 @@ func (c *checkString) Range(min, max int, opts ...ruleOption) *checkString {
 	}, func() bool {
 		return min <= 0 && max >= 0
 	}, func() bool {
-		l := len(*c.s)
+		l := utf8.RuneCountInString(*c.s)
 		return l >= min && l <= max
 	})
 	return c
@@ -91,7 +92,7 @@ func (c *checkString) Gt(min int, opts ...ruleOption) *checkString {
 	}, func() bool {
 		return min < 0
 	}, func() bool {
-		return len(*c.s) > min
+		return utf8.RuneCountInString(*c.s) > min
 	})
 	return c
 }
@@ -102,7 +103,7 @@ func (c *checkString) Lt(max int, opts ...ruleOption) *checkString {
 	}, func() bool {
 		return max > 0
 	}, func() bool {
-		return len(*c.s) < max
+		return utf8.RuneCountInString(*c.s) < max
 	})
 	return c
 }
@@ -113,7 +114,7 @@ func (c *checkString) Within(min, max int, opts ...ruleOption) *checkString {
 	}, func() bool {
 		return min < 0 && max > 0
 	}, func() bool {
-		l := len(*c.s)
+		l := utf8.RuneCountInString(*c.s)
 		return l > min && l < max
 	})
 	return c
