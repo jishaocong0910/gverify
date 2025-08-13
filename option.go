@@ -1,29 +1,29 @@
 package vfy
 
-type ruleOption func(*FieldInfo)
-type fieldOption func(*FieldInfo)
-type structOption func(vc *VContext)
+type StructOption func(vc *VContext)
+type FieldOption func(*FieldInfo)
+type RuleOption func(*FieldInfo)
 
-func Code(code string) ruleOption {
-	return func(o *FieldInfo) {
-		o.code = code
+func All() StructOption {
+	return func(vc *VContext) {
+		vc.all = true
 	}
 }
 
-func Msg(mbf msgBuildFunc) ruleOption {
-	return func(o *FieldInfo) {
-		o.mbf = mbf
-	}
-}
-
-func Omittable() fieldOption {
+func Omittable() FieldOption {
 	return func(o *FieldInfo) {
 		o.omittable = true
 	}
 }
 
-func All() structOption {
-	return func(vc *VContext) {
-		vc.all = true
+func Code(code string) RuleOption {
+	return func(o *FieldInfo) {
+		o.code = code
+	}
+}
+
+func Msg(mbf msgBuildFunc) RuleOption {
+	return func(o *FieldInfo) {
+		o.mbf = mbf
 	}
 }

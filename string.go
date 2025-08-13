@@ -11,14 +11,14 @@ type checkString struct {
 	s  *string
 }
 
-func (c *checkString) Required(opts ...ruleOption) *checkString {
+func (c *checkString) Required(opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncRequired, nil, func() bool {
 		return false
 	}, nil)
 	return c
 }
 
-func (c *checkString) NotBlank(opts ...ruleOption) *checkString {
+func (c *checkString) NotBlank(opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncNotBlank, nil, func() bool {
 		return false
 	}, func() bool {
@@ -32,7 +32,7 @@ func (c *checkString) NotBlank(opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Regex(r *regexp.Regexp, opts ...ruleOption) *checkString {
+func (c *checkString) Regex(r *regexp.Regexp, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncRegex, nil, func() bool {
 		return r.MatchString("")
 	}, func() bool {
@@ -41,7 +41,7 @@ func (c *checkString) Regex(r *regexp.Regexp, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Length(l int, opts ...ruleOption) *checkString {
+func (c *checkString) Length(l int, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncLength, func() []string {
 		return intToStr(l)
 	}, func() bool {
@@ -52,7 +52,7 @@ func (c *checkString) Length(l int, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Min(min int, opts ...ruleOption) *checkString {
+func (c *checkString) Min(min int, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncLengthMin, func() []string {
 		return intToStr(min)
 	}, func() bool {
@@ -63,7 +63,7 @@ func (c *checkString) Min(min int, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Max(max int, opts ...ruleOption) *checkString {
+func (c *checkString) Max(max int, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncLengthMax, func() []string {
 		return intToStr(max)
 	}, func() bool {
@@ -74,7 +74,7 @@ func (c *checkString) Max(max int, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Range(min, max int, opts ...ruleOption) *checkString {
+func (c *checkString) Range(min, max int, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncLengthRange, func() []string {
 		return intToStr(min, max)
 	}, func() bool {
@@ -86,7 +86,7 @@ func (c *checkString) Range(min, max int, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Gt(min int, opts ...ruleOption) *checkString {
+func (c *checkString) Gt(min int, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncLengthGt, func() []string {
 		return intToStr(min)
 	}, func() bool {
@@ -97,7 +97,7 @@ func (c *checkString) Gt(min int, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Lt(max int, opts ...ruleOption) *checkString {
+func (c *checkString) Lt(max int, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncLengthLt, func() []string {
 		return intToStr(max)
 	}, func() bool {
@@ -108,7 +108,7 @@ func (c *checkString) Lt(max int, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Within(min, max int, opts ...ruleOption) *checkString {
+func (c *checkString) Within(min, max int, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncLengthWithin, func() []string {
 		return intToStr(min, max)
 	}, func() bool {
@@ -120,7 +120,7 @@ func (c *checkString) Within(min, max int, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Enum(enums []string, opts ...ruleOption) *checkString {
+func (c *checkString) Enum(enums []string, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncEnum, func() []string {
 		var confines []string
 		for _, e := range enums {
@@ -140,7 +140,7 @@ func (c *checkString) Enum(enums []string, opts ...ruleOption) *checkString {
 	return c
 }
 
-func (c *checkString) Custom(successIfNil bool, custom func(s string) bool, opts ...ruleOption) *checkString {
+func (c *checkString) Custom(successIfNil bool, custom func(s string) bool, opts ...RuleOption) *checkString {
 	checkPredicate[int, string](c.vc, c.s, opts, msgBuildFuncDefault, nil, func() bool {
 		return successIfNil
 	}, func() bool {

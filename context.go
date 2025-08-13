@@ -32,7 +32,7 @@ func (vc *VContext) beforeDiveSliceMap(elemName string) {
 	}
 }
 
-func (vc *VContext) beforeCheckField(fieldName string, opts []fieldOption) *VContext {
+func (vc *VContext) beforeCheckField(fieldName string, opts []FieldOption) *VContext {
 	if vc.fieldInfo.hasElemName {
 		vc.fieldInfo = &FieldInfo{
 			fieldName:   vc.fieldInfo.fieldName,
