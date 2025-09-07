@@ -19,7 +19,7 @@ func msgBuildFuncMax(f *FieldInfo) {
 }
 
 func msgBuildFuncRange(f *FieldInfo) {
-	f.Msg("%s must not be %s to %s", f.fieldName, f.Confine(0), f.Confine(1))
+	f.Msg("%s must be %s to %s", f.fieldName, f.Confine(0), f.Confine(1))
 }
 
 func msgBuildFuncGt(f *FieldInfo) {

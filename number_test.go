@@ -47,16 +47,16 @@ func TestCheckNumber_Range(t *testing.T) {
 	r := require.New(t)
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.Int(vc, ptr(5), "param").Range(1, 4)
-	}, "param must not be 1 to 4")
+	}, "param must be 1 to 4")
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.Int(vc, ptr(5), "param").Range(6, 9)
-	}, "param must not be 6 to 9")
+	}, "param must be 6 to 9")
 	testSuccess(r, func(vc *vfy.VContext) {
 		vfy.Int(vc, ptr(5), "param").Range(1, 9)
 	})
 	testFail(r, func(vc *vfy.VContext) {
 		vfy.Int(vc, (*int)(nil), "param").Range(0, 9)
-	}, "param must not be 0 to 9")
+	}, "param must be 0 to 9")
 }
 
 func TestCheckNumber_Gt(t *testing.T) {

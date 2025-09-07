@@ -1,6 +1,6 @@
 # Gverify
 
-一款用于Golang的结构体校验工具。它不通过标签来指定校验规则，而是由代码指定。使用标签的校验工具需要修改结构体，在一些代码生成器生成的结构体上使用时，可能导致代码覆盖或冲突问题。gverify可实现**零代码入侵**，支持自定义错误码和错误消息，不使用反射，处理速度理论上比使用标签的校验工具快。
+一款用于Golang的结构体校验工具。它不通过标签来指定校验规则，而是由代码指定。使用标签的校验工具需要修改结构体，在一些代码生成器生成的结构体上使用时，可能导致代码覆盖或冲突问题。Gverify可实现**零代码入侵**，支持自定义错误码和错误消息，不使用反射，处理速度理论上比使用标签的校验工具快。
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/jishaocong0910/gverify.svg)](https://pkg.go.dev/github.com/jishaocong0910/gverify)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jishaocong0910/gverify)](https://goreportcard.com/report/github.com/jishaocong0910/gverify)
@@ -200,27 +200,27 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
     <tr>
         <td>Min</td>
-        <td>数值、string字符长度、slice和map长度的最小值。nil值处理：数字视为无穷小，长度视为0。</td>
+        <td>数值、string字符长度、slice和map长度的最小值。nil值处理：数值视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Max</td>
-        <td>数值、string字符长度、slice和map长度的最大值。nil值处理：数字视为无穷小，长度视为0。</td>
+        <td>数值、string字符长度、slice和map长度的最大值。nil值处理：数值视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Range</td>
-        <td>数值、string字符长度、slice和map长度的范围值，包含边界。nil值处理：数字视为无穷小，长度视为0。</td>
+        <td>数值、string字符长度、slice和map长度的范围值，包含边界。nil值处理：数值视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Gt</td>
-        <td>数值、string字符长度、slice和map长度，必须大于指定值。nil值处理：数字视为无穷小，长度视为0。</td>
+        <td>数值、string字符长度、slice和map长度，必须大于指定值。nil值处理：数值视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Lt</td>
-        <td>数值、string字符长度、slice和map长度，必须小于指定值。nil值处理：数字视为无穷小，长度视为0。</td>
+        <td>数值、string字符长度、slice和map长度，必须小于指定值。nil值处理：数值视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Within</td>
-        <td>数值、string字符长度、slice和map长度的范围值，不包含边界。nil值处理：数字视为无穷小，长度视为0。</td>
+        <td>数值、string字符长度、slice和map长度的范围值，不包含边界。nil值处理：数值视为无穷小，长度视为0。</td>
     </tr>
     <tr>
         <td>Enum</td>
@@ -333,7 +333,7 @@ func main() {
 
 # 零代码入侵
 
-零代码入侵是gverify的特色，可在不修改结构文件的情况下实现校验，原理是<i>Checklist</i>方法可以与结构体分开不同文件，有以下三种场景，一些场景可实现零代码入侵。
+零代码入侵是Gverify的特色，可在不修改结构文件的情况下实现校验，原理是<i>Checklist</i>方法可以与结构体分开不同文件，有以下三种场景，一些场景可实现零代码入侵。
 
 * 在结构体所在文件
 
