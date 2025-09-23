@@ -266,7 +266,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     <th>描述</th>
     <tr>
         <td>FieldName</td>
-        <td>返回具有路径的字段名称。例如：<i>title</i>、<i>author.name</i>、<i>categoryId[2].sort</i>。</td>
+        <td>返回具有层级关系的字段名称。例如：<i>title</i>、<i>author.name</i>、<i>categoryId[2].sort</i>。</td>
     </tr>
     <tr>
         <td>Confine</td>
