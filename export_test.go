@@ -52,7 +52,7 @@ func SetOmittable(vc *VContext) {
 }
 
 func CheckPredicate[T any](vc *VContext, t *T, opts []RuleOption, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
-	checkPredicate[int, T](vc, t, opts, msgBuildFuncDefault, confineFunc, predicateNil, predicate)
+	predicate[int, T](vc, t, opts, msgBuildFuncDefault, confineFunc, predicateNil, predicate)
 }
 
 type Number = number

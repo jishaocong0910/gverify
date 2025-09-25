@@ -167,7 +167,7 @@ func Any[T any](vc *VContext, a *T, fieldName string, opts ...FieldOption) *chec
 }
 
 // 断言
-func checkPredicate[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T, opts []RuleOption, mbf msgBuildFunc, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
+func predicate[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T, opts []RuleOption, mbf msgBuildFunc, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
 	if vc.interrupt() {
 		return
 	}
