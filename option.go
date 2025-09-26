@@ -32,8 +32,8 @@ func All() StructOption {
 	}
 }
 
-// Omittable 字段值为nil时不校验
-func Omittable() FieldOption {
+// Omitempty 字段值为nil时不校验
+func Omitempty() FieldOption {
 	return func(o *FieldInfo) {
 		o.omittable = true
 	}

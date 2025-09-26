@@ -48,11 +48,11 @@ func SetFieldName(vc *VContext, fieldName string) {
 }
 
 func SetOmittable(vc *VContext) {
-	Omittable()(vc.fieldInfo)
+	Omitempty()(vc.fieldInfo)
 }
 
-func CheckPredicate[T any](vc *VContext, t *T, opts []RuleOption, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
-	predicate[int, T](vc, t, opts, msgBuildFuncDefault, confineFunc, predicateNil, predicate)
+func CheckPredicate[T any](vc *VContext, t *T, opts []RuleOption, confineFunc func() []string, predicateNil func() bool, predicateNoNil func() bool) {
+	predicate[int, T](vc, t, opts, msgBuildFuncDefault, confineFunc, predicateNil, predicateNoNil)
 }
 
 type Number = number

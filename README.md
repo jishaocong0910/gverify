@@ -136,17 +136,13 @@ func main() {
 
 # Checklist方法
 
-结构体通过实现*vfy.Verifiable*接口的*Checklist*方法，在其中编写字段校验规则，如果接收者为指针，**无需担心它为nil**，*校验函数*检测到传入的值为nil会创建零值进行校验。
-
-# 字段校验
-
-校验字段时，根据字段类型，调用对应的***字段类型函数***，传入<i>Checklist</i>方法的<i>vc</i>参数、字段值的指针和字段名称，再链式调用***规则方法***，可指定一些选项。
+结构体通过实现*vfy.Verifiable*接口的*Checklist*方法，在其中编写字段的校验规则，根据字段类型，调用对应的***字段类型函数***，传入<i>Checklist</i>方法的<i>vc</i>参数、字段值的指针和字段名称，再链式调用***规则方法***，可指定一些选项。
 
 *e.g.*
 
 ```go
 func (b *Book) Checklist(vc *vfy.VContext) {
-    vfy.String(vc, &b.Title, "title", vfy.Omittable()).NotBlank().Max(10, vfy.Code("TITLE_TOO_LONG"))
+    vfy.String(vc, &b.Title, "title", vfy.Omitempty()).NotBlank().Max(10, vfy.Code("TITLE_TOO_LONG"))
 }
 ```
 
@@ -238,7 +234,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 
 | 字段类型函数选项      | 描述       |
 |---------------|----------|
-| vfy.Omittable | 值为nil时忽略 |
+| vfy.Omitempty | 值为nil时忽略 |
 
 | 规则方法选项   | 描述      |
 |----------|---------|

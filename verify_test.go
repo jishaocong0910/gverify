@@ -149,7 +149,7 @@ type user struct {
 
 func (u user) Checklist(vc *vfy.VContext) {
 	vfy.String(vc, &u.name, "name").NotBlank()
-	vfy.Embed(vc, &u.base).Dive()
+	vfy.Embed(vc, &u.base)
 	vfy.Struct(vc, &u.attach, "attach").Dive()
 }
 
@@ -161,7 +161,7 @@ type attach struct {
 }
 
 func (a attach) Checklist(vc *vfy.VContext) {
-	vfy.Embed(vc, &a.base).Dive()
+	vfy.Embed(vc, &a.base)
 	vfy.Slice(vc, a.images, "images").Dive(func(i image) {
 		vfy.Struct(vc, &i, "not work").Dive()
 	})
@@ -182,7 +182,7 @@ type image struct {
 
 func (i image) Checklist(vc *vfy.VContext) {
 	vfy.String(vc, &i.url, "url").NotBlank()
-	vfy.Embed(vc, &i.base).Dive()
+	vfy.Embed(vc, &i.base)
 }
 
 type school struct {
