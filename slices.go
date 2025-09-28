@@ -26,7 +26,7 @@ type checkSlice[T any] struct {
 
 // Required 限制不能为nil
 func (c *checkSlice[T]) Required(opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncRequired, nil, func() bool {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncRequired, nil, func() bool {
 		return false
 	}, nil)
 	return c
@@ -34,7 +34,7 @@ func (c *checkSlice[T]) Required(opts ...RuleOption) *checkSlice[T] {
 
 // NotEmpty 限制不能为空
 func (c *checkSlice[T]) NotEmpty(opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncNotEmpty, nil, func() bool {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncNotEmpty, nil, func() bool {
 		return false
 	}, func() bool {
 		return len(c.s) != 0
@@ -44,7 +44,7 @@ func (c *checkSlice[T]) NotEmpty(opts ...RuleOption) *checkSlice[T] {
 
 // Length 限制长度范围
 func (c *checkSlice[T]) Length(l int, opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLength, func() []string {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncLength, func() []string {
 		return intToStr(l)
 	}, func() bool {
 		return l == 0
@@ -56,7 +56,7 @@ func (c *checkSlice[T]) Length(l int, opts ...RuleOption) *checkSlice[T] {
 
 // Min 限制长度最小值
 func (c *checkSlice[T]) Min(min int, opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthMin, func() []string {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthMin, func() []string {
 		return intToStr(min)
 	}, func() bool {
 		return min <= 0
@@ -68,7 +68,7 @@ func (c *checkSlice[T]) Min(min int, opts ...RuleOption) *checkSlice[T] {
 
 // Max 限制长度最大值
 func (c *checkSlice[T]) Max(max int, opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthMax, func() []string {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthMax, func() []string {
 		return intToStr(max)
 	}, func() bool {
 		return max >= 0
@@ -80,7 +80,7 @@ func (c *checkSlice[T]) Max(max int, opts ...RuleOption) *checkSlice[T] {
 
 // Range 限制长度范围（包含边界）
 func (c *checkSlice[T]) Range(min, max int, opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthRange, func() []string {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthRange, func() []string {
 		return intToStr(min, max)
 	}, func() bool {
 		return min <= 0 && max >= 0
@@ -93,7 +93,7 @@ func (c *checkSlice[T]) Range(min, max int, opts ...RuleOption) *checkSlice[T] {
 
 // Gt 限制长度必须大于指定值
 func (c *checkSlice[T]) Gt(min int, opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthGt, func() []string {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthGt, func() []string {
 		return intToStr(min)
 	}, func() bool {
 		return min < 0
@@ -105,7 +105,7 @@ func (c *checkSlice[T]) Gt(min int, opts ...RuleOption) *checkSlice[T] {
 
 // Lt 限制长度必须小于指定值
 func (c *checkSlice[T]) Lt(max int, opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthLt, func() []string {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthLt, func() []string {
 		return intToStr(max)
 	}, func() bool {
 		return max > 0
@@ -117,7 +117,7 @@ func (c *checkSlice[T]) Lt(max int, opts ...RuleOption) *checkSlice[T] {
 
 // Within 限制长度范围（不包含边界）
 func (c *checkSlice[T]) Within(min, max int, opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthWithin, func() []string {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncLengthWithin, func() []string {
 		return intToStr(min, max)
 	}, func() bool {
 		return min < 0 && max > 0
@@ -130,7 +130,7 @@ func (c *checkSlice[T]) Within(min, max int, opts ...RuleOption) *checkSlice[T] 
 
 // Custom 自定义校验
 func (c *checkSlice[T]) Custom(successIfNil bool, custom func(s []T) bool, opts ...RuleOption) *checkSlice[T] {
-	checkPredicate[int, T](c.vc, c.s, opts, msgBuildFuncDefault, nil, func() bool {
+	predicate[int, T](c.vc, c.s, opts, msgBuildFuncDefault, nil, func() bool {
 		return successIfNil
 	}, func() bool {
 		return custom(c.s)

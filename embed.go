@@ -22,8 +22,8 @@ type checkEmbed[V Verifiable] struct {
 	s  *V
 }
 
-// Dive 校验下沉内嵌结构体中的字段
-func (c *checkEmbed[V]) Dive() {
+// 校验下沉内嵌结构体中的字段。内嵌结构体没有其他规则方法，也没有选项，所以改方法不导出，创建 checkEmbed 时直接调用
+func (c *checkEmbed[V]) dive() {
 	if c.s != nil {
 		(*c.s).Checklist(c.vc)
 	}

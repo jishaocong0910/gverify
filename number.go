@@ -31,7 +31,7 @@ type checkNumber[T number] struct {
 
 // Required 限制不能为nil
 func (c *checkNumber[T]) Required(opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncRequired, nil, func() bool {
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncRequired, nil, func() bool {
 		return false
 	}, nil)
 	return c
@@ -39,7 +39,7 @@ func (c *checkNumber[T]) Required(opts ...RuleOption) *checkNumber[T] {
 
 // Min 限制最小值
 func (c *checkNumber[T]) Min(min T, opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncMin, func() []string {
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncMin, func() []string {
 		return c.ntsf(min)
 	}, func() bool {
 		return false
@@ -51,7 +51,7 @@ func (c *checkNumber[T]) Min(min T, opts ...RuleOption) *checkNumber[T] {
 
 // Max 限制最大值
 func (c *checkNumber[T]) Max(max T, opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncMax, func() []string {
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncMax, func() []string {
 		return c.ntsf(max)
 	}, func() bool {
 		return true
@@ -63,7 +63,7 @@ func (c *checkNumber[T]) Max(max T, opts ...RuleOption) *checkNumber[T] {
 
 // Range 限制值范围（包含边界）
 func (c *checkNumber[T]) Range(min, max T, opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncRange, func() []string {
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncRange, func() []string {
 		return c.ntsf(min, max)
 	}, func() bool {
 		return false
@@ -75,7 +75,7 @@ func (c *checkNumber[T]) Range(min, max T, opts ...RuleOption) *checkNumber[T] {
 
 // Gt 限制必须大于指定值
 func (c *checkNumber[T]) Gt(min T, opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncGt, func() []string {
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncGt, func() []string {
 		return c.ntsf(min)
 	}, func() bool {
 		return false
@@ -87,7 +87,7 @@ func (c *checkNumber[T]) Gt(min T, opts ...RuleOption) *checkNumber[T] {
 
 // Lt 限制必须小于指定值
 func (c *checkNumber[T]) Lt(max T, opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncLt, func() []string {
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncLt, func() []string {
 		return c.ntsf(max)
 	}, func() bool {
 		return true
@@ -99,7 +99,7 @@ func (c *checkNumber[T]) Lt(max T, opts ...RuleOption) *checkNumber[T] {
 
 // Within 限制值范围（不含边界）
 func (c *checkNumber[T]) Within(min, max T, opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncWithin, func() []string {
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncWithin, func() []string {
 		return c.ntsf(min, max)
 	}, func() bool {
 		return false
@@ -111,7 +111,7 @@ func (c *checkNumber[T]) Within(min, max T, opts ...RuleOption) *checkNumber[T] 
 
 // Enum 限制值必须在指定枚举值中
 func (c *checkNumber[T]) Enum(enums []T, opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncEnum, func() []string {
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncEnum, func() []string {
 		return c.ntsf(enums...)
 	}, func() bool {
 		return false
@@ -128,7 +128,7 @@ func (c *checkNumber[T]) Enum(enums []T, opts ...RuleOption) *checkNumber[T] {
 
 // Custom 自定义校验
 func (c *checkNumber[T]) Custom(successIfNil bool, custom func(n T) bool, opts ...RuleOption) *checkNumber[T] {
-	checkPredicate[int, T](c.vc, c.n, opts, msgBuildFuncDefault, nil,
+	predicate[int, T](c.vc, c.n, opts, msgBuildFuncDefault, nil,
 		func() bool {
 			return successIfNil
 		}, func() bool {

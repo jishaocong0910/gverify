@@ -56,7 +56,7 @@ func TestCheckAny_Custom(t *testing.T) {
 		})
 	})
 	testSuccess(r, func(vc *vfy.VContext) {
-		vfy.Any(vc, (*any)(nil), "param", vfy.Omittable()).Custom(false, func(t any) bool {
+		vfy.Any(vc, (*any)(nil), "param", vfy.Omitempty()).Custom(false, func(t any) bool {
 			return false
 		})
 	})

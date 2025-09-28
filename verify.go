@@ -33,23 +33,16 @@ type Verifiable interface {
 }
 
 // Check 校验入口
-func Check[V Verifiable](ctx context.Context, s V, opts ...StructOption) (code string, msg string, msgs []string) {
-	var target Verifiable
-	if rv := reflect.ValueOf(s); rv.Kind() == reflect.Pointer {
-		if rv.IsNil() {
-			target = reflect.New(rv.Type().Elem()).Interface().(Verifiable)
-		} else {
-			target = s
-		}
-	} else {
-		target = s
+func Check[V Verifiable](ctx context.Context, v V, opts ...StructOption) (code string, msg string, msgs []string) {
+	if !reflect.Indirect(reflect.ValueOf(v)).IsValid() {
+		return
 	}
 
 	vc := &VContext{Context: ctx, fieldInfo: &FieldInfo{}}
 	for _, o := range opts {
 		o(vc)
 	}
-	target.Checklist(vc)
+	v.Checklist(vc)
 
 	if !vc.hasWrong {
 		code = SUCCESS
@@ -148,7 +141,9 @@ func Struct[V Verifiable](vc *VContext, s *V, fieldName string, opts ...FieldOpt
 
 // Embed 校验内嵌结构体
 func Embed[V Verifiable](vc *VContext, s *V) *checkEmbed[V] {
-	return &checkEmbed[V]{vc: vc.beforeCheckEmbed(), s: s}
+	c := &checkEmbed[V]{vc: vc.beforeCheckEmbed(), s: s}
+	c.dive()
+	return c
 }
 
 // Slice 校验切片类型的字段
@@ -167,7 +162,7 @@ func Any[T any](vc *VContext, a *T, fieldName string, opts ...FieldOption) *chec
 }
 
 // 断言
-func checkPredicate[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T, opts []RuleOption, mbf msgBuildFunc, confineFunc func() []string, predicateNil func() bool, predicate func() bool) {
+func predicate[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T, opts []RuleOption, mbf msgBuildFunc, confineFunc func() []string, predicateNil func() bool, predicateNoNil func() bool) {
 	if vc.interrupt() {
 		return
 	}
@@ -179,8 +174,8 @@ func checkPredicate[C comparable, A any, T *A | []A | map[C]A](vc *VContext, t T
 		if !vc.fieldInfo.omittable {
 			fail = !predicateNil()
 		}
-	} else if predicate != nil {
-		fail = !predicate()
+	} else if predicateNoNil != nil {
+		fail = !predicateNoNil()
 	}
 	if fail {
 		var confines []string

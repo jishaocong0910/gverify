@@ -24,7 +24,7 @@ type checkBool struct {
 
 // Required 必填
 func (c *checkBool) Required(opts ...RuleOption) *checkBool {
-	checkPredicate[int, bool](c.vc, c.b, opts, msgBuildFuncRequired, nil, func() bool {
+	predicate[int, bool](c.vc, c.b, opts, msgBuildFuncRequired, nil, func() bool {
 		return false
 	}, nil)
 	return c
@@ -32,7 +32,7 @@ func (c *checkBool) Required(opts ...RuleOption) *checkBool {
 
 // Custom 自定义校验
 func (c *checkBool) Custom(successIfNil bool, custom func(b bool) bool, opts ...RuleOption) *checkBool {
-	checkPredicate[int, bool](c.vc, c.b, opts, msgBuildFuncDefault, nil, func() bool {
+	predicate[int, bool](c.vc, c.b, opts, msgBuildFuncDefault, nil, func() bool {
 		return successIfNil
 	}, func() bool {
 		return custom(*c.b)

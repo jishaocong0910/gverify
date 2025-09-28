@@ -219,4 +219,13 @@ func TestCheckSlice_Interrupt(t *testing.T) {
 		r.Len(msgs, 1)
 		r.Equal("param[0] must be less than 7", msgs[0])
 	}
+	{
+		vc := vfy.NewDefaultContext()
+		vfy.SetHasWrong(vc)
+		vfy.Slice(vc, []int{8, 3}, "param").Dive(func(t int) {
+			vfy.Int(vc, &t, "").Lt(7).Gt(4)
+		})
+		_, _, msgs := vfy.GetResult(vc)
+		r.Nil(msgs)
+	}
 }

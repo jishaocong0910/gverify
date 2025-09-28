@@ -236,4 +236,15 @@ func TestCheckMap_Interrupt(t *testing.T) {
 		_, _, msgs := vfy.GetResult(vc)
 		r.Len(msgs, 1)
 	}
+	{
+		vc := vfy.NewDefaultContext()
+		vfy.SetHasWrong(vc)
+		vfy.Map(vc, map[string]int{"a": 11, "b": 11}, "param").Dive(func(k string) {
+			vfy.String(vc, &k, "").Lt(3)
+		}, func(v int) {
+			vfy.Int(vc, &v, "").Lt(10)
+		})
+		_, _, msgs := vfy.GetResult(vc)
+		r.Nil(msgs)
+	}
 }

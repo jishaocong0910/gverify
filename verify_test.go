@@ -17,7 +17,6 @@ limitations under the License.
 package vfy_test
 
 import (
-	"fmt"
 	"testing"
 
 	vfy "github.com/jishaocong0910/gverify"
@@ -28,12 +27,12 @@ func ptr[T any](t T) *T {
 	return &t
 }
 
-func TestCheckPredicate(t *testing.T) {
+func TestPredicate(t *testing.T) {
 	r := require.New(t)
 	{
 		// 成功
 		vc := vfy.NewDefaultContext()
-		vfy.CheckPredicate(vc, ptr(5), nil, nil, func() bool {
+		vfy.Predicate(vc, ptr(5), nil, nil, func() bool {
 			return false
 		}, func() bool {
 			return true
@@ -45,7 +44,7 @@ func TestCheckPredicate(t *testing.T) {
 		// 指定code和msg
 		vc := vfy.NewDefaultContext()
 		vfy.SetFieldName(vc, "param")
-		vfy.CheckPredicate(vc, ptr(5), []vfy.CheckOption{vfy.Code("MY_CODE"), vfy.Msg(func(b *vfy.FieldInfo) {
+		vfy.Predicate(vc, ptr(5), []vfy.CheckOption{vfy.Code("MY_CODE"), vfy.Msg(func(b *vfy.FieldInfo) {
 			b.Msg("%s %s", b.FieldName(), b.Confines())
 		})}, func() []string {
 			return []string{"a", "b", "c"}
@@ -62,7 +61,7 @@ func TestCheckPredicate(t *testing.T) {
 		// 默认code和msg
 		vc := vfy.NewDefaultContext()
 		vfy.SetFieldName(vc, "param")
-		vfy.CheckPredicate(vc, ptr(5), nil, nil, func() bool {
+		vfy.Predicate(vc, ptr(5), nil, nil, func() bool {
 			return true
 		}, func() bool {
 			return false
@@ -75,7 +74,7 @@ func TestCheckPredicate(t *testing.T) {
 		// nil导致错误
 		vc := vfy.NewDefaultContext()
 		vfy.SetFieldName(vc, "param")
-		vfy.CheckPredicate(vc, (*int)(nil), nil, nil, func() bool {
+		vfy.Predicate(vc, (*int)(nil), nil, nil, func() bool {
 			return false
 		}, func() bool {
 			return true
@@ -87,7 +86,7 @@ func TestCheckPredicate(t *testing.T) {
 		// 忽略nil
 		vc := vfy.NewDefaultContext()
 		vfy.SetOmittable(vc)
-		vfy.CheckPredicate(vc, (*int)(nil), nil, nil, func() bool {
+		vfy.Predicate(vc, (*int)(nil), nil, nil, func() bool {
 			return false
 		}, func() bool {
 			return false
@@ -99,7 +98,7 @@ func TestCheckPredicate(t *testing.T) {
 		// 中断
 		vc := vfy.NewDefaultContext()
 		vfy.SetHasWrong(vc)
-		vfy.CheckPredicate(vc, (*int)(nil), []vfy.CheckOption{vfy.Code("MY_CODE")}, nil, func() bool {
+		vfy.Predicate(vc, (*int)(nil), []vfy.CheckOption{vfy.Code("MY_CODE")}, nil, func() bool {
 			return false
 		}, func() bool {
 			return false
@@ -137,8 +136,8 @@ type base struct {
 	id string
 }
 
-func (p base) Checklist(vc *vfy.VContext) {
-	vfy.String(vc, &p.id, "id").NotBlank()
+func (b base) Checklist(vc *vfy.VContext) {
+	vfy.String(vc, &b.id, "id").NotBlank()
 }
 
 type user struct {
@@ -149,7 +148,7 @@ type user struct {
 
 func (u user) Checklist(vc *vfy.VContext) {
 	vfy.String(vc, &u.name, "name").NotBlank()
-	vfy.Embed(vc, &u.base).Dive()
+	vfy.Embed(vc, &u.base)
 	vfy.Struct(vc, &u.attach, "attach").Dive()
 }
 
@@ -161,7 +160,7 @@ type attach struct {
 }
 
 func (a attach) Checklist(vc *vfy.VContext) {
-	vfy.Embed(vc, &a.base).Dive()
+	vfy.Embed(vc, &a.base)
 	vfy.Slice(vc, a.images, "images").Dive(func(i image) {
 		vfy.Struct(vc, &i, "not work").Dive()
 	})
@@ -182,7 +181,7 @@ type image struct {
 
 func (i image) Checklist(vc *vfy.VContext) {
 	vfy.String(vc, &i.url, "url").NotBlank()
-	vfy.Embed(vc, &i.base).Dive()
+	vfy.Embed(vc, &i.base)
 }
 
 type school struct {
@@ -203,16 +202,7 @@ func TestDive(t *testing.T) {
 		},
 	}
 
-	code, msg, msgs := vfy.Check(nil, u)
-	r.Equal(vfy.FAIL, code)
-	r.Equal("name must not be blank", msg)
-	r.Len(msgs, 1)
-
-	code, _, msgs = vfy.Check(nil, &u, vfy.All())
-	for _, m := range msgs {
-		fmt.Println(m)
-
-	}
+	code, _, msgs := vfy.Check(nil, &u, vfy.All())
 	r.Equal(vfy.FAIL, code)
 	r.Len(msgs, 10)
 	r.Equal("name must not be blank", msgs[0])
@@ -244,4 +234,12 @@ func TestFieldVerifyFunc(t *testing.T) {
 	r.NotNil(vfy.Uint64(vc, ptr(uint64(1)), "param"))
 	r.NotNil(vfy.Float32(vc, ptr(float32(0.1)), "param"))
 	r.NotNil(vfy.Float64(vc, ptr(0.1), "param"))
+}
+
+func TestCheckNil(t *testing.T) {
+	r := require.New(t)
+	code, msg, msgs := vfy.Check(nil, (vfy.Verifiable)(nil))
+	r.Equal("", code)
+	r.Equal("", msg)
+	r.Nil(msgs)
 }
