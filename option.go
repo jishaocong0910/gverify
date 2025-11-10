@@ -35,11 +35,28 @@ func All() StructOption {
 // Omitempty 字段值为nil时不校验
 func Omitempty() FieldOption {
 	return func(o *FieldInfo) {
-		o.omittable = true
+		o.omitempty = true
 	}
 }
 
-// Code 自定义错误码，只有不使用 [All] 选项时有效果
+// Amend 修改字段值，会影响原结构体。
+//
+// 无效场景：
+//  1. 字段值为nil
+//  3. 字段类型函数 [Slice]、[Map]、[Embed]
+//  2. 泛型与字段类型不一致
+func Amend[T any](amend func(t T) T) FieldOption {
+	return func(o *FieldInfo) {
+		o.amend = func(a any) any {
+			if t, ok := a.(T); ok {
+				return amend(t)
+			}
+			return a
+		}
+	}
+}
+
+// Code 自定义错误码，只有不使用 [All] 选项时有效果。
 func Code(code string) RuleOption {
 	return func(o *FieldInfo) {
 		o.code = code

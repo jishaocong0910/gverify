@@ -235,6 +235,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 | 字段类型函数选项      | 描述       |
 |---------------|----------|
 | vfy.Omitempty | 值为nil时忽略 |
+| vfy.Amend     | 修正字段值    |
 
 | 规则方法选项   | 描述      |
 |----------|---------|
@@ -266,7 +267,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
     </tr>
     <tr>
         <td>Confine</td>
-        <td>返回<i>规则方法</i>的指定索引的限制值的字符串形式。例如：对于<i>Max(10)</i>，<i>vc.Confine(0)</i>返回<i>10</i>；对于<i>Range(5, 15)</i>，<i>vc.Confine(0)</i>返回<i>5</i>，<i>vc.Confine(1)</i>返回<i>15</i>。</td>
+        <td>返回<i>规则方法</i>的指定索引的限制值的字符串形式。例如：对于<i>Max(10)</i>，<i>vc.Confine(0)</i>返回<i>10</i>；对于<i>Range(5, 15)</i>，<i>vc.Confine(0)</i>返回<i>"5"</i>，<i>vc.Confine(1)</i>返回<i>"15"</i>。</td>
     </tr>
     <tr>
         <td>Confines</td>

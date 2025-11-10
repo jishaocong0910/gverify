@@ -17,6 +17,7 @@ limitations under the License.
 package vfy_test
 
 import (
+	"strings"
 	"testing"
 
 	vfy "github.com/jishaocong0910/gverify"
@@ -105,6 +106,34 @@ func TestPredicate(t *testing.T) {
 		})
 		code, _, _ := vfy.GetResult(vc)
 		r.Equal(vfy.FAIL, code)
+	}
+}
+
+func TestAmend(t *testing.T) {
+	r := require.New(t)
+	{
+		field := " abc "
+		vc := vfy.NewDefaultContext()
+		vfy.String(vc, &field, "param", vfy.Amend(func(t string) string {
+			return strings.TrimSpace(t)
+		})).Custom(false, func(t string) bool {
+			return strings.EqualFold(t, "abc")
+		})
+		code, _, _ := vfy.GetResult(vc)
+		r.Equal(vfy.SUCCESS, code)
+		r.Equal("abc", field)
+	}
+	{
+		field := " abc "
+		vc := vfy.NewDefaultContext()
+		vfy.String(vc, &field, "param", vfy.Amend(func(t int) int {
+			return 1
+		})).Custom(false, func(t string) bool {
+			return strings.EqualFold(t, "abc")
+		})
+		code, _, _ := vfy.GetResult(vc)
+		r.Equal(vfy.FAIL, code)
+		r.Equal(" abc ", field)
 	}
 }
 

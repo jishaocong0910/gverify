@@ -110,7 +110,9 @@ type FieldInfo struct {
 	// 是否为切片元素、map的key或value
 	hasElemName bool
 	// nil时忽略校验
-	omittable bool
+	omitempty bool
+	// 修字段值函数
+	amend func(a any) any
 	// 字段名
 	fieldName string
 	// 限制值的字符串形式，校验每个规则方法时会修改此字段
