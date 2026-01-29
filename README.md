@@ -253,7 +253,7 @@ func (b *Book) Checklist(vc *vfy.VContext) {
 ```go
 func (b *Book) Checklist(vc *vfy.VContext) {
     vfy.String(vc, &b.Title, "title").Max(10, vfy.Msg(func(f *vfy.FieldInfo) {
-        f.Msg("%s is too long", f.FieldName(), f.Confine(0))
+        f.Msg("%s exceeds max length %s", f.FieldName(), f.Confine(0))
     }))
 }
 ```
@@ -330,7 +330,7 @@ func main() {
 
 # 零代码入侵
 
-零代码入侵是Gverify的特色，可在不修改结构文件的情况下实现校验，原理是<i>Checklist</i>方法可以与结构体分开不同文件，有以下三种场景，一些场景可实现零代码入侵。
+零代码入侵是Gverify的特色，可在不修改结构体文件的情况下实现校验，原理是<i>Checklist</i>方法可以与任意文件下实现，有以下三种场景，一些场景可实现零代码入侵。
 
 * 在结构体所在文件
 
