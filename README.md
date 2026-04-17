@@ -374,7 +374,7 @@ func (g GenStruct) Checklist(vc *vfy.VContext) {
 
 * 在其他目录的文件
 
-也可以在其他包实现`vfy.Verifiable`接口。由于Golang语法禁止在其他包增加结构体方法，因此需增加一个内嵌原结构体的新的结构体，通过新的结构体来校验。
+也可以在其他包实现`vfy.Verifiable`接口。由于Golang语法禁止类型的方法放在非定义它的包下，因此需增加一个内嵌原结构体的新的结构体，通过新的结构体来校验。
 
 *目录结构*
 
